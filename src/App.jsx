@@ -2,6 +2,16 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import Pusher from 'pusher-js';
+
+Pusher.logToConsole = true;
+
+    const pusher = new Pusher('c007ac7359c638bacebe', {
+      cluster: 'us2',
+      forceTLS: true
+    });
+
+    
 function App() {
   return (
     <div className="App">
