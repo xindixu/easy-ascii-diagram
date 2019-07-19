@@ -1,6 +1,6 @@
 import React from 'react';
-import Pusher from 'pusher-js';
-
+// import Pusher from 'pusher-js';
+import SketchPad from './container/SketchPad';
 
 import './App.css';
 
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header" />
+      <SketchPad />
     </div>
   );
 }
