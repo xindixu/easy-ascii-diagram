@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '../component/grid';
+import ToolBar from '../component/toolbar';
 
 const userStrokeStyle = '#EE92C2';
 const guestStrokeStyle = '#F0C987';
@@ -15,10 +16,11 @@ class SketchPad extends Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
+        <ToolBar />
         <Grid />
-        <p> Start to draw</p>
-      </div>
+      </React.Fragment>
+
     );
   }
 }
