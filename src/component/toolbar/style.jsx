@@ -2,14 +2,18 @@ import styled from 'styled-components';
 
 import { styleSettings } from '../../assets/styles/settings';
 
-const { spacerXxl } = styleSettings;
+const {
+  spacerXs, spacerSm, spacerXxl, radiusSm, gray,
+} = styleSettings;
+
 export const Wrapper = styled.nav`
   display: inline-flex;
   justify-content: space-around;
+  align-items: center;
+  
   height: ${spacerXxl};
   width: 100%;
-  border: 1px solid #222;
-  background: #ccc;
+  background: ${gray};
 `;
 
 const Container = styled.div`
@@ -27,9 +31,11 @@ export const Action = styled(Container)`
   flex: 33%;
 `;
 
-const button = styled.button`
-  padding: 0.25rem; 
+const Button = styled.button`
+  padding: ${spacerSm};
+  margin: ${spacerXs};
+  border-radius: ${radiusSm};
 `;
 
-export const IconButton = styled.button`
+export const IconButton = styled(Button)`
 `;
