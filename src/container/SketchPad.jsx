@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '../component/grid';
-import ToolBar from '../component/toolbar';
+import ToolBar from './toolbar';
 
 const userStrokeStyle = '#EE92C2';
 const guestStrokeStyle = '#F0C987';
