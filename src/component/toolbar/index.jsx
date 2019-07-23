@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Wrapper, Tool, Command, Action,
+  Wrapper, Tool, Command, Action, IconButton,
 } from './style';
 
 const TOOLS = [
@@ -26,9 +26,9 @@ const ACTIONS = [
 
 const Toolbar = () => (
   <Wrapper>
-    <Tool>{TOOLS.map(el => <span key={el}>{el}</span>)}</Tool>
-    <Command>{COMMANDS.map(el => <span key={el}>{el}</span>)}</Command>
-    <Action>{ACTIONS.map(el => <span key={el}>{el}</span>)}</Action>
+    <Tool>{TOOLS.map(el => <IconButton key={el}>{el}</IconButton>)}</Tool>
+    <Command>{COMMANDS.map(el => <IconButton key={el}>{el}</IconButton>)}</Command>
+    <Action>{ACTIONS.map(el => <IconButton key={el}>{el}</IconButton>)}</Action>
 
   </Wrapper>
 );
