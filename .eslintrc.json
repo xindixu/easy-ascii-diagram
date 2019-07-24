@@ -17,7 +17,9 @@
   "rules": {
     "semi": "error",
     "react/jsx-one-expression-per-line": "off",
-    "max-len": "error"
+    "react/destructuring-assignment": "off",
+    "max-len": "error",
+    
   },
   "parser": "babel-eslint"
 
