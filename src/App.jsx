@@ -1,6 +1,6 @@
 import React from 'react';
 // import Pusher from 'pusher-js';
-import SketchPad from './container/SketchPad';
+import SketchPad from './container/sketch-pad';
 
 import './App.css';
 

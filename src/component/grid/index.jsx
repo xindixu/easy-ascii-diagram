@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { GRID_HEIGHT, GRID_WIDTH } from '../../constants';
 import { GridBackground } from './style';
-
-const GRID_HEIGHT = 32;
-const GRID_WIDTH = 16;
 
 
 class Grid extends Component {
@@ -12,10 +11,16 @@ class Grid extends Component {
 
   render() {
     const { zoomLevel } = this.state;
+    const { onMouseDown, onMouseMove, onMouseUp } = this.props;
     return (
-      <GridBackground width={GRID_WIDTH / zoomLevel} height={GRID_HEIGHT / zoomLevel} />
+      <GridBackground width={GRID_WIDTH / zoomLevel} height={GRID_HEIGHT / zoomLevel} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} />
     );
   }
 }
 
+Grid.propTypes = {
+  onMouseDown: PropTypes.func.isRequired,
+  onMouseMove: PropTypes.func.isRequired,
+  onMouseUp: PropTypes.func.isRequired,
+};
 export default Grid;

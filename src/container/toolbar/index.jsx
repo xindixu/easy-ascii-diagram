@@ -1,28 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TOOLS, COMMANDS, ACTIONS } from '../../constants';
 import {
   Wrapper, Tool, Command, Action, IconButton,
 } from './style';
-
-const TOOLS = [
-  'RECTANGLE',
-  'LINE',
-  'ARROW',
-  'TEXT',
-  'ERASER',
-];
-
-const COMMANDS = [
-  'ZOOM_IN',
-  'ZOOM_OUT',
-  'UNDO',
-  'REDO',
-];
-
-const ACTIONS = [
-  'EXPORT',
-  'SAVE',
-];
 
 const Toolbar = () => (
   <Wrapper>
