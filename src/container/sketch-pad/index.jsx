@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { GRID_WIDTH, GRID_HEIGHT } from '../../constants';
+import {
+  GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT,
+} from '../../constants';
 import Grid from '../../component/grid';
 import ToolBar from '../toolbar';
 
+import { Canvas } from './style';
 
-const userStrokeStyle = '#EE92C2';
-const guestStrokeStyle = '#F0C987';
 
 class SketchPad extends Component {
-  state = {
-    zoomLevel: 1,
-    isDrawing: false,
-    content: [],
-    tool: '',
-    prevPos: { x: null, y: null },
-    curPos: { x: null, y: null },
-  };
+  constructor(props) {
+    super(props);
+    this.canvas = React.createRef();
+    this.state = {
+      zoomLevel: 1,
+      isDrawing: false,
+      content: [],
+      tool: '',
+      prevPos: { x: null, y: null },
+      curPos: { x: null, y: null },
+    };
+  }
+
+
+  componentDidMount() {
+    console.log(this.canvas);
+  }
 
 
   handleMouseDown = (e) => {
@@ -48,8 +58,8 @@ class SketchPad extends Component {
     const { curPos, zoomLevel } = this.state;
     const { x, y } = curPos;
 
-    const column = x / GRID_WIDTH * zoomLevel;
-    const row = y / GRID_HEIGHT * zoomLevel;
+    const column = Math.floor(x / GRID_WIDTH / zoomLevel);
+    const row = Math.floor(y / GRID_HEIGHT / zoomLevel) - 1;
     console.log(column, row);
     const { _, totalColumn } = this.calculateTotalGridNumber();
     const index = row * totalColumn + column;
@@ -58,8 +68,8 @@ class SketchPad extends Component {
 
   calculateTotalGridNumber() {
     const { zoomLevel } = this.state;
-    const totalRow = window.height / GRID_HEIGHT * zoomLevel;
-    const totalColumn = window.width / GRID_WIDTH * zoomLevel;
+    const totalRow = Math.floor(window.innerHeight / GRID_HEIGHT / zoomLevel);
+    const totalColumn = Math.floor(window.innerWidth / GRID_WIDTH / zoomLevel);
     return { totalRow, totalColumn };
   }
 
@@ -74,6 +84,7 @@ class SketchPad extends Component {
     return (
       <React.Fragment>
         <ToolBar />
+        <Canvas ref={this.canvas} />
         <Grid
           onMouseMove={this.handleMouseMove}
           onMouseDown={this.handleMouseDown}
@@ -86,7 +97,6 @@ class SketchPad extends Component {
 }
 
 SketchPad.propTypes = {
-
 };
 
 export default SketchPad;

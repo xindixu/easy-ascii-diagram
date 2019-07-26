@@ -19,7 +19,7 @@
     "react/jsx-one-expression-per-line": "off",
     "react/destructuring-assignment": "off",
     "max-len": "error",
-    
+    "space-infix-ops": "error"
   },
   "parser": "babel-eslint"
 

@@ -1,17 +1,18 @@
 import styled from 'styled-components';
-
+import { TOOLBAR_HEIGHT } from '../../constants';
 import { styleSettings } from '../../assets/styles/settings';
 
 const {
-  spacerXs, spacerSm, spacerXxl, radiusSm, gray,
+  spacerXs, spacerSm, radiusSm, gray,
 } = styleSettings;
 
 export const Wrapper = styled.nav`
+  z-index: 100;
   display: inline-flex;
   justify-content: space-around;
   align-items: center;
   
-  height: ${spacerXxl};
+  height: ${TOOLBAR_HEIGHT}px;
   width: 100%;
   background: ${gray};
 `;
