@@ -4,6 +4,10 @@ import { GRID_HEIGHT, GRID_WIDTH } from '../../constants';
 import { GridBackground } from './style';
 
 class Grid extends Component {
+  state = {
+    content: [{ index: 2, content: '-' }],
+  }
+
   render() {
     const {
       zoomLevel, onMouseDown, onMouseMove, onMouseUp,
@@ -17,6 +21,7 @@ class Grid extends Component {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       />
+
     );
   }
 }

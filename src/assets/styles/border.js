@@ -7,3 +7,11 @@ export const borderRadius = {
   radiusXl: '1.75rem',
   radiusXxl: '2rem',
 };
+
+export const borderWidth = {
+  borderWidthSm: '0.25px',
+  borderWidthMd: '0.5px',
+  borderWidth: '1px',
+  borderWidthLg: '2px',
+  borderWidthXl: '4px',
+};

@@ -6,8 +6,6 @@ import {
 import Grid from '../../component/grid';
 import ToolBar from '../toolbar';
 
-import { Canvas } from './style';
-
 
 class SketchPad extends Component {
   constructor(props) {
@@ -25,7 +23,7 @@ class SketchPad extends Component {
 
 
   componentDidMount() {
-    console.log(this.canvas);
+
   }
 
 
@@ -42,7 +40,6 @@ class SketchPad extends Component {
       this.setState({
         curPos: { x: e.clientX, y: e.clientY },
       });
-
       this.draw();
     }
   }
@@ -60,7 +57,7 @@ class SketchPad extends Component {
 
     const column = Math.floor(x / GRID_WIDTH / zoomLevel);
     const row = Math.floor(y / GRID_HEIGHT / zoomLevel) - 1;
-    console.log(column, row);
+
     const { _, totalColumn } = this.calculateTotalGridNumber();
     const index = row * totalColumn + column;
     return index;
@@ -68,8 +65,8 @@ class SketchPad extends Component {
 
   calculateTotalGridNumber() {
     const { zoomLevel } = this.state;
-    const totalRow = Math.floor(window.innerHeight / GRID_HEIGHT / zoomLevel);
-    const totalColumn = Math.floor(window.innerWidth / GRID_WIDTH / zoomLevel);
+    const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
+    const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
     return { totalRow, totalColumn };
   }
 
@@ -84,7 +81,6 @@ class SketchPad extends Component {
     return (
       <React.Fragment>
         <ToolBar />
-        <Canvas ref={this.canvas} />
         <Grid
           onMouseMove={this.handleMouseMove}
           onMouseDown={this.handleMouseDown}
