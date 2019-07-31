@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import draw from '../../utlis/draw';
 import {
   GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT,
 } from '../../constants';
-import Grid from '../../component/grid';
+
+import Grid from '../../components/grid';
 import ToolBar from '../toolbar';
+import { Canvas } from './style';
 
 
 class SketchPad extends Component {
   constructor(props) {
     super(props);
     this.canvas = React.createRef();
+
     this.state = {
       zoomLevel: 1,
       isDrawing: false,
@@ -23,7 +27,12 @@ class SketchPad extends Component {
 
 
   componentDidMount() {
-
+    const ctx = this.canvas.current.getContext('2d');
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    const props = {
+      x: 20, y: 20, width: 100, height: 100,
+    };
+    draw(ctx, 'rect', props);
   }
 
 
@@ -86,6 +95,8 @@ class SketchPad extends Component {
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
         />
+        <Canvas ref={this.canvas} />
+
       </React.Fragment>
 
     );
