@@ -5,7 +5,6 @@ import { GridBackground } from './style';
 
 class Grid extends Component {
   state = {
-    content: [{ index: 2, content: '-' }],
   }
 
   render() {

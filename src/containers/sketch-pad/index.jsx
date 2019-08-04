@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import draw from '../../utlis/draw';
 import {
-  GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT,
+  GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, DIRECTION, TOOLS,
 } from '../../constants';
 
 import Grid from '../../components/grid';
@@ -28,11 +28,17 @@ class SketchPad extends Component {
 
   componentDidMount() {
     const ctx = this.canvas.current.getContext('2d');
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    const props = {
-      x: 20, y: 20, width: 100, height: 100,
-    };
-    draw(ctx, 'rect', props);
+    draw(ctx, TOOLS.rectangle, {
+      x: 2, y: 2, width: 4, height: 5,
+    });
+    draw(ctx, TOOLS.line, {
+      x: 10, y: 3, length: 5, direction: DIRECTION.vertical,
+    });
+    console.log(ctx);
   }
 
 
@@ -95,7 +101,7 @@ class SketchPad extends Component {
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
         />
-        <Canvas ref={this.canvas} />
+        <Canvas ref={this.canvas} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
 
       </React.Fragment>
 

@@ -7,9 +7,9 @@ import {
 
 const Toolbar = () => (
   <Wrapper>
-    <Tool>{TOOLS.map(el => <IconButton key={el}>{el}</IconButton>)}</Tool>
-    <Command>{COMMANDS.map(el => <IconButton key={el}>{el}</IconButton>)}</Command>
-    <Action>{ACTIONS.map(el => <IconButton key={el}>{el}</IconButton>)}</Action>
+    <Tool>{Object.keys(TOOLS).map(key => <IconButton key={key}>{TOOLS[key]}</IconButton>)}</Tool>
+    <Command>{Object.keys(COMMANDS).map(key => <IconButton key={key}>{COMMANDS[key]}</IconButton>)}</Command>
+    <Action>{Object.keys(ACTIONS).map(key => <IconButton key={key}>{ACTIONS[key]}</IconButton>)}</Action>
 
   </Wrapper>
 );
