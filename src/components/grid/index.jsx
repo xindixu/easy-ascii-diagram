@@ -8,17 +8,12 @@ class Grid extends Component {
   }
 
   render() {
-    const {
-      zoomLevel, onMouseDown, onMouseMove, onMouseUp,
-    } = this.props;
+    const { zoomLevel } = this.props;
 
     return (
       <GridBackground
         width={GRID_WIDTH / zoomLevel}
         height={GRID_HEIGHT / zoomLevel}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
       />
 
     );
@@ -29,9 +24,6 @@ Grid.defaultProps = {
   zoomLevel: 1,
 };
 Grid.propTypes = {
-  onMouseDown: PropTypes.func.isRequired,
-  onMouseMove: PropTypes.func.isRequired,
-  onMouseUp: PropTypes.func.isRequired,
   zoomLevel: PropTypes.number,
 };
 export default Grid;

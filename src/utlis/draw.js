@@ -14,14 +14,18 @@ const drawRect = (ctx, _x, _y, width, height) => {
 const drawLine = (ctx, _x, _y, length, direction) => {
   const x = offsetX(_x);
   const y = offsetY(_y);
-  ctx.beginPath();
-  ctx.moveTo(x, y);
+
+  let text = '';
   if (direction === DIRECTION.horizontal) {
-    ctx.lineTo(x + length * GRID_WIDTH, y);
+    for (let i = 0; i < length; i += 1) {
+      text += '-';
+    }
   } else {
-    ctx.lineTo(x, y + length * GRID_HEIGHT);
+    for (let i = 0; i < length; i += 1) {
+      text += '|';
+    }
   }
-  ctx.stroke();
+  ctx.fillText(text, x, y);
 };
 
 

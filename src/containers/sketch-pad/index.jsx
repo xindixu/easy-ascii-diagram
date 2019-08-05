@@ -1,44 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import draw from '../../utlis/draw';
 import {
   GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, DIRECTION, TOOLS,
 } from '../../constants';
 
 import Grid from '../../components/grid';
+import Diagram from '../../components/diagram';
 import ToolBar from '../toolbar';
-import { Canvas } from './style';
+
+import draw from '../../utlis/draw';
 
 
 class SketchPad extends Component {
-  constructor(props) {
-    super(props);
-    this.canvas = React.createRef();
-
-    this.state = {
-      zoomLevel: 1,
-      isDrawing: false,
-      content: [],
-      tool: '',
-      prevPos: { x: null, y: null },
-      curPos: { x: null, y: null },
-    };
-  }
+  state = {
+    zoomLevel: 1,
+    isDrawing: false,
+    content: [],
+    tool: '',
+    prevPos: { x: null, y: null },
+    curPos: { x: null, y: null },
+  };
 
 
   componentDidMount() {
-    const ctx = this.canvas.current.getContext('2d');
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
+    // const ctx = this.canvas.current.getContext('2d');
+    // ctx.strokeStyle = '#000000';
+    // ctx.lineWidth = 2;
 
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    draw(ctx, TOOLS.rectangle, {
-      x: 2, y: 2, width: 4, height: 5,
-    });
-    draw(ctx, TOOLS.line, {
-      x: 10, y: 3, length: 5, direction: DIRECTION.vertical,
-    });
-    console.log(ctx);
+    // ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    // draw(ctx, TOOLS.rectangle, {
+    //   x: 2, y: 2, width: 4, height: 5,
+    // });
+    // draw(ctx, TOOLS.line, {
+    //   x: 10, y: 3, length: 5, direction: DIRECTION.vertical,
+    // });
   }
 
 
@@ -92,17 +87,14 @@ class SketchPad extends Component {
   }
 
   render() {
-    const { prevPos, curPos } = this.state;
+    const { prevPos, curPos, zoomLevel } = this.state;
     return (
       <React.Fragment>
         <ToolBar />
         <Grid
-          onMouseMove={this.handleMouseMove}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
+          zoomLevel={zoomLevel}
         />
-        <Canvas ref={this.canvas} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
-
+        <Diagram />
       </React.Fragment>
 
     );
