@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Wrapper } from './style';
+import { Wrapper, Content } from './style';
 
 class Diagram extends Component {
   state = {
@@ -10,7 +10,8 @@ class Diagram extends Component {
   render() {
     return (
       <Wrapper>
-        <div>lalaal</div>
+        <Content x={1} y={2}>+------------------+</Content>
+        <Content x={2} y={10}>+------------------+</Content>
       </Wrapper>
     );
   }

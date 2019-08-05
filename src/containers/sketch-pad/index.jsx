@@ -91,9 +91,7 @@ class SketchPad extends Component {
     return (
       <React.Fragment>
         <ToolBar />
-        <Grid
-          zoomLevel={zoomLevel}
-        />
+        <Grid zoomLevel={zoomLevel} />
         <Diagram />
       </React.Fragment>
 
