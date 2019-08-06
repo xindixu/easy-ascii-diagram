@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Wrapper, Content } from './style';
+import { Wrapper } from './style';
+import { DIRECTION } from '../../constants';
 
-import Rectangle from '../../lib/reactangle';
+import Rectangle from '../../lib/rectangle';
+import Line from '../../lib/line';
 
 class Diagram extends Component {
   state = {
-    content: [new Rectangle(1, 2, 12, 12)],
+    content: [new Rectangle(1, 2, 12, 12), new Line(20, 3, 10, DIRECTION.horizontal)],
   }
 
   render() {
@@ -14,7 +16,7 @@ class Diagram extends Component {
     return (
       <Wrapper>
         {content.map(el => (
-          <Content>{el.toString()}</Content>
+          el.render()
         ))}
       </Wrapper>
     );

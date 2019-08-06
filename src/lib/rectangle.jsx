@@ -1,14 +1,23 @@
-import Base from './base';
+import React, { Component } from 'react';
+import { Content } from './style';
+import { TOOLS } from '../constants';
 
-class Rectangle extends Base {
+class Rectangle extends Component {
   constructor(x, y, width, height) {
-    super(x, y, width, height, null);
+    super();
+    this.name = TOOLS.rectangle;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.direction = null;
     this.charSet = {
       corner: '+',
       horizontalEdge: '-',
       verticalEdge: '|',
       inner: ' ',
     };
+    this.text = this.toString();
   }
 
   toString() {
@@ -28,6 +37,10 @@ class Rectangle extends Base {
       text += '\n';
     }
     return text;
+  }
+
+  render() {
+    return <Content x={this.x} y={this.y}>{this.text}</Content>;
   }
 }
 
