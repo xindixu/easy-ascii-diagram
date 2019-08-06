@@ -6,6 +6,7 @@ import { DIRECTION } from '../../constants';
 import Rectangle from '../../lib/rectangle';
 import Line from '../../lib/line';
 import Arrow from '../../lib/arrow';
+import Text from '../../lib/text';
 
 class Diagram extends Component {
   state = {
@@ -16,6 +17,7 @@ class Diagram extends Component {
       new Arrow(25, 3, 10, DIRECTION.left),
       new Arrow(30, 2, 10, DIRECTION.right),
       new Arrow(30, 20, 10, DIRECTION.down),
+      new Text(2, 3, 'xindi love justin'),
     ],
   }
 

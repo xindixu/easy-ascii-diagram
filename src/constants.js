@@ -5,6 +5,12 @@ export const TOOLS = {
   text: 'TEXT',
   eraser: 'ERASER',
 };
+export const TOOLS_DRAWING = {
+  [TOOLS.rectangle]: TOOLS.rectangle,
+  [TOOLS.line]: TOOLS.line,
+  [TOOLS.arrow]: TOOLS.arrow,
+  [TOOLS.text]: TOOLS.text,
+};
 
 export const COMMANDS = {
   zoomIn: 'ZOOM_IN',
