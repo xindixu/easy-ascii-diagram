@@ -35,3 +35,15 @@ export const DIRECTION = {
   left: 'LEFT',
   right: 'RIGHT',
 };
+
+export const DIRECTION_LINE = {
+  [DIRECTION.horizontal]: DIRECTION.horizontal,
+  [DIRECTION.vertical]: DIRECTION.vertical,
+};
+
+export const DIRECTION_ARROW = {
+  [DIRECTION.up]: DIRECTION.up,
+  [DIRECTION.down]: DIRECTION.down,
+  [DIRECTION.left]: DIRECTION.left,
+  [DIRECTION.right]: DIRECTION.right,
+};

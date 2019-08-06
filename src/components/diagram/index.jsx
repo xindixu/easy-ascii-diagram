@@ -5,10 +5,18 @@ import { DIRECTION } from '../../constants';
 
 import Rectangle from '../../lib/rectangle';
 import Line from '../../lib/line';
+import Arrow from '../../lib/arrow';
 
 class Diagram extends Component {
   state = {
-    content: [new Rectangle(1, 2, 12, 12), new Line(20, 3, 10, DIRECTION.horizontal)],
+    content: [
+      new Rectangle(1, 2, 12, 12),
+      new Line(20, 3, 10, DIRECTION.vertical),
+      new Arrow(25, 3, 10, DIRECTION.up),
+      new Arrow(25, 3, 10, DIRECTION.left),
+      new Arrow(30, 2, 10, DIRECTION.right),
+      new Arrow(30, 20, 10, DIRECTION.down),
+    ],
   }
 
   render() {

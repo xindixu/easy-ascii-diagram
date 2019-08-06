@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Content } from './style';
-import { TOOLS, DIRECTION } from '../constants';
+import { TOOLS, DIRECTION, DIRECTION_LINE } from '../constants';
 
 class Line extends Component {
   constructor(x, y, length, direction) {
     super();
 
-    if (direction !== DIRECTION.horizontal && direction !== DIRECTION.vertical) {
+    if (!Object.values(DIRECTION_LINE).includes(direction)) {
       throw Error('Direction not valid');
     }
 
@@ -30,7 +30,7 @@ class Line extends Component {
       }
     } else {
       for (let i = 0; i < this.length; i += 1) {
-        text += this.charSet.verticalEdge;
+        text += `${this.charSet.verticalEdge}\n`;
       }
     }
     return text;
