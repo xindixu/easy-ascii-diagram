@@ -23,17 +23,7 @@ class SketchPad extends Component {
 
 
   componentDidMount() {
-    // const ctx = this.canvas.current.getContext('2d');
-    // ctx.strokeStyle = '#000000';
-    // ctx.lineWidth = 2;
 
-    // ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    // draw(ctx, TOOLS.rectangle, {
-    //   x: 2, y: 2, width: 4, height: 5,
-    // });
-    // draw(ctx, TOOLS.line, {
-    //   x: 10, y: 3, length: 5, direction: DIRECTION.vertical,
-    // });
   }
 
 

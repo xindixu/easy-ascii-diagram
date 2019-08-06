@@ -5,6 +5,7 @@ import {
 } from '../../constants';
 
 const { yellow } = styleSettings;
+
 export const Wrapper = styled.div`
   width: ${CANVAS_WIDTH}px;
   height: ${CANVAS_HEIGHT}px;
@@ -14,6 +15,8 @@ export const Wrapper = styled.div`
 `;
 
 export const Content = styled.code`
+  pointer-events: none;
+  white-space: pre-wrap;
   font-family: monospace;
   font-size: ${GRID_WIDTH * 1.2}px;
   line-height: ${GRID_HEIGHT}px;

@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Wrapper, Content } from './style';
 
+import Rectangle from '../../lib/reactangle';
+
 class Diagram extends Component {
   state = {
-    content: [],
+    content: [new Rectangle(1, 2, 12, 12)],
   }
 
   render() {
+    const { content } = this.state;
     return (
       <Wrapper>
-        <Content x={1} y={2}>+------------------+</Content>
-        {[...Array(5).keys()].map(el => <Content x={1} y={3 + el}>|</Content>)}
-
-
-        <Content x={2} y={10}>+------------------+</Content>
+        {content.map(el => (
+          <Content>{el.toString()}</Content>
+        ))}
       </Wrapper>
     );
   }
