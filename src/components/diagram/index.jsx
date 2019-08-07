@@ -25,6 +25,7 @@ class Diagram extends Component {
     const { content } = this.state;
     return (
       <Wrapper>
+        <Arrow x={25} y={10} length={21} direction={DIRECTION.up} />
         <Rectangle x={1} y={2} width={12} height={12} />
       </Wrapper>
     );

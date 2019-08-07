@@ -1,65 +1,55 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Content } from './style';
 import { TOOLS, DIRECTION, DIRECTION_ARROW } from '../constants';
 
 class Arrow extends Component {
-  constructor(x, y, length, direction) {
-    super();
+  static shape = TOOLS.arrow
 
-    if (!Object.values(DIRECTION_ARROW).includes(direction)) {
-      throw Error('Direction not valid');
-    }
+  static charSet = {
+    horizontal: '-',
+    vertical: '|',
+    up: '^',
+    down: 'V',
+    left: '<',
+    right: '>',
+    end: '+',
+  };
 
-    this.name = TOOLS.arrow;
-    this.x = x;
-    this.y = y;
-    this.length = length;
-    this.direction = direction;
-    this.charSet = {
-      horizontal: '-',
-      vertical: '|',
-      up: '^',
-      down: 'V',
-      left: '<',
-      right: '>',
-      end: '+',
-    };
-    this.text = this.toString();
-  }
 
-  toString() {
+  static toString(direction, length) {
     let text = '';
-    switch (this.direction) {
+    switch (direction) {
       case DIRECTION.left:
-        text += this.charSet.left;
-        for (let i = 1; i < this.length - 1; i += 1) {
-          text += this.charSet.horizontal;
+        text += Arrow.charSet.left;
+        for (let i = 1; i < length - 1; i += 1) {
+          text += Arrow.charSet.horizontal;
         }
-        text += this.charSet.end;
+        text += Arrow.charSet.end;
         break;
 
       case DIRECTION.right:
-        text += this.charSet.end;
-        for (let i = 1; i < this.length - 1; i += 1) {
-          text += this.charSet.horizontal;
+        text += Arrow.charSet.end;
+        for (let i = 1; i < length - 1; i += 1) {
+          text += Arrow.charSet.horizontal;
         }
-        text += this.charSet.right;
+        text += Arrow.charSet.right;
         break;
 
       case DIRECTION.up:
-        text += `${this.charSet.up}\n`;
-        for (let i = 1; i < this.length - 1; i += 1) {
-          text += `${this.charSet.vertical}\n`;
+        text += `${Arrow.charSet.up}\n`;
+        for (let i = 1; i < length - 1; i += 1) {
+          text += `${Arrow.charSet.vertical}\n`;
         }
-        text += this.charSet.end;
+        text += Arrow.charSet.end;
         break;
 
       case DIRECTION.down:
-        text += `${this.charSet.end}\n`;
-        for (let i = 1; i < this.length - 1; i += 1) {
-          text += `${this.charSet.vertical}\n`;
+        text += `${Arrow.charSet.end}\n`;
+        for (let i = 1; i < length - 1; i += 1) {
+          text += `${Arrow.charSet.vertical}\n`;
         }
-        text += this.charSet.down;
+        text += Arrow.charSet.down;
         break;
 
       default:
@@ -68,9 +58,30 @@ class Arrow extends Component {
     return text;
   }
 
+  state = {
+    x: this.props.x,
+    y: this.props.y,
+    length: this.props.length,
+    direction: this.props.direction,
+  }
+
+
   render() {
-    return <Content x={this.x} y={this.y}>{this.text}</Content>;
+    const {
+      x, y, direction, length,
+    } = this.state;
+    return <Content x={x} y={y}>{Arrow.toString(direction, length)}</Content>;
   }
 }
+
+
+Arrow.propTypes = {
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
+  direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
+
+};
+
 
 export default Arrow;

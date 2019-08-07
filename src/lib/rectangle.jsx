@@ -4,6 +4,8 @@ import { Content } from './style';
 import { TOOLS } from '../constants';
 
 class Rectangle extends Component {
+  static shape = TOOLS.rectangle
+
   static charSet = {
     corner: '+',
     horizontalEdge: '-',
@@ -11,7 +13,6 @@ class Rectangle extends Component {
     inner: ' ',
   }
 
-  static shape = TOOLS.rectangle
 
   state = {
     x: this.props.x,
