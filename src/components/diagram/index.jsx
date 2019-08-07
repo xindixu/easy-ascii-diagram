@@ -25,9 +25,7 @@ class Diagram extends Component {
     const { content } = this.state;
     return (
       <Wrapper>
-        {content.map(el => (
-          el.render()
-        ))}
+        <Rectangle x={1} y={2} width={12} height={12} />
       </Wrapper>
     );
   }

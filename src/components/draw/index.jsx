@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+
 
 import { TOOLS_DRAWING } from '../../constants';
 
 class Draw extends Component {
+  state = {
+    tool: TOOLS_DRAWING.rectangle,
+  }
+
   render() {
     return (
       <div />
@@ -11,8 +15,5 @@ class Draw extends Component {
   }
 }
 
-Draw.propTypes = {
-
-};
 
 export default Draw;
