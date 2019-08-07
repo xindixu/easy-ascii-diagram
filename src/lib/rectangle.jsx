@@ -13,24 +13,7 @@ class Rectangle extends Component {
     inner: ' ',
   }
 
-
-  state = {
-    x: this.props.x,
-    y: this.props.y,
-    width: this.props.width,
-    height: this.props.height,
-  }
-
-  moveTo(x, y) {
-    this.setState({ x, y });
-  }
-
-  resize(width, height) {
-    this.setState({ width, height });
-  }
-
-  toString() {
-    const { width, height } = this.state;
+  static toString(width, height) {
     let text = '';
     for (let j = 0; j < height; j += 1) {
       for (let i = 0; i < width; i += 1) {
@@ -49,9 +32,28 @@ class Rectangle extends Component {
     return text;
   }
 
+
+  state = {
+    x: this.props.x,
+    y: this.props.y,
+    width: this.props.width,
+    height: this.props.height,
+  }
+
+  moveTo(x, y) {
+    this.setState({ x, y });
+  }
+
+  resize(width, height) {
+    this.setState({ width, height });
+  }
+
+
   render() {
-    const { x, y } = this.state;
-    return <Content x={x} y={y}>{this.toString()}</Content>;
+    const {
+      x, y, width, height,
+    } = this.state;
+    return <Content x={x} y={y}>{Rectangle.toString(width, height)}</Content>;
   }
 }
 

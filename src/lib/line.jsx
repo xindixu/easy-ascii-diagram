@@ -1,44 +1,51 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Content } from './style';
 import { TOOLS, DIRECTION, DIRECTION_LINE } from '../constants';
 
 class Line extends Component {
-  constructor(x, y, length, direction) {
-    super();
+  static shape = TOOLS.line
 
-    if (!Object.values(DIRECTION_LINE).includes(direction)) {
-      throw Error('Direction not valid');
-    }
+  static charSet = {
+    horizontalEdge: '-',
+    verticalEdge: '|',
+  };
 
-    this.name = TOOLS.line;
-    this.x = x;
-    this.y = y;
-    this.length = length;
-    this.direction = direction;
-    this.charSet = {
-      horizontalEdge: '-',
-      verticalEdge: '|',
-    };
-    this.text = this.toString();
-  }
-
-  toString() {
+  static toString(direction, length) {
     let text = '';
-    if (this.direction === DIRECTION.horizontal) {
-      for (let i = 0; i < this.length; i += 1) {
-        text += this.charSet.horizontalEdge;
+    if (direction === DIRECTION.horizontal) {
+      for (let i = 0; i < length; i += 1) {
+        text += Line.charSet.horizontalEdge;
       }
     } else {
-      for (let i = 0; i < this.length; i += 1) {
-        text += `${this.charSet.verticalEdge}\n`;
+      for (let i = 0; i < length; i += 1) {
+        text += `${Line.charSet.verticalEdge}\n`;
       }
     }
     return text;
   }
 
+  state = {
+    x: this.props.x,
+    y: this.props.y,
+    length: this.props.length,
+    direction: this.props.direction,
+  }
+
   render() {
-    return <Content x={this.x} y={this.y}>{this.text}</Content>;
+    const {
+      x, y, direction, length,
+    } = this.state;
+    return <Content x={x} y={y}>{Line.toString(direction, length)}</Content>;
   }
 }
+
+Line.propTypes = {
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
+  direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
+};
+
 
 export default Line;
