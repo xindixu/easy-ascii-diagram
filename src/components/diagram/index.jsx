@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { debounce } from 'lodash';
 import { Wrapper } from './style';
 import {
   DIRECTION, TOOLS, TOOLS_DRAWING,
-  GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, DIRECTION_ARROW,
+  GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, DIRECTION_ARROW, DIRECTION_LINE,
 } from '../../constants';
 
 import Rectangle from '../../lib/rectangle';
@@ -11,12 +12,17 @@ import Line from '../../lib/line';
 import Arrow from '../../lib/arrow';
 import Text from '../../lib/text';
 
+const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
 class Diagram extends Component {
   state = {
     isDrawing: false,
-    prevPos: null,
-    curPos: null,
-    content: [],
+    start: null,
+    end: null,
+    drawing: null,
+    content: [
+      <Rectangle key={randomId()} x={1} y={2} width={13} height={14} />,
+      <Line key={randomId()} x={20} y={2} length={10} direction={DIRECTION_LINE.vertical} />,
+    ],
   }
 
   componentDidMount() {
@@ -26,39 +32,33 @@ class Diagram extends Component {
   handleMouseDown = (e) => {
     this.setState({
       isDrawing: true,
-      prevPos: { x: e.clientX, y: e.clientY },
-      curPos: { x: e.clientX, y: e.clientY },
+      start: { x: e.clientX, y: e.clientY },
+      end: { x: e.clientX, y: e.clientY },
+
     });
   }
 
-  handleMouseMove = (e) => {
+  handleMouseMove = debounce((e) => {
+    console.log('handling move');
     if (this.state.isDrawing === true) {
       this.setState({
-        curPos: { x: e.clientX, y: e.clientY },
+        end: { x: e.clientX, y: e.clientY },
       });
-      this.draw();
     }
-  }
+    this.draw();
+  }, 200)
 
   handleMouseUp = (e) => {
     this.setState({
       isDrawing: false,
+      end: { x: e.clientX, y: e.clientY },
     });
   }
 
+  getX = x => Math.floor(x / GRID_WIDTH / this.props.zoomLevel);
 
-  calculateGridToFill() {
-    const { zoomLevel } = this.props;
-    const { curPos } = this.state;
-    const { x, y } = curPos;
+  getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 2;
 
-    const column = Math.floor(x / GRID_WIDTH / zoomLevel);
-    const row = Math.floor(y / GRID_HEIGHT / zoomLevel) - 2;
-    return { column, row };
-    // const { _, totalColumn } = this.calculateTotalGridNumber();
-    // const index = row * totalColumn + column;
-    // return index;
-  }
 
   calculateTotalGridNumber() {
     const { zoomLevel } = this.props;
@@ -67,36 +67,45 @@ class Diagram extends Component {
     return { totalRow, totalColumn };
   }
 
+  drawRectangle() {
+    const { start, end } = this.state;
+
+    const x = this.getX(start.x);
+    const y = this.getY(start.y);
+    const width = Math.abs(this.getX(end.x) - x);
+    const height = Math.abs(this.getY(end.x) - y);
+
+    return <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />;
+  }
 
   draw() {
-    const { column, row } = this.calculateGridToFill();
     const { tool } = this.props;
-    console.log(`${tool} (${column}, ${row})`);
 
+    let shape = null;
     switch (tool) {
       case TOOLS.rectangle:
+        shape = this.drawRectangle();
         break;
       case TOOLS.arrow:
         break;
       default:
         break;
     }
+    this.setState({ drawing: shape });
   }
 
 
   render() {
-    const { content } = this.state;
-
+    const { content, drawing } = this.state;
     return (
       <Wrapper
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
       >
-        <Text x={10} y={3} content="xindi loves justin" />
-        <Line x={25} y={10} length={21} direction={DIRECTION.horizontal} />
-        <Arrow x={25} y={10} length={21} direction={DIRECTION.up} />
-        <Rectangle x={1} y={2} width={12} height={12} />
+        {drawing}
+        {content.map(el => el)}
+        {console.log(content)}
       </Wrapper>
     );
   }
