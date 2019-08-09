@@ -32,7 +32,6 @@ class Rectangle extends Component {
     return text;
   }
 
-
   state = {
     x: this.props.x,
     y: this.props.y,

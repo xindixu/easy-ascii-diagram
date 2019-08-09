@@ -10,21 +10,14 @@ import Text from '../../lib/text';
 
 class Diagram extends Component {
   state = {
-    content: [
-      new Rectangle(1, 2, 12, 12),
-      new Line(20, 3, 10, DIRECTION.vertical),
-      new Arrow(25, 3, 10, DIRECTION.up),
-      new Arrow(25, 3, 10, DIRECTION.left),
-      new Arrow(30, 2, 10, DIRECTION.right),
-      new Arrow(30, 20, 10, DIRECTION.down),
-      new Text(2, 3, 'xindi love justin'),
-    ],
+    content: [],
   }
 
   render() {
     const { content } = this.state;
     return (
       <Wrapper>
+        <Text x={10} y={3} content="xindi loves justin" />
         <Line x={25} y={10} length={21} direction={DIRECTION.horizontal} />
         <Arrow x={25} y={10} length={21} direction={DIRECTION.up} />
         <Rectangle x={1} y={2} width={12} height={12} />
@@ -36,6 +29,9 @@ class Diagram extends Component {
 Diagram.defaultProps = {
 };
 Diagram.propTypes = {
+  handleMouseDown: PropTypes.func.isRequired,
+  handleMouseMove: PropTypes.func.isRequired,
+  handleMouseUp: PropTypes.func.isRequired,
 };
 
 export default Diagram;

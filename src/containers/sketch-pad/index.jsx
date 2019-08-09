@@ -82,7 +82,11 @@ class SketchPad extends Component {
       <React.Fragment>
         <ToolBar />
         <Grid zoomLevel={zoomLevel} />
-        <Diagram />
+        <Diagram
+          handleMouseDown={this.handleMouseDown}
+          handleMouseMove={this.handleMouseMove}
+          handleMouseUp={this.handleMouseUp}
+        />
       </React.Fragment>
 
     );

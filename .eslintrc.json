@@ -18,7 +18,7 @@
     "semi": "error",
     "react/jsx-one-expression-per-line": "off",
     "react/destructuring-assignment": "off",
-    "max-len": "error",
+    "max-len": ["error", { "code": 80 }],
     "space-infix-ops": "error"
   },
   "parser": "babel-eslint"
