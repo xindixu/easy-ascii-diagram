@@ -6,10 +6,10 @@ export const TOOLS = {
   eraser: 'ERASER',
 };
 export const TOOLS_DRAWING = {
-  [TOOLS.rectangle]: TOOLS.rectangle,
-  [TOOLS.line]: TOOLS.line,
-  [TOOLS.arrow]: TOOLS.arrow,
-  [TOOLS.text]: TOOLS.text,
+  rectangle: TOOLS.rectangle,
+  line: TOOLS.line,
+  arrow: TOOLS.arrow,
+  text: TOOLS.text,
 };
 
 export const COMMANDS = {
@@ -43,13 +43,13 @@ export const DIRECTION = {
 };
 
 export const DIRECTION_LINE = {
-  [DIRECTION.horizontal]: DIRECTION.horizontal,
-  [DIRECTION.vertical]: DIRECTION.vertical,
+  horizontal: DIRECTION.horizontal,
+  vertical: DIRECTION.vertical,
 };
 
 export const DIRECTION_ARROW = {
-  [DIRECTION.up]: DIRECTION.up,
-  [DIRECTION.down]: DIRECTION.down,
-  [DIRECTION.left]: DIRECTION.left,
-  [DIRECTION.right]: DIRECTION.right,
+  up: DIRECTION.up,
+  down: DIRECTION.down,
+  left: DIRECTION.left,
+  right: DIRECTION.right,
 };
