@@ -58,7 +58,7 @@ class Diagram extends Component {
 
   getX = x => Math.floor(x / GRID_WIDTH / this.props.zoomLevel);
 
-  getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 2;
+  getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
 
   calculateTotalGridNumber() {
@@ -79,9 +79,16 @@ class Diagram extends Component {
     return <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />;
   }
 
+  drawLine() {
+    const { start, end } = this.state;
+    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
+    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
+
+    const height = Math.abs(this.getY(start.y - end.y));
+  }
+
   draw() {
     const { tool } = this.props;
-    console.log(this.state.end.x, this.state.end.y);
 
     let shape = null;
     switch (tool) {

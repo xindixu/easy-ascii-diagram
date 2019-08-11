@@ -27,8 +27,8 @@ export const ACTIONS = {
 
 
 export const TOOLBAR_HEIGHT = 32;
-export const GRID_HEIGHT = 20;
-export const GRID_WIDTH = 12;
+export const GRID_HEIGHT = 32;
+export const GRID_WIDTH = 16;
 
 export const CANVAS_HEIGHT = window.innerHeight - TOOLBAR_HEIGHT;
 export const CANVAS_WIDTH = window.innerWidth;
