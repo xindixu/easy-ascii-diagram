@@ -9,4 +9,6 @@ export const Wrapper = styled.div`
   position: absolute;
   top: ${TOOLBAR_HEIGHT}px;
   left: 0;
+  cursor: crosshair;
+  font-family: Courier, monospace;
 `;

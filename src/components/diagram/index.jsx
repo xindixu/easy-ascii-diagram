@@ -21,6 +21,7 @@ class Diagram extends Component {
     drawing: null,
     content: [
       <Rectangle key={randomId()} x={1} y={2} width={13} height={14} />,
+      <Text key={randomId()} x={1} y={2} content="hahah" />,
       <Line key={randomId()} x={20} y={2} length={10} direction={DIRECTION_LINE.vertical} />,
     ],
   }
@@ -38,15 +39,15 @@ class Diagram extends Component {
     });
   }
 
-  handleMouseMove = debounce((e) => {
+  handleMouseMove = (e) => {
     console.log('handling move');
     if (this.state.isDrawing === true) {
       this.setState({
         end: { x: e.clientX, y: e.clientY },
       });
+      this.draw();
     }
-    this.draw();
-  }, 200)
+  }
 
   handleMouseUp = (e) => {
     this.setState({
@@ -70,16 +71,17 @@ class Diagram extends Component {
   drawRectangle() {
     const { start, end } = this.state;
 
-    const x = this.getX(start.x);
-    const y = this.getY(start.y);
-    const width = Math.abs(this.getX(end.x) - x);
-    const height = Math.abs(this.getY(end.x) - y);
+    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
+    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
+    const width = Math.abs(this.getX(start.x - end.x));
+    const height = Math.abs(this.getY(start.y - end.y));
 
     return <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />;
   }
 
   draw() {
     const { tool } = this.props;
+    console.log(this.state.end.x, this.state.end.y);
 
     let shape = null;
     switch (tool) {
