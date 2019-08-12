@@ -11,7 +11,6 @@ export const Content = styled.code`
   white-space: pre-wrap;
   display: inline;
   font-family: Courier, monospace;
-
   font-size: ${GRID_WIDTH / 0.6}px;
   line-height: ${GRID_HEIGHT * 1.03}px;
   background: ${yellow};

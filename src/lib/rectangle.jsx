@@ -52,7 +52,7 @@ class Rectangle extends Component {
     const {
       x, y, width, height,
     } = this.state;
-    return <Content x={x} y={y} width={width} height={height}>{Rectangle.toString(width, height)}</Content>;
+    return <Content x={x} y={y}>{Rectangle.toString(width, height)}</Content>;
   }
 }
 

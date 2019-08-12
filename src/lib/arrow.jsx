@@ -10,7 +10,7 @@ class Arrow extends Component {
     horizontal: '-',
     vertical: '|',
     up: '^',
-    down: 'V',
+    down: 'v',
     left: '<',
     right: '>',
     end: '+',

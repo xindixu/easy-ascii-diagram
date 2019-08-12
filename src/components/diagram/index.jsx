@@ -23,6 +23,7 @@ class Diagram extends Component {
       <Rectangle key={randomId()} x={1} y={2} width={13} height={14} />,
       <Text key={randomId()} x={1} y={2} content="hahah" />,
       <Line key={randomId()} x={20} y={2} length={10} direction={DIRECTION_LINE.vertical} />,
+      <Arrow key={randomId()} x={24} y={2} length={10} direction={DIRECTION_ARROW.up} />,
     ],
   }
 
@@ -50,6 +51,13 @@ class Diagram extends Component {
   }
 
   handleMouseUp = (e) => {
+    const shape = this.state.drawing;
+    if (shape !== null) {
+      this.setState(state => ({
+        content: state.content.concat(shape),
+        drawing: null,
+      }));
+    }
     this.setState({
       isDrawing: false,
       end: { x: e.clientX, y: e.clientY },
@@ -68,9 +76,48 @@ class Diagram extends Component {
     return { totalRow, totalColumn };
   }
 
+
+  drawArrow() {
+    const { start, end } = this.state;
+    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
+    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
+    const width = Math.abs(this.getX(start.x - end.x));
+    const height = Math.abs(this.getY(start.y - end.y));
+    let length;
+    let direction;
+
+    if (width < height) {
+      length = height;
+      direction = start.y < end.y ? DIRECTION_ARROW.down : DIRECTION_ARROW.up;
+    } else {
+      length = width;
+      direction = start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
+    }
+
+    return <Arrow key={randomId()} x={x} y={y} length={length} direction={direction} />;
+  }
+
+  drawLine() {
+    const { start, end } = this.state;
+    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
+    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
+    const width = Math.abs(this.getX(start.x - end.x));
+    const height = Math.abs(this.getY(start.y - end.y));
+    let length;
+    let direction;
+
+    if (width < height) {
+      length = height;
+      direction = DIRECTION_LINE.vertical;
+    } else {
+      length = width;
+      direction = DIRECTION_LINE.horizontal;
+    }
+    return <Line key={randomId()} x={x} y={y} length={length} direction={direction} />;
+  }
+
   drawRectangle() {
     const { start, end } = this.state;
-
     const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
     const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
     const width = Math.abs(this.getX(start.x - end.x));
@@ -79,12 +126,8 @@ class Diagram extends Component {
     return <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />;
   }
 
-  drawLine() {
-    const { start, end } = this.state;
-    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
-    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
-
-    const height = Math.abs(this.getY(start.y - end.y));
+  drawText() {
+    const { start } = this.state;
   }
 
   draw() {
@@ -96,6 +139,10 @@ class Diagram extends Component {
         shape = this.drawRectangle();
         break;
       case TOOLS.arrow:
+        shape = this.drawArrow();
+        break;
+      case TOOLS.Line:
+        shape = this.drawLine();
         break;
       default:
         break;
@@ -114,7 +161,7 @@ class Diagram extends Component {
       >
         {drawing}
         {content.map(el => el)}
-        {console.log(content)}
+        {console.log(content, drawing)}
       </Wrapper>
     );
   }
