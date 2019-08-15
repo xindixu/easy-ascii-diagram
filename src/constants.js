@@ -12,13 +12,15 @@ export const TOOLS_DRAWING = {
   text: TOOLS.text,
 };
 
-export const COMMANDS = {
+export const ZOOM = {
   zoomIn: 'ZOOM_IN',
   zoomOut: 'ZOOM_OUT',
+};
+
+export const COMMANDS = {
   undo: 'UNDO',
   redo: 'REDO',
 };
-
 
 export const ACTIONS = {
   export: 'EXPORT',

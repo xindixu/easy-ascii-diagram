@@ -36,6 +36,7 @@ const Button = styled.button`
   padding: ${spacerSm};
   margin: ${spacerXs};
   border-radius: ${radiusSm};
+  background: ${props => (props.active ? 'pink' : 'auto')}
 `;
 
 export const IconButton = styled(Button)`
