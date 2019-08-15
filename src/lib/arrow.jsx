@@ -80,7 +80,6 @@ Arrow.propTypes = {
   y: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
-
 };
 
 

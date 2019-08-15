@@ -32,6 +32,7 @@ class Diagram extends Component {
   }
 
   handleMouseDown = (e) => {
+    console.log(this.props.tool);
     this.setState({
       isDrawing: true,
       start: { x: e.clientX, y: e.clientY },
@@ -41,7 +42,6 @@ class Diagram extends Component {
   }
 
   handleMouseMove = (e) => {
-    console.log('handling move');
     if (this.state.isDrawing === true) {
       this.setState({
         end: { x: e.clientX, y: e.clientY },
@@ -130,6 +130,10 @@ class Diagram extends Component {
     const { start } = this.state;
   }
 
+  erase() {
+    const { start, end } = this.state;
+  }
+
   draw() {
     const { tool } = this.props;
 
@@ -141,8 +145,14 @@ class Diagram extends Component {
       case TOOLS.arrow:
         shape = this.drawArrow();
         break;
-      case TOOLS.Line:
+      case TOOLS.line:
         shape = this.drawLine();
+        break;
+      case TOOLS.text:
+        shape = this.drawText();
+        break;
+      case TOOLS.eraser:
+        this.erase();
         break;
       default:
         break;
@@ -159,9 +169,8 @@ class Diagram extends Component {
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
       >
-        {drawing}
         {content.map(el => el)}
-        {console.log(content, drawing)}
+        {drawing}
       </Wrapper>
     );
   }

@@ -18,15 +18,15 @@ class SketchPad extends Component {
 
   }
 
-  setDrawingTool(tool) {
-    this.setState({ tool });
+  setDrawingTool = (e) => {
+    this.setState({ tool: e.target.value });
   }
 
   render() {
     const { tool, zoomLevel } = this.state;
     return (
       <React.Fragment>
-        <ToolBar />
+        <ToolBar setTool={this.setDrawingTool} />
         <Grid zoomLevel={zoomLevel} />
         <Diagram
           tool={tool}
