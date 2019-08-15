@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Content } from './style';
-import { TOOLS, DIRECTION, DIRECTION_ARROW } from '../constants';
+import { TOOLS } from '../constants';
 
 class Text extends Component {
   static shape = TOOLS.Text

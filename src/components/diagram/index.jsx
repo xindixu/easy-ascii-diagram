@@ -16,12 +16,14 @@ const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
 class Diagram extends Component {
   state = {
     isDrawing: false,
+    isTyping: false,
     start: null,
     end: null,
     drawing: null,
+    textBuffer: '',
     content: [
       <Rectangle key={randomId()} x={1} y={2} width={13} height={14} />,
-      <Text key={randomId()} x={1} y={2} content="hahah" />,
+      <Text key={randomId()} x={1} y={1} content="hahah" />,
       <Line key={randomId()} x={20} y={2} length={10} direction={DIRECTION_LINE.vertical} />,
       <Arrow key={randomId()} x={24} y={2} length={10} direction={DIRECTION_ARROW.up} />,
     ],
@@ -31,8 +33,12 @@ class Diagram extends Component {
 
   }
 
+
   handleMouseDown = (e) => {
-    console.log(this.props.tool);
+    const { isTyping } = this.state;
+    if (isTyping) {
+      this.commitDrawing();
+    }
     this.setState({
       isDrawing: true,
       start: { x: e.clientX, y: e.clientY },
@@ -42,6 +48,9 @@ class Diagram extends Component {
   }
 
   handleMouseMove = (e) => {
+    const { tool } = this.props;
+    if (tool === TOOLS.text) return;
+
     if (this.state.isDrawing === true) {
       this.setState({
         end: { x: e.clientX, y: e.clientY },
@@ -51,23 +60,78 @@ class Diagram extends Component {
   }
 
   handleMouseUp = (e) => {
-    const shape = this.state.drawing;
-    if (shape !== null) {
-      this.setState(state => ({
-        content: state.content.concat(shape),
-        drawing: null,
-      }));
-    }
+    const { tool } = this.props;
+    if (tool === TOOLS.text) return;
+
     this.setState({
-      isDrawing: false,
       end: { x: e.clientX, y: e.clientY },
     });
+
+    this.commitDrawing();
+  }
+
+  handleKeyDown =(e) => {
+    const { tool } = this.props;
+    const { isDrawing } = this.state;
+
+    if (tool === TOOLS.text && isDrawing) {
+      const { textBuffer } = this.state;
+      let content = '';
+      let needToDraw = false;
+
+      switch (e.key) {
+        case 'Backspace':
+          content = textBuffer.substring(0, textBuffer.length - 1);
+          needToDraw = true;
+          break;
+        default:
+          break;
+      }
+
+      if (needToDraw) {
+        this.draw(content);
+        this.setState({ textBuffer: content });
+      }
+    }
+  }
+
+  handleKeyPress = (e) => {
+    const { tool } = this.props;
+    const { isDrawing } = this.state;
+
+    if (tool === TOOLS.text && isDrawing) {
+      const { textBuffer } = this.state;
+      let content = '';
+
+      if (e.key === 'Enter') {
+        content = `${textBuffer}\n`;
+      } else {
+        content = `${textBuffer}${e.key}`;
+      }
+      this.draw(content);
+      this.setState({ textBuffer: content, isTyping: true });
+    }
   }
 
   getX = x => Math.floor(x / GRID_WIDTH / this.props.zoomLevel);
 
   getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
+
+  commitDrawing() {
+    const { drawing } = this.state;
+    if (drawing !== null) {
+      const { content } = this.state;
+      this.setState({
+        content: content.concat(drawing),
+        drawing: null,
+        textBuffer: '',
+      });
+    }
+    this.setState({
+      isDrawing: false,
+    });
+  }
 
   calculateTotalGridNumber() {
     const { zoomLevel } = this.props;
@@ -126,15 +190,18 @@ class Diagram extends Component {
     return <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />;
   }
 
-  drawText() {
+  drawText(textBuffer) {
     const { start } = this.state;
+    const x = this.getX(start.x);
+    const y = this.getY(start.y);
+    return <Text key={randomId()} x={x} y={y} content={textBuffer} />;
   }
 
   erase() {
     const { start, end } = this.state;
   }
 
-  draw() {
+  draw(content) {
     const { tool } = this.props;
 
     let shape = null;
@@ -149,7 +216,7 @@ class Diagram extends Component {
         shape = this.drawLine();
         break;
       case TOOLS.text:
-        shape = this.drawText();
+        shape = this.drawText(content);
         break;
       case TOOLS.eraser:
         this.erase();
@@ -163,11 +230,17 @@ class Diagram extends Component {
 
   render() {
     const { content, drawing } = this.state;
+    const { tool } = this.props;
+
     return (
       <Wrapper
+        tabIndex={-1}
+        tool={tool}
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
+        onKeyPress={this.handleKeyPress}
+        onKeyDown={this.handleKeyDown}
       >
         {content.map(el => el)}
         {drawing}
