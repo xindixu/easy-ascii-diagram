@@ -21,12 +21,6 @@ class Diagram extends Component {
     end: null,
     drawing: null,
     textBuffer: '',
-    content: [
-      <Rectangle key={randomId()} x={1} y={2} width={13} height={14} />,
-      <Text key={randomId()} x={1} y={1} content="hahah" />,
-      <Line key={randomId()} x={20} y={2} length={10} direction={DIRECTION_LINE.vertical} />,
-      <Arrow key={randomId()} x={24} y={2} length={10} direction={DIRECTION_ARROW.up} />,
-    ],
   }
 
   componentDidMount() {
@@ -37,7 +31,7 @@ class Diagram extends Component {
   handleMouseDown = (e) => {
     const { isTyping } = this.state;
     if (isTyping) {
-      this.commitDrawing();
+      this.commit();
     }
     this.setState({
       isDrawing: true,
@@ -67,7 +61,7 @@ class Diagram extends Component {
       end: { x: e.clientX, y: e.clientY },
     });
 
-    this.commitDrawing();
+    this.commit();
   }
 
   handleKeyDown =(e) => {
@@ -118,12 +112,12 @@ class Diagram extends Component {
   getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
 
-  commitDrawing() {
+  commit() {
     const { drawing } = this.state;
     if (drawing !== null) {
-      const { content } = this.state;
+      console.log(drawing);
+      this.props.commitDrawing(drawing);
       this.setState({
-        content: content.concat(drawing),
         drawing: null,
         textBuffer: '',
       });
@@ -229,8 +223,8 @@ class Diagram extends Component {
 
 
   render() {
-    const { content, drawing } = this.state;
-    const { tool } = this.props;
+    const { drawing } = this.state;
+    const { tool, content } = this.props;
 
     return (
       <Wrapper
@@ -255,6 +249,8 @@ Diagram.defaultProps = {
 Diagram.propTypes = {
   tool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
   zoomLevel: PropTypes.number,
+  content: PropTypes.arrayOf(PropTypes.node).isRequired,
+  commitDrawing: PropTypes.func.isRequired,
 };
 
 export default Diagram;
