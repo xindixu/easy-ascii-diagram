@@ -125,12 +125,12 @@ class Diagram extends Component {
     });
   }
 
-  calculateTotalGridNumber() {
-    const { zoomLevel } = this.props;
-    const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
-    const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
-    return { totalRow, totalColumn };
-  }
+  // calculateTotalGridNumber() {
+  //   const { zoomLevel } = this.props;
+  //   const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
+  //   const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
+  //   return { totalRow, totalColumn };
+  // }
 
   drawArrow() {
     const { start, end } = this.state;

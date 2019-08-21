@@ -61,11 +61,29 @@ class SketchPad extends Component {
 
   handleAction = e => {
     console.log(e.target.value);
-    let result = "";
+    const result = [];
     const { content } = this.state;
+    console.log(content);
     content.forEach(el => {
-      console.log(el);
-      result += el.convert();
+      let text = "";
+      switch (el.type.shape) {
+        case TOOLS.arrow:
+          text = el.type.convert(el.props.direction, el.props.length);
+          break;
+        case TOOLS.line:
+          text = el.type.convert(el.props.direction, el.props.length);
+          break;
+        case TOOLS.text:
+          text = el.type.convert(el.props.content);
+          break;
+        case TOOLS.rectangle:
+          text = el.type.convert(el.props.width, el.props.height);
+          break;
+        default:
+          break;
+      }
+
+      result.push(text);
     });
     console.log(result);
 

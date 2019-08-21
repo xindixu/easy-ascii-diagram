@@ -4,7 +4,7 @@ import { Content } from "./style";
 import { TOOLS } from "../constants";
 
 class Text extends Component {
-  static shape = TOOLS.Text;
+  static shape = TOOLS.text;
 
   static convert(content) {
     return content;
