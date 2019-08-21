@@ -33,7 +33,7 @@ export const WithGrid = styled(Base)`
   `}
 `;
 
-export const BorderOnly = styled(WithGrid)`
+export const BorderOnly = styled(Base)`
   box-shadow: inset ${GRID_WIDTH}px 0px 0px ${yellow},
     inset -${GRID_WIDTH}px 0px 0px ${yellow},
     inset 0 ${GRID_HEIGHT}px 0px ${yellow},

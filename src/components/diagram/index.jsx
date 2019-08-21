@@ -5,8 +5,6 @@ import {
   TOOLS,
   GRID_WIDTH,
   GRID_HEIGHT,
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
   DIRECTION_ARROW,
   DIRECTION_LINE
 } from "../../constants";
@@ -34,6 +32,8 @@ class Diagram extends Component {
     const { isTyping } = this.state;
     if (isTyping) {
       this.commit();
+      this.setState({ isTyping: false });
+      return;
     }
     this.setState({
       isDrawing: true,

@@ -50,7 +50,8 @@ Eraser.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
+  zoomLevel: PropTypes.number.isRequired
 };
 
 export default Eraser;
