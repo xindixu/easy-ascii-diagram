@@ -79,6 +79,9 @@ class SketchPad extends Component {
         case TOOLS.rectangle:
           text = el.type.convert(el.props.width, el.props.height);
           break;
+        case TOOLS.eraser:
+          text = el.type.convert(el.props.width, el.props.height);
+          break;
         default:
           break;
       }
@@ -111,7 +114,6 @@ class SketchPad extends Component {
         />
         <Grid zoomLevel={zoomLevel} />
         <Diagram
-          setRef={this.setRef}
           tool={tool}
           zoomLevel={zoomLevel}
           content={content}

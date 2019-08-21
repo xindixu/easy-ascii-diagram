@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Content } from "./style";
+import { BorderOnly } from "./style";
 import { TOOLS } from "../constants";
 
 class Rectangle extends Component {
@@ -41,7 +41,7 @@ class Rectangle extends Component {
   };
 
   componentDidMount() {
-    const { width, height } = this.props;
+    const { width, height } = this.state;
     const text = Rectangle.convert(width, height);
     this.setState({ text });
   }
@@ -56,10 +56,11 @@ class Rectangle extends Component {
 
   render() {
     const { x, y, text } = this.state;
+    const { zoomLevel } = this.props;
     return (
-      <Content x={x} y={y}>
+      <BorderOnly x={x} y={y} zoomLevel={zoomLevel}>
         {text}
-      </Content>
+      </BorderOnly>
     );
   }
 }
@@ -68,7 +69,8 @@ Rectangle.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
+  zoomLevel: PropTypes.number.isRequired
 };
 
 export default Rectangle;

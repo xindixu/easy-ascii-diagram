@@ -15,6 +15,7 @@ import Rectangle from "../../lib/rectangle";
 import Line from "../../lib/line";
 import Arrow from "../../lib/arrow";
 import Text from "../../lib/text";
+import Eraser from "../../lib/eraser";
 
 const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
 class Diagram extends Component {
@@ -134,6 +135,7 @@ class Diagram extends Component {
 
   drawArrow() {
     const { start, end } = this.state;
+    const { zoomLevel } = this.props;
     const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
     const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
     const width = Math.abs(this.getX(start.x - end.x));
@@ -157,12 +159,14 @@ class Diagram extends Component {
         y={y}
         length={length}
         direction={direction}
+        zoomLevel={zoomLevel}
       />
     );
   }
 
   drawLine() {
     const { start, end } = this.state;
+    const { zoomLevel } = this.props;
     const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
     const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
     const width = Math.abs(this.getX(start.x - end.x));
@@ -184,31 +188,65 @@ class Diagram extends Component {
         y={y}
         length={length}
         direction={direction}
+        zoomLevel={zoomLevel}
       />
     );
   }
 
   drawRectangle() {
     const { start, end } = this.state;
+    const { zoomLevel } = this.props;
     const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
     const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
     const width = Math.abs(this.getX(start.x - end.x));
     const height = Math.abs(this.getY(start.y - end.y));
 
     return (
-      <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />
+      <Rectangle
+        key={randomId()}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        zoomLevel={zoomLevel}
+      />
     );
   }
 
   drawText(textBuffer) {
     const { start } = this.state;
+    const { zoomLevel } = this.props;
     const x = this.getX(start.x);
     const y = this.getY(start.y);
-    return <Text key={randomId()} x={x} y={y} content={textBuffer} />;
+    return (
+      <Text
+        key={randomId()}
+        x={x}
+        y={y}
+        content={textBuffer}
+        zoomLevel={zoomLevel}
+      />
+    );
   }
 
   erase() {
     const { start, end } = this.state;
+    const { zoomLevel } = this.props;
+    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
+    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
+    const width = Math.abs(this.getX(start.x - end.x));
+    const height = Math.abs(this.getY(start.y - end.y));
+
+    return (
+      <Eraser
+        key={randomId()}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        zoomLevel={zoomLevel}
+      />
+    );
   }
 
   draw(content) {
@@ -229,7 +267,7 @@ class Diagram extends Component {
         shape = this.drawText(content);
         break;
       case TOOLS.eraser:
-        this.erase();
+        shape = this.erase();
         break;
       default:
         break;

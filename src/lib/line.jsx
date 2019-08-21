@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Content } from "./style";
+import { WithBackground } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_LINE } from "../constants";
 
 class Line extends Component {
@@ -42,9 +42,9 @@ class Line extends Component {
   render() {
     const { x, y, text } = this.state;
     return (
-      <Content x={x} y={y}>
+      <WithBackground x={x} y={y}>
         {text}
-      </Content>
+      </WithBackground>
     );
   }
 }

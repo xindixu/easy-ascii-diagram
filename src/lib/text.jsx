@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Content } from "./style";
+import { WithBackground } from "./style";
 import { TOOLS } from "../constants";
 
 class Text extends Component {
@@ -18,7 +18,7 @@ class Text extends Component {
   };
 
   componentDidMount() {
-    const { content } = this.props;
+    const { content } = this.state;
     const text = Text.convert(content);
     this.setState({ text });
   }
@@ -26,9 +26,9 @@ class Text extends Component {
   render() {
     const { x, y, text } = this.state;
     return (
-      <Content x={x} y={y}>
+      <WithBackground x={x} y={y}>
         {text}
-      </Content>
+      </WithBackground>
     );
   }
 }
