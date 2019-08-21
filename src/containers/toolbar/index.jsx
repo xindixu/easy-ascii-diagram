@@ -8,12 +8,12 @@ import {
 } from './style';
 
 const Toolbar = ({
-  setTool, setZoom, currentTool, currentZoom,
+  setTool, setZoom, handleHistory, currentTool, currentZoom,
 }) => (
   <Wrapper>
     <Tool>{Object.keys(TOOLS).map(key => <IconButton onClick={setTool} key={key} value={TOOLS[key]} active={currentTool === TOOLS[key]}>{TOOLS[key]}</IconButton>)}</Tool>
     <Command>
-      {Object.keys(COMMANDS).map(key => <IconButton key={key}>{COMMANDS[key]}</IconButton>)}
+      {Object.keys(COMMANDS).map(key => <IconButton onClick={handleHistory} key={key} value={COMMANDS[key]}>{COMMANDS[key]}</IconButton>)}
       {Object.keys(ZOOM).map(key => <IconButton key={key} value={ZOOM[key]}>{ZOOM[key]}</IconButton>)}
     </Command>
     <Action>{Object.keys(ACTIONS).map(key => <IconButton key={key}>{ACTIONS[key]}</IconButton>)}</Action>
@@ -23,6 +23,7 @@ const Toolbar = ({
 Toolbar.propTypes = {
   setTool: PropTypes.func.isRequired,
   setZoom: PropTypes.func.isRequired,
+  handleHistory: PropTypes.func.isRequired,
   currentTool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
   currentZoom: PropTypes.number.isRequired,
 };

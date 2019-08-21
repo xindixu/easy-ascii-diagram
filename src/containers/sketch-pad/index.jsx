@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TOOLS } from '../../constants';
+import { TOOLS, COMMANDS } from '../../constants';
 
 import Grid from '../../components/grid';
 import Diagram from '../../components/diagram';
@@ -35,6 +35,31 @@ class SketchPad extends Component {
     });
   }
 
+  handleHistory = (e) => {
+    const { content, future } = this.state;
+    let present;
+    switch (e.target.value) {
+      case COMMANDS.undo:
+        present = content.pop();
+        future.unshift(present);
+        this.setState({
+          content,
+          future,
+        });
+        break;
+      case COMMANDS.redo:
+        present = future.shift();
+        content.push(present);
+        this.setState({
+          content,
+          future,
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     const { tool, zoomLevel, content } = this.state;
     return (
@@ -42,10 +67,9 @@ class SketchPad extends Component {
         <ToolBar
           setTool={this.setDrawingTool}
           setZoom={this.setZoomLevel}
+          handleHistory={this.handleHistory}
           currentTool={tool}
           currentZoom={zoomLevel}
-          content={this.content}
-          future={this.future}
         />
         <Grid zoomLevel={zoomLevel} />
         <Diagram
