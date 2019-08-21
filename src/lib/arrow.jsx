@@ -58,18 +58,21 @@ class Arrow extends Component {
   }
 
   state = {
+    x: this.props.x,
+    y: this.props.y,
+    length: this.props.length,
+    direction: this.props.direction,
     text: ""
   };
 
   componentDidMount() {
-    const { direction, length } = this.props;
+    const { direction, length } = this.state;
     const text = Arrow.convert(direction, length);
     this.setState({ text });
   }
 
   render() {
-    const { x, y } = this.props;
-    const { text } = this.state;
+    const { x, y, text } = this.state;
     return (
       <Content x={x} y={y}>
         {text}

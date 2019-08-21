@@ -65,14 +65,7 @@ class SketchPad extends Component {
     const { content } = this.state;
     content.forEach(el => {
       console.log(el);
-
-      switch (el.type.shape) {
-        case TOOLS.arrow:
-          result += this.convert();
-          break;
-        default:
-          break;
-      }
+      result += el.convert();
     });
     console.log(result);
 

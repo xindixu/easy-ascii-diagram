@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Content } from './style';
-import { TOOLS } from '../constants';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Content } from "./style";
+import { TOOLS } from "../constants";
 
 class Rectangle extends Component {
-  static shape = TOOLS.rectangle
+  static shape = TOOLS.rectangle;
 
   static charSet = {
-    corner: '+',
-    horizontalEdge: '-',
-    verticalEdge: '|',
-    inner: ' ',
-  }
+    corner: "+",
+    horizontalEdge: "-",
+    verticalEdge: "|",
+    inner: " "
+  };
 
-  static toString(width, height) {
-    let text = '';
+  static convert(width, height) {
+    let text = "";
     for (let j = 0; j < height; j += 1) {
       for (let i = 0; i < width; i += 1) {
         if ((i === 0 || i === width - 1) && (j === 0 || j === height - 1)) {
           text += Rectangle.charSet.corner;
-        } else if ((i > 0 && i < width - 1) && (j === 0 || j === height - 1)) {
+        } else if (i > 0 && i < width - 1 && (j === 0 || j === height - 1)) {
           text += Rectangle.charSet.horizontalEdge;
         } else if ((i === 0 || i === width - 1) && (j > 0 && j < height - 1)) {
           text += Rectangle.charSet.verticalEdge;
@@ -27,7 +27,7 @@ class Rectangle extends Component {
           text += Rectangle.charSet.inner;
         }
       }
-      text += '\n';
+      text += "\n";
     }
     return text;
   }
@@ -37,6 +37,13 @@ class Rectangle extends Component {
     y: this.props.y,
     width: this.props.width,
     height: this.props.height,
+    text: ""
+  };
+
+  componentDidMount() {
+    const { width, height } = this.props;
+    const text = Rectangle.convert(width, height);
+    this.setState({ text });
   }
 
   moveTo(x, y) {
@@ -47,12 +54,13 @@ class Rectangle extends Component {
     this.setState({ width, height });
   }
 
-
   render() {
-    const {
-      x, y, width, height,
-    } = this.state;
-    return <Content x={x} y={y}>{Rectangle.toString(width, height)}</Content>;
+    const { x, y, text } = this.state;
+    return (
+      <Content x={x} y={y}>
+        {text}
+      </Content>
+    );
   }
 }
 
@@ -60,7 +68,7 @@ Rectangle.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 };
 
 export default Rectangle;
