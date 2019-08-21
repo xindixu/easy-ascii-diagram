@@ -1,16 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
-import { Wrapper } from './style';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Wrapper } from "./style";
 import {
-  DIRECTION, TOOLS, TOOLS_DRAWING,
-  GRID_WIDTH, GRID_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, DIRECTION_ARROW, DIRECTION_LINE,
-} from '../../constants';
+  TOOLS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  DIRECTION_ARROW,
+  DIRECTION_LINE
+} from "../../constants";
 
-import Rectangle from '../../lib/rectangle';
-import Line from '../../lib/line';
-import Arrow from '../../lib/arrow';
-import Text from '../../lib/text';
+import Rectangle from "../../lib/rectangle";
+import Line from "../../lib/line";
+import Arrow from "../../lib/arrow";
+import Text from "../../lib/text";
 
 const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
 class Diagram extends Component {
@@ -20,15 +24,12 @@ class Diagram extends Component {
     start: null,
     end: null,
     drawing: null,
-    textBuffer: '',
-  }
+    textBuffer: ""
+  };
 
-  componentDidMount() {
+  componentDidMount() {}
 
-  }
-
-
-  handleMouseDown = (e) => {
+  handleMouseDown = e => {
     const { isTyping } = this.state;
     if (isTyping) {
       this.commit();
@@ -36,45 +37,44 @@ class Diagram extends Component {
     this.setState({
       isDrawing: true,
       start: { x: e.clientX, y: e.clientY },
-      end: { x: e.clientX, y: e.clientY },
-
+      end: { x: e.clientX, y: e.clientY }
     });
-  }
+  };
 
-  handleMouseMove = (e) => {
+  handleMouseMove = e => {
     const { tool } = this.props;
     if (tool === TOOLS.text) return;
 
     if (this.state.isDrawing === true) {
       this.setState({
-        end: { x: e.clientX, y: e.clientY },
+        end: { x: e.clientX, y: e.clientY }
       });
       this.draw();
     }
-  }
+  };
 
-  handleMouseUp = (e) => {
+  handleMouseUp = e => {
     const { tool } = this.props;
     if (tool === TOOLS.text) return;
 
     this.setState({
-      end: { x: e.clientX, y: e.clientY },
+      end: { x: e.clientX, y: e.clientY }
     });
 
     this.commit();
-  }
+  };
 
-  handleKeyDown =(e) => {
+  handleKeyDown = e => {
     const { tool } = this.props;
     const { isDrawing } = this.state;
 
     if (tool === TOOLS.text && isDrawing) {
       const { textBuffer } = this.state;
-      let content = '';
+      let content = "";
       let needToDraw = false;
 
       switch (e.key) {
-        case 'Backspace':
+        case "Backspace":
           content = textBuffer.substring(0, textBuffer.length - 1);
           needToDraw = true;
           break;
@@ -87,17 +87,17 @@ class Diagram extends Component {
         this.setState({ textBuffer: content });
       }
     }
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyPress = e => {
     const { tool } = this.props;
     const { isDrawing } = this.state;
 
     if (tool === TOOLS.text && isDrawing) {
       const { textBuffer } = this.state;
-      let content = '';
+      let content = "";
 
-      if (e.key === 'Enter') {
+      if (e.key === "Enter") {
         content = `${textBuffer}\n`;
       } else {
         content = `${textBuffer}${e.key}`;
@@ -105,25 +105,23 @@ class Diagram extends Component {
       this.draw(content);
       this.setState({ textBuffer: content, isTyping: true });
     }
-  }
+  };
 
   getX = x => Math.floor(x / GRID_WIDTH / this.props.zoomLevel);
 
   getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
-
   commit() {
     const { drawing } = this.state;
     if (drawing !== null) {
-      console.log(drawing);
       this.props.commitDrawing(drawing);
       this.setState({
         drawing: null,
-        textBuffer: '',
+        textBuffer: ""
       });
     }
     this.setState({
-      isDrawing: false,
+      isDrawing: false
     });
   }
 
@@ -133,7 +131,6 @@ class Diagram extends Component {
     const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
     return { totalRow, totalColumn };
   }
-
 
   drawArrow() {
     const { start, end } = this.state;
@@ -149,10 +146,19 @@ class Diagram extends Component {
       direction = start.y < end.y ? DIRECTION_ARROW.down : DIRECTION_ARROW.up;
     } else {
       length = width;
-      direction = start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
+      direction =
+        start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
     }
 
-    return <Arrow key={randomId()} x={x} y={y} length={length} direction={direction} />;
+    return (
+      <Arrow
+        key={randomId()}
+        x={x}
+        y={y}
+        length={length}
+        direction={direction}
+      />
+    );
   }
 
   drawLine() {
@@ -171,7 +177,15 @@ class Diagram extends Component {
       length = width;
       direction = DIRECTION_LINE.horizontal;
     }
-    return <Line key={randomId()} x={x} y={y} length={length} direction={direction} />;
+    return (
+      <Line
+        key={randomId()}
+        x={x}
+        y={y}
+        length={length}
+        direction={direction}
+      />
+    );
   }
 
   drawRectangle() {
@@ -181,7 +195,9 @@ class Diagram extends Component {
     const width = Math.abs(this.getX(start.x - end.x));
     const height = Math.abs(this.getY(start.y - end.y));
 
-    return <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />;
+    return (
+      <Rectangle key={randomId()} x={x} y={y} width={width} height={height} />
+    );
   }
 
   drawText(textBuffer) {
@@ -221,7 +237,6 @@ class Diagram extends Component {
     this.setState({ drawing: shape });
   }
 
-
   render() {
     const { drawing } = this.state;
     const { tool, content } = this.props;
@@ -244,13 +259,13 @@ class Diagram extends Component {
 }
 
 Diagram.defaultProps = {
-  zoomLevel: 1,
+  zoomLevel: 1
 };
 Diagram.propTypes = {
   tool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
-  commitDrawing: PropTypes.func.isRequired,
+  commitDrawing: PropTypes.func.isRequired
 };
 
 export default Diagram;

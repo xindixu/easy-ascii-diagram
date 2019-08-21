@@ -2,12 +2,14 @@
   "plugins": [
     "react",
     "import",
-    "jsx-a11y"
+    "jsx-a11y",
+    "prettier"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "airbnb"
+    "airbnb",
+    "prettier"
   ],
   "env": {
     "node": true,
@@ -18,8 +20,8 @@
     "semi": "error",
     "react/jsx-one-expression-per-line": "off",
     "react/destructuring-assignment": "off",
-    "max-len": ["error", { "code": 80 }],
-    "space-infix-ops": "error"
+    "space-infix-ops": "error",
+    "prettier/prettier": ["error"]
   },
   "parser": "babel-eslint"
 

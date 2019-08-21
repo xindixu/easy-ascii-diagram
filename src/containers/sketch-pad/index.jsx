@@ -1,41 +1,36 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { TOOLS, COMMANDS } from '../../constants';
+import React, { Component } from "react";
+import { TOOLS, COMMANDS } from "../../constants";
 
-import Grid from '../../components/grid';
-import Diagram from '../../components/diagram';
-import ToolBar from '../toolbar';
+import Grid from "../../components/grid";
+import Diagram from "../../components/diagram";
+import ToolBar from "../toolbar";
 
 class SketchPad extends Component {
   state = {
     zoomLevel: 1,
     tool: TOOLS.arrow,
     content: [],
-    future: [],
+    future: []
   };
 
+  componentDidMount() {}
 
-  componentDidMount() {
-
-  }
-
-  setDrawingTool = (e) => {
+  setDrawingTool = e => {
     this.setState({ tool: e.target.value });
-  }
+  };
 
-  setZoomLevel = (zoom) => {
+  setZoomLevel = zoom => {
     this.setState({ zoomLevel: zoom });
-  }
+  };
 
-
-  commitDrawing = (shape) => {
+  commitDrawing = shape => {
     const { content } = this.state;
     this.setState({
-      content: [...content, shape],
+      content: [...content, shape]
     });
-  }
+  };
 
-  handleHistory = (e) => {
+  handleHistory = e => {
     const { content, future } = this.state;
     let present;
     switch (e.target.value) {
@@ -44,7 +39,7 @@ class SketchPad extends Component {
         future.unshift(present);
         this.setState({
           content,
-          future,
+          future
         });
         break;
       case COMMANDS.redo:
@@ -52,24 +47,36 @@ class SketchPad extends Component {
         content.push(present);
         this.setState({
           content,
-          future,
+          future
         });
         break;
       default:
         break;
     }
-  }
+  };
+
+  handleAction = e => {
+    console.log(e.target.value);
+    let result = "";
+    const { content } = this.state;
+    content.forEach(el => {
+      console.log(el);
+      result += el.toString();
+    });
+    console.log(result);
+  };
 
   render() {
     const { tool, zoomLevel, content } = this.state;
     return (
       <React.Fragment>
         <ToolBar
-          setTool={this.setDrawingTool}
-          setZoom={this.setZoomLevel}
-          handleHistory={this.handleHistory}
           currentTool={tool}
           currentZoom={zoomLevel}
+          handleAction={this.handleAction}
+          handleHistory={this.handleHistory}
+          setTool={this.setDrawingTool}
+          setZoom={this.setZoomLevel}
         />
         <Grid zoomLevel={zoomLevel} />
         <Diagram
@@ -79,12 +86,8 @@ class SketchPad extends Component {
           commitDrawing={this.commitDrawing}
         />
       </React.Fragment>
-
     );
   }
 }
-
-SketchPad.propTypes = {
-};
 
 export default SketchPad;
