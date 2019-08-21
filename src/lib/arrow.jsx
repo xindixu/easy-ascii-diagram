@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Content } from './style';
-import { TOOLS, DIRECTION, DIRECTION_ARROW } from '../constants';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Content } from "./style";
+import { TOOLS, DIRECTION, DIRECTION_ARROW } from "../constants";
 
 class Arrow extends Component {
-  static shape = TOOLS.arrow
+  static shape = TOOLS.arrow;
 
   static charSet = {
-    horizontal: '-',
-    vertical: '|',
-    up: '^',
-    down: 'v',
-    left: '<',
-    right: '>',
-    end: '+',
+    horizontal: "-",
+    vertical: "|",
+    up: "^",
+    down: "v",
+    left: "<",
+    right: ">",
+    end: "+"
   };
 
-
-  static toString(direction, length) {
-    let text = '';
+  static convert(direction, length) {
+    let text = "";
     switch (direction) {
       case DIRECTION.left:
         text += Arrow.charSet.left;
@@ -59,28 +58,31 @@ class Arrow extends Component {
   }
 
   state = {
-    x: this.props.x,
-    y: this.props.y,
-    length: this.props.length,
-    direction: this.props.direction,
-  }
+    text: ""
+  };
 
+  componentDidMount() {
+    const { direction, length } = this.props;
+    const text = Arrow.convert(direction, length);
+    this.setState({ text });
+  }
 
   render() {
-    const {
-      x, y, direction, length,
-    } = this.state;
-    return <Content x={x} y={y}>{Arrow.toString(direction, length)}</Content>;
+    const { x, y } = this.props;
+    const { text } = this.state;
+    return (
+      <Content x={x} y={y}>
+        {text}
+      </Content>
+    );
   }
 }
-
 
 Arrow.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
-  direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
+  direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired
 };
-
 
 export default Arrow;

@@ -1,17 +1,21 @@
 import React, { Component } from "react";
-import { TOOLS, COMMANDS } from "../../constants";
+import { TOOLS, COMMANDS, ACTIONS } from "../../constants";
 
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
 import ToolBar from "../toolbar";
+import Arrow from "../../lib/arrow";
 
 class SketchPad extends Component {
-  state = {
-    zoomLevel: 1,
-    tool: TOOLS.arrow,
-    content: [],
-    future: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      zoomLevel: 1,
+      tool: TOOLS.arrow,
+      content: [],
+      future: []
+    };
+  }
 
   componentDidMount() {}
 
@@ -61,9 +65,25 @@ class SketchPad extends Component {
     const { content } = this.state;
     content.forEach(el => {
       console.log(el);
-      result += el.toString();
+
+      switch (el.type.shape) {
+        case TOOLS.arrow:
+          result += this.convert();
+          break;
+        default:
+          break;
+      }
     });
     console.log(result);
+
+    switch (e.target.value) {
+      case ACTIONS.export:
+        break;
+      case ACTIONS.save:
+        break;
+      default:
+        break;
+    }
   };
 
   render() {
@@ -80,6 +100,7 @@ class SketchPad extends Component {
         />
         <Grid zoomLevel={zoomLevel} />
         <Diagram
+          setRef={this.setRef}
           tool={tool}
           zoomLevel={zoomLevel}
           content={content}
