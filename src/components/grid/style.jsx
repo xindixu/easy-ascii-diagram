@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { TOOLBAR_HEIGHT } from '../../constants';
+import styled from "styled-components";
+import { TOOLBAR_HEIGHT } from "../../constants";
 
-import { styleSettings } from '../../assets/styles/settings';
+import { styleSettings } from "../../assets/styles/settings";
 
 const { pink, borderWidth } = styleSettings;
 
@@ -17,5 +17,4 @@ export const GridBackground = styled.div`
   background-color: white;
   background-image: linear-gradient(${pink} ${borderWidth}, transparent ${borderWidth}),
                   linear-gradient(90deg, ${pink} ${borderWidth}, transparent ${borderWidth});
-
 `;

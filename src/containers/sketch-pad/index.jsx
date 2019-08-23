@@ -1,10 +1,15 @@
 import React, { Component } from "react";
-import { TOOLS, COMMANDS, ACTIONS } from "../../constants";
+import {
+  TOOLS,
+  COMMANDS,
+  ACTIONS,
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH
+} from "../../constants";
 
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
 import ToolBar from "../toolbar";
-import Arrow from "../../lib/arrow";
 
 class SketchPad extends Component {
   constructor(props) {
@@ -15,9 +20,27 @@ class SketchPad extends Component {
       content: [],
       future: []
     };
+    this.result = null;
   }
 
   componentDidMount() {}
+
+  addToResult = (x, y, text) => {
+    let curX = x;
+    let curY = y;
+    let index = 0;
+    while (index < text.length) {
+      this.result[curY][curX] = text[index];
+
+      if (text[index] === "\n") {
+        curY += 1;
+        curX = x;
+      } else {
+        curX += 1;
+      }
+      index += 1;
+    }
+  };
 
   setDrawingTool = e => {
     this.setState({ tool: e.target.value });
@@ -60,10 +83,12 @@ class SketchPad extends Component {
   };
 
   handleAction = e => {
-    console.log(e.target.value);
-    const result = [];
     const { content } = this.state;
-    console.log(content);
+    const { totalRow, totalColumn } = this.calculateTotalGridNumber();
+    this.result = Array(totalRow)
+      .fill()
+      .map(() => Array(totalColumn));
+
     content.forEach(el => {
       let text = "";
       switch (el.type.shape) {
@@ -85,10 +110,9 @@ class SketchPad extends Component {
         default:
           break;
       }
-
-      result.push(text);
+      this.addToResult(el.props.x, el.props.y, text);
     });
-    console.log(result);
+    console.log(this.result);
 
     switch (e.target.value) {
       case ACTIONS.export:
@@ -99,6 +123,13 @@ class SketchPad extends Component {
         break;
     }
   };
+
+  calculateTotalGridNumber() {
+    const { zoomLevel } = this.state;
+    const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
+    const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
+    return { totalRow, totalColumn };
+  }
 
   render() {
     const { tool, zoomLevel, content } = this.state;
