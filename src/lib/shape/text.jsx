@@ -7,6 +7,10 @@ import { TOOLS } from "../../constants";
 class Text extends Component {
   static shape = TOOLS.text;
 
+  static convert(content) {
+    return content;
+  }
+
   state = {
     x: this.props.x,
     y: this.props.y,
@@ -16,13 +20,8 @@ class Text extends Component {
 
   componentDidMount() {
     const { content } = this.state;
-    const text = this.convert(content);
+    const text = Text.convert(content);
     this.setState({ text });
-  }
-
-  convert() {
-    const { content } = this.state;
-    return content;
   }
 
   render() {
@@ -46,7 +45,8 @@ Text.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
-  zoomLevel: PropTypes.number.isRequired
+  zoomLevel: PropTypes.number.isRequired,
+  enterEditMode: PropTypes.func.isRequired
 };
 
 export default editable(Text);

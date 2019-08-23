@@ -171,26 +171,7 @@ class SketchPad extends Component {
       .map(() => Array(border.right - border.left).fill(" "));
 
     content.forEach(el => {
-      let text = "";
-      switch (el.type.shape) {
-        case TOOLS.arrow:
-          text = el.type.convert(el.props.direction, el.props.length);
-          break;
-        case TOOLS.line:
-          text = el.type.convert(el.props.direction, el.props.length);
-          break;
-        case TOOLS.text:
-          text = el.type.convert(el.props.content);
-          break;
-        case TOOLS.rectangle:
-          text = el.type.convert(el.props.width, el.props.height);
-          break;
-        case TOOLS.eraser:
-          text = el.type.convert(el.props.width, el.props.height);
-          break;
-        default:
-          break;
-      }
+      const { text } = el.ref.current.state;
       this.addToResult(el.props.x, el.props.y, text);
     });
     const resultText = this.result.map(arr => arr.join("")).join("\n");
