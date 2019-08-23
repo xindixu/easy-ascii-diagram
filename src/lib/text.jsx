@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import editable from "./editable";
 import { WithBackground } from "./style";
 import { TOOLS } from "../constants";
 
@@ -25,8 +26,15 @@ class Text extends Component {
 
   render() {
     const { x, y, text } = this.state;
+    const { zoomLevel, enterEditMode } = this.props;
+
     return (
-      <WithBackground x={x} y={y}>
+      <WithBackground
+        x={x}
+        y={y}
+        zoomLevel={zoomLevel}
+        onDoubleClick={enterEditMode}
+      >
         {text}
       </WithBackground>
     );
@@ -36,7 +44,9 @@ class Text extends Component {
 Text.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  content: PropTypes.string.isRequired
+  content: PropTypes.string.isRequired,
+  zoomLevel: PropTypes.number.isRequired,
+  enterEditMode: PropTypes.func.isRequired
 };
 
-export default Text;
+export default editable(Text);

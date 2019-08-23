@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import editable from "./editable";
 import { WithBackground } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_ARROW } from "../constants";
 
@@ -73,8 +74,14 @@ class Arrow extends Component {
 
   render() {
     const { x, y, text } = this.state;
+    const { zoomLevel, enterEditMode } = this.props;
     return (
-      <WithBackground x={x} y={y}>
+      <WithBackground
+        x={x}
+        y={y}
+        zoomLevel={zoomLevel}
+        onDoubleClick={enterEditMode}
+      >
         {text}
       </WithBackground>
     );
@@ -85,7 +92,9 @@ Arrow.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
-  direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired
+  direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
+  zoomLevel: PropTypes.number.isRequired,
+  enterEditMode: PropTypes.func.isRequired
 };
 
-export default Arrow;
+export default editable(Arrow);
