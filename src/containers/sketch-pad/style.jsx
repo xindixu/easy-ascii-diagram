@@ -7,7 +7,7 @@ export const TextArea = styled.textarea`
 `;
 
 export const Border = styled.div`
-  pointer-event: none;
+  pointer-events: none;
   border: black solid 2px;
   position: absolute;
   z-index: 100;

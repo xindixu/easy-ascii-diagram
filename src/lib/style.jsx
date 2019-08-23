@@ -47,6 +47,7 @@ export const WithBackground = styled(Base)`
 export const NoBackground = styled(WithGrid)``;
 
 export const EditBox = styled.div`
+  pointer-event: none;
   position: absolute;
   outline: 2px solid ${blue};
 

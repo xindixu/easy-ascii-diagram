@@ -46,8 +46,31 @@ Text.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  enterEditMode: PropTypes.func.isRequired
+  zoomLevel: PropTypes.number.isRequired
 };
 
 export default editable(Text);
+
+export const drawText = ({ x, y, content, id, ref, zoomLevel }) => {
+  return (
+    <Text
+      key={id}
+      ref={ref}
+      x={x}
+      y={y}
+      content={content}
+      zoomLevel={zoomLevel}
+    />
+  );
+};
+
+drawText.propTypes = {
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  content: PropTypes.string.isRequired,
+  zoomLevel: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+  ref: PropTypes.shape({
+    current: PropTypes.any.isRequired
+  }).isRequired
+};

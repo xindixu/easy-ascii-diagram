@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { NoBackground } from "./style";
 import { TOOLS } from "../constants";
+import { randomId } from "../util";
 
 class Eraser extends Component {
   static shape = TOOLS.eraser;
@@ -55,3 +56,22 @@ Eraser.propTypes = {
 };
 
 export default Eraser;
+
+export const erase = ({ x, y, width, height, zoomLevel }) => (
+  <Eraser
+    key={randomId()}
+    x={x}
+    y={y}
+    width={width}
+    height={height}
+    zoomLevel={zoomLevel}
+  />
+);
+
+erase.propTypes = {
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  zoomLevel: PropTypes.number.isRequired
+};

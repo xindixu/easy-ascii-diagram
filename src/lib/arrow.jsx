@@ -98,3 +98,27 @@ Arrow.propTypes = {
 };
 
 export default editable(Arrow);
+
+export const drawArrow = ({ x, y, length, direction, id, ref, zoomLevel }) => (
+  <Arrow
+    key={id}
+    ref={ref}
+    x={x}
+    y={y}
+    length={length}
+    direction={direction}
+    zoomLevel={zoomLevel}
+  />
+);
+
+drawArrow.propTypes = {
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
+  direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
+  zoomLevel: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+  ref: PropTypes.shape({
+    current: PropTypes.any.isRequired
+  }).isRequired
+};

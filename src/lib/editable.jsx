@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { EditBox } from "./style";
-import { TOOLS } from "../constants";
-
-const randomId = () =>
-  Math.random()
-    .toString(36)
-    .substring(2, 8);
+import { randomId } from "../util";
 
 function editable(WrappedComponent) {
   class Editable extends Component {
@@ -18,8 +13,6 @@ function editable(WrappedComponent) {
       height: null,
       id: randomId()
     };
-
-    componentDidMount() {}
 
     handleClick = e => {
       const { id } = this.state;
@@ -57,7 +50,9 @@ function editable(WrappedComponent) {
   Editable.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    forwardedRef: PropTypes.element.isRequired
+    forwardedRef: PropTypes.shape({
+      current: PropTypes.any
+    }).isRequired
   };
 
   return React.forwardRef((props, ref) => {

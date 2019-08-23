@@ -219,6 +219,12 @@ class SketchPad extends Component {
           handleTool={this.handleTool}
         />
         <Grid zoomLevel={zoomLevel} />
+        <Border
+          up={border.up}
+          left={border.left}
+          right={border.right}
+          down={border.down}
+        />
         <Diagram
           tool={tool}
           zoomLevel={zoomLevel}
@@ -227,12 +233,7 @@ class SketchPad extends Component {
           updateBorder={this.updateBorder}
           setRef={(key, ref) => this.nodes.set(key, ref)}
         />
-        <Border
-          up={border.up}
-          left={border.left}
-          right={border.right}
-          down={border.down}
-        />
+
         {showPopUp ? (
           <PopUp
             closePopUp={this.closePopUp}

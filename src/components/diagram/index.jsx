@@ -10,13 +10,14 @@ import {
   DIRECTION_LINE
 } from "../../constants";
 
-import Rectangle from "../../lib/rectangle";
-import Line from "../../lib/line";
-import Arrow from "../../lib/arrow";
-import Text from "../../lib/text";
-import Eraser from "../../lib/eraser";
+import { drawRectangle } from "../../lib/rectangle";
+import { drawLine } from "../../lib/line";
+import { drawArrow } from "../../lib/arrow";
+import { drawText } from "../../lib/text";
+import { erase } from "../../lib/eraser";
 
 const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
+
 class Diagram extends Component {
   state = {
     isDrawing: false,
@@ -118,69 +119,9 @@ class Diagram extends Component {
 
   getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
-  drawArrow = ({ x, y, length, direction }) => (
-    <Arrow
-      key={randomId()}
-      x={x}
-      y={y}
-      length={length}
-      direction={direction}
-      zoomLevel={this.props.zoomLevel}
-    />
-  );
-
-  drawLine = ({ x, y, length, direction }) => (
-    <Line
-      key={randomId()}
-      x={x}
-      y={y}
-      length={length}
-      direction={direction}
-      zoomLevel={this.props.zoomLevel}
-    />
-  );
-
-  drawRectangle = ({ x, y, width, height }) => (
-    <Rectangle
-      key={randomId()}
-      x={x}
-      y={y}
-      width={width}
-      height={height}
-      zoomLevel={this.props.zoomLevel}
-    />
-  );
-
-  drawText = ({ x, y, content }) => {
-    const id = randomId();
-    const ref = React.createRef();
-    this.nodes.set(id, ref);
-    return (
-      <Text
-        key={id}
-        ref={ref}
-        x={x}
-        y={y}
-        content={content}
-        zoomLevel={this.props.zoomLevel}
-      />
-    );
-  };
-
-  erase = ({ x, y, width, height }) => (
-    <Eraser
-      key={randomId()}
-      x={x}
-      y={y}
-      width={width}
-      height={height}
-      zoomLevel={this.props.zoomLevel}
-    />
-  );
-
   commit() {
     const { drawing, borderBuffer } = this.state;
-    console.log(drawing);
+    console.log(this.nodes);
 
     if (drawing !== null) {
       this.props.commitDrawing(drawing);
@@ -196,10 +137,13 @@ class Diagram extends Component {
   }
 
   draw(content) {
-    const { tool } = this.props;
+    const { tool, zoomLevel } = this.props;
     const { start, end } = this.state;
 
     let shape = null;
+    const id = randomId();
+    const ref = React.createRef();
+    this.nodes.set(id, ref);
 
     const x = start.x < end.x ? start.x : end.x;
     const y = start.y < end.y ? start.y : end.y;
@@ -210,7 +154,7 @@ class Diagram extends Component {
 
     switch (tool) {
       case TOOLS.rectangle:
-        shape = this.drawRectangle({ x, y, width, height });
+        shape = drawRectangle({ x, y, width, height, id, ref, zoomLevel });
         break;
 
       case TOOLS.arrow:
@@ -223,7 +167,7 @@ class Diagram extends Component {
           direction =
             start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
         }
-        shape = this.drawArrow({ x, y, length, direction });
+        shape = drawArrow({ x, y, length, direction, id, ref, zoomLevel });
         break;
 
       case TOOLS.line:
@@ -234,15 +178,15 @@ class Diagram extends Component {
           length = width;
           direction = DIRECTION_LINE.horizontal;
         }
-        shape = this.drawLine({ x, y, length, direction });
+        shape = drawLine({ x, y, length, direction, id, ref, zoomLevel });
         break;
 
       case TOOLS.text:
-        shape = this.drawText({ x, y, content });
+        shape = drawText({ x, y, content, id, ref, zoomLevel });
         break;
 
       case TOOLS.eraser:
-        shape = this.erase({ x, y, width, height });
+        shape = erase({ x, y, width, height, zoomLevel });
         break;
 
       default:
