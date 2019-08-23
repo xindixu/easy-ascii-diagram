@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
 
-const { pink, borderWidth, radiusMd, spacer, spacerSm } = styleSettings;
+const { pink, borderWidth, radiusMd, spacer } = styleSettings;
 
 export const Container = styled.div`
   background: white;
@@ -22,6 +22,7 @@ export const Button = styled.button`
   position: absolute;
   top: ${spacer};
   right: ${spacer};
+  border: none;
 `;
 
 export const Header = styled.h1`

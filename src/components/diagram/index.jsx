@@ -239,7 +239,6 @@ class Diagram extends Component {
       default:
         break;
     }
-    console.log(y + height + 1);
 
     this.setState({
       drawing: shape,

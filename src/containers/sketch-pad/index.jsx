@@ -14,31 +14,26 @@ import ToolBar from "../toolbar";
 
 import { TextArea, Border } from "./style";
 
+const calculateTotalGridNumber = zoomLevel => {
+  const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
+  const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
+  return { totalRow, totalColumn };
+};
+
 class SketchPad extends Component {
   constructor(props) {
     super(props);
 
+    const zoomLevel = 1;
+    const { totalRow, totalColumn } = calculateTotalGridNumber(zoomLevel);
+
     this.state = {
-      zoomLevel: 1,
+      zoomLevel,
       tool: TOOLS.arrow,
       content: [],
       future: [],
       showPopUp: false,
       resultText: "",
-      border: {
-        up: 0,
-        down: 0,
-        left: 0,
-        right: 0
-      }
-    };
-    this.result = null;
-  }
-
-  componentDidMount() {
-    const { totalRow, totalColumn } = this.calculateTotalGridNumber();
-    this.state = {
-      ...this.state,
       border: {
         up: totalRow,
         down: 0,
@@ -46,20 +41,22 @@ class SketchPad extends Component {
         right: 0
       }
     };
+    this.result = null;
   }
 
   addToResult = (x, y, text) => {
     const { border } = this.state;
+    console.log(this.result);
     let curX = x - border.left;
     let curY = y - border.up;
     let index = 0;
     while (index < text.length) {
       if (text[index] === "\n") {
         curY += 1;
-        curX = x;
+        curX = x - border.left;
       } else {
         curX += 1;
-        console.log(curY, curX);
+        console.log(curX);
         this.result[curY][curX] = text[index];
       }
       index += 1;
@@ -151,21 +148,12 @@ class SketchPad extends Component {
     document.execCommand("copy");
   };
 
-  calculateTotalGridNumber() {
-    const { zoomLevel } = this.state;
-    const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
-    const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
-    return { totalRow, totalColumn };
-  }
-
   export() {
     const { content, border } = this.state;
-    console.log("rows", border.down - border.up);
-    console.log("cols", border.right - border.left);
     this.result = Array(border.down - border.up)
       .fill(" ")
       .map(() => Array(border.right - border.left).fill(" "));
-    console.log(this.result);
+
     // const bottom = 0;
     // const right = 0;
     // let left = totalColumn;
@@ -246,9 +234,12 @@ class SketchPad extends Component {
             closePopUp={this.closePopUp}
             header="Click to copy, paste it into doc with a monospace font"
           >
-            <TextArea onClick={this.selectAndCopy} rows="20" cols="80">
-              {resultText}
-            </TextArea>
+            <TextArea
+              onClick={this.selectAndCopy}
+              rows="20"
+              cols="80"
+              value={resultText}
+            />
           </PopUp>
         ) : null}
       </React.Fragment>
