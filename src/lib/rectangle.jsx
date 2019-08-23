@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import editable from "./editable";
 import { BorderOnly } from "./style";
 import { TOOLS } from "../constants";
 
@@ -46,8 +47,11 @@ class Rectangle extends Component {
     this.setState({ text });
   }
 
-  moveTo(x, y) {
-    this.setState({ x, y });
+  handleDrag(x, y) {
+    const { edit } = this.state;
+    if (edit) {
+      this.setState({ x, y });
+    }
   }
 
   resize(width, height) {
@@ -56,9 +60,14 @@ class Rectangle extends Component {
 
   render() {
     const { x, y, text } = this.state;
-    const { zoomLevel } = this.props;
+    const { zoomLevel, enterEditMode } = this.props;
     return (
-      <BorderOnly x={x} y={y} zoomLevel={zoomLevel}>
+      <BorderOnly
+        x={x}
+        y={y}
+        zoomLevel={zoomLevel}
+        onDoubleClick={enterEditMode}
+      >
         {text}
       </BorderOnly>
     );
@@ -70,7 +79,8 @@ Rectangle.propTypes = {
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  zoomLevel: PropTypes.number.isRequired
+  zoomLevel: PropTypes.number.isRequired,
+  enterEditMode: PropTypes.func.isRequired
 };
 
-export default Rectangle;
+export default editable(Rectangle);

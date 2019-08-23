@@ -1,21 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TOOLS, COMMANDS, ZOOM, ACTIONS } from "../../constants";
+import { TOOLS, COMMANDS, ACTIONS } from "../../constants";
 import { Wrapper, Tool, Command, Action, IconButton } from "./style";
 
 const Toolbar = ({
   currentTool,
   currentZoom,
   handleAction,
-  handleHistory,
-  setTool,
-  setZoom
+  handleCommand,
+  handleTool
 }) => (
   <Wrapper>
     <Tool>
       {Object.keys(TOOLS).map(key => (
         <IconButton
-          onClick={setTool}
+          onClick={handleTool}
           key={key}
           value={TOOLS[key]}
           active={currentTool === TOOLS[key]}
@@ -26,13 +25,8 @@ const Toolbar = ({
     </Tool>
     <Command>
       {Object.keys(COMMANDS).map(key => (
-        <IconButton onClick={handleHistory} key={key} value={COMMANDS[key]}>
+        <IconButton onClick={handleCommand} key={key} value={COMMANDS[key]}>
           {COMMANDS[key]}
-        </IconButton>
-      ))}
-      {Object.keys(ZOOM).map(key => (
-        <IconButton key={key} value={ZOOM[key]}>
-          {ZOOM[key]}
         </IconButton>
       ))}
     </Command>
@@ -50,9 +44,8 @@ Toolbar.propTypes = {
   currentTool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
   currentZoom: PropTypes.number.isRequired,
   handleAction: PropTypes.func.isRequired,
-  handleHistory: PropTypes.func.isRequired,
-  setTool: PropTypes.func.isRequired,
-  setZoom: PropTypes.func.isRequired
+  handleCommand: PropTypes.func.isRequired,
+  handleTool: PropTypes.func.isRequired
 };
 
 export default Toolbar;

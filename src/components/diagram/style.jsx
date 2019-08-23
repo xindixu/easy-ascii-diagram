@@ -1,7 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import {
-  CANVAS_WIDTH, CANVAS_HEIGHT, TOOLBAR_HEIGHT, TOOLS,
-} from '../../constants';
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  TOOLBAR_HEIGHT,
+  TOOLS
+} from "../../constants";
 
 export const Wrapper = styled.div`
   width: ${CANVAS_WIDTH}px;
@@ -10,5 +13,9 @@ export const Wrapper = styled.div`
   top: ${TOOLBAR_HEIGHT}px;
   left: 0;
   font-family: Courier, monospace;
-  cursor: ${props => (props.tool === TOOLS.text ? 'text' : 'crosshair')} ;
+  cursor: ${props => (props.tool === TOOLS.text ? "text" : "crosshair")};
+
+  &:focus {
+    outline: none;
+  }
 `;

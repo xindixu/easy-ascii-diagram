@@ -20,6 +20,12 @@ const calculateTotalGridNumber = zoomLevel => {
   return { totalRow, totalColumn };
 };
 
+const selectAndCopy = e => {
+  e.target.focus();
+  e.target.select();
+  document.execCommand("copy");
+};
+
 class SketchPad extends Component {
   constructor(props) {
     super(props);
@@ -46,7 +52,6 @@ class SketchPad extends Component {
 
   addToResult = (x, y, text) => {
     const { border } = this.state;
-    console.log(this.result);
     let curX = x - border.left;
     let curY = y - border.up;
     let index = 0;
@@ -56,7 +61,6 @@ class SketchPad extends Component {
         curX = x - border.left;
       } else {
         curX += 1;
-        console.log(curX);
         this.result[curY][curX] = text[index];
       }
       index += 1;
@@ -65,10 +69,6 @@ class SketchPad extends Component {
 
   closePopUp = e => {
     this.setState({ showPopUp: false });
-  };
-
-  setDrawingTool = e => {
-    this.setState({ tool: e.target.value });
   };
 
   setZoomLevel = zoom => {
@@ -84,7 +84,6 @@ class SketchPad extends Component {
 
   updateBorder = borderBuffer => {
     const { border } = this.state;
-    console.log(borderBuffer);
     const newUp = borderBuffer.up < border.up ? borderBuffer.up : border.up;
     const newLeft =
       borderBuffer.left < border.left ? borderBuffer.left : border.left;
@@ -98,14 +97,24 @@ class SketchPad extends Component {
       left: newLeft,
       right: newRight
     };
-    console.log("newBorder", newBorder);
-
     this.setState({
       border: newBorder
     });
   };
 
-  handleHistory = e => {
+  handleAction = e => {
+    switch (e.target.value) {
+      case ACTIONS.export:
+        this.export();
+        break;
+      case ACTIONS.save:
+        break;
+      default:
+        break;
+    }
+  };
+
+  handleCommand = e => {
     const { content, future } = this.state;
     let present;
     switch (e.target.value) {
@@ -125,27 +134,21 @@ class SketchPad extends Component {
           future
         });
         break;
-      default:
+      case COMMANDS.moveUp:
         break;
-    }
-  };
-
-  handleAction = e => {
-    switch (e.target.value) {
-      case ACTIONS.export:
-        this.export();
+      case COMMANDS.moveDown:
         break;
-      case ACTIONS.save:
+      case COMMANDS.zoomIn:
+        break;
+      case COMMANDS.zoomOut:
         break;
       default:
         break;
     }
   };
 
-  selectAndCopy = e => {
-    e.target.focus();
-    e.target.select();
-    document.execCommand("copy");
+  handleTool = e => {
+    this.setState({ tool: e.target.value });
   };
 
   export() {
@@ -153,19 +156,6 @@ class SketchPad extends Component {
     this.result = Array(border.down - border.up)
       .fill(" ")
       .map(() => Array(border.right - border.left).fill(" "));
-
-    // const bottom = 0;
-    // const right = 0;
-    // let left = totalColumn;
-    // const top = totalRow;
-    // for (let y = 0; y < this.result.length; y += 1) {
-    //   for (let x = 0; y < this.result[y].length; x += 1) {
-    //     const lineLeft = this.result[y].find(value => /w/.test(value));
-    //     if (lineLeft < left) {
-    //       left = lineLeft;
-    //     }
-    //   }
-    // }
 
     content.forEach(el => {
       let text = "";
@@ -190,30 +180,21 @@ class SketchPad extends Component {
       }
       this.addToResult(el.props.x, el.props.y, text);
     });
-    console.log(this.result);
     const resultText = this.result.map(arr => arr.join("")).join("\n");
 
     this.setState({ showPopUp: true, resultText });
   }
 
   render() {
-    const {
-      tool,
-      zoomLevel,
-      content,
-      showPopUp,
-      resultText,
-      border
-    } = this.state;
+    const { tool, zoomLevel, content, showPopUp, resultText } = this.state;
     return (
       <React.Fragment>
         <ToolBar
           currentTool={tool}
           currentZoom={zoomLevel}
           handleAction={this.handleAction}
-          handleHistory={this.handleHistory}
-          setTool={this.setDrawingTool}
-          setZoom={this.setZoomLevel}
+          handleCommand={this.handleCommand}
+          handleTool={this.handleTool}
         />
         <Grid zoomLevel={zoomLevel} />
         <Diagram
@@ -223,19 +204,14 @@ class SketchPad extends Component {
           commitDrawing={this.commitDrawing}
           updateBorder={this.updateBorder}
         />
-        <Border
-          up={border.up}
-          left={border.left}
-          right={border.right}
-          down={border.down}
-        />
         {showPopUp ? (
           <PopUp
             closePopUp={this.closePopUp}
             header="Click to copy, paste it into doc with a monospace font"
           >
             <TextArea
-              onClick={this.selectAndCopy}
+              onClick={selectAndCopy}
+              readOnly
               rows="20"
               cols="80"
               value={resultText}

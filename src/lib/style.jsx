@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { styleSettings } from "../assets/styles/settings";
 import { GRID_WIDTH, GRID_HEIGHT } from "../constants";
 
-const { yellow, pink, borderWidth } = styleSettings;
+const { yellow, blue, pink, borderWidth } = styleSettings;
 
 const Base = styled.code`
-  pointer-events: none;
+  // pointer-events: none;
+  user-select: none;
   white-space: pre-wrap;
   display: inline;
   font-family: Courier, monospace;
@@ -33,7 +34,7 @@ export const WithGrid = styled(Base)`
   `}
 `;
 
-export const BorderOnly = styled(Base)`
+export const BorderOnly = styled(WithGrid)`
   box-shadow: inset ${GRID_WIDTH}px 0px 0px ${yellow},
     inset -${GRID_WIDTH}px 0px 0px ${yellow},
     inset 0 ${GRID_HEIGHT}px 0px ${yellow},
@@ -45,3 +46,14 @@ export const WithBackground = styled(Base)`
 `;
 
 export const NoBackground = styled(WithGrid)``;
+
+export const EditBox = styled.div`
+  position: absolute;
+  outline: 2px solid ${blue};
+
+  ${props => `width: ${props.width}px; 
+  height: ${props.height}px;
+  left: ${props.x * GRID_WIDTH}px; 
+    top:${props.y * GRID_HEIGHT}px; 
+  `}
+`;
