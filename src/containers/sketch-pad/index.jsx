@@ -23,7 +23,13 @@ class SketchPad extends Component {
       content: [],
       future: [],
       showPopUp: false,
-      resultText: ""
+      resultText: "",
+      border: {
+        left: 0,
+        right: 0,
+        up: 0,
+        bottom: 0
+      }
     };
     this.result = null;
   }
@@ -35,12 +41,12 @@ class SketchPad extends Component {
     let curY = y;
     let index = 0;
     while (index < text.length) {
-      this.result[curY][curX] = text[index];
       if (text[index] === "\n") {
         curY += 1;
         curX = x;
       } else {
         curX += 1;
+        this.result[curY][curX] = text[index];
       }
       index += 1;
     }
@@ -64,6 +70,8 @@ class SketchPad extends Component {
       content: [...content, shape]
     });
   };
+
+  updateBorder = ({ up, down, left, right }) => {};
 
   handleHistory = e => {
     const { content, future } = this.state;
@@ -120,7 +128,20 @@ class SketchPad extends Component {
     const { totalRow, totalColumn } = this.calculateTotalGridNumber();
     this.result = Array(totalRow)
       .fill()
-      .map(() => Array(totalColumn));
+      .map(() => Array(totalColumn).fill());
+
+    // const bottom = 0;
+    // const right = 0;
+    // let left = totalColumn;
+    // const top = totalRow;
+    // for (let y = 0; y < this.result.length; y += 1) {
+    //   for (let x = 0; y < this.result[y].length; x += 1) {
+    //     const lineLeft = this.result[y].find(value => /w/.test(value));
+    //     if (lineLeft < left) {
+    //       left = lineLeft;
+    //     }
+    //   }
+    // }
 
     content.forEach(el => {
       let text = "";
@@ -145,7 +166,9 @@ class SketchPad extends Component {
       }
       this.addToResult(el.props.x, el.props.y, text);
     });
-    const resultText = this.result.map(el => el.join("")).join("");
+    console.log(this.result);
+    const resultText = "";
+
     this.setState({ showPopUp: true, resultText });
   }
 
@@ -167,6 +190,7 @@ class SketchPad extends Component {
           zoomLevel={zoomLevel}
           content={content}
           commitDrawing={this.commitDrawing}
+          updateBorder={this.updateBorder}
         />
         {showPopUp ? (
           <PopUp

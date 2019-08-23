@@ -37,8 +37,8 @@ class Diagram extends Component {
     }
     this.setState({
       isDrawing: true,
-      start: { x: e.clientX, y: e.clientY },
-      end: { x: e.clientX, y: e.clientY }
+      start: { x: this.getX(e.clientX), y: this.getY(e.clientY) },
+      end: { x: this.getX(e.clientX), y: this.getY(e.clientY) }
     });
   };
 
@@ -48,7 +48,7 @@ class Diagram extends Component {
 
     if (this.state.isDrawing === true) {
       this.setState({
-        end: { x: e.clientX, y: e.clientY }
+        end: { x: this.getX(e.clientX), y: this.getY(e.clientY) }
       });
       this.draw();
     }
@@ -57,9 +57,8 @@ class Diagram extends Component {
   handleMouseUp = e => {
     const { tool } = this.props;
     if (tool === TOOLS.text) return;
-
     this.setState({
-      end: { x: e.clientX, y: e.clientY }
+      end: { x: this.getX(e.clientX), y: this.getY(e.clientY) }
     });
 
     this.commit();
@@ -113,7 +112,8 @@ class Diagram extends Component {
   getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
   commit() {
-    const { drawing } = this.state;
+    const { drawing, start, end } = this.state;
+    console.log(start, end);
     if (drawing !== null) {
       this.props.commitDrawing(drawing);
       this.setState({
@@ -129,10 +129,10 @@ class Diagram extends Component {
   drawArrow() {
     const { start, end } = this.state;
     const { zoomLevel } = this.props;
-    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
-    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
-    const width = Math.abs(this.getX(start.x - end.x));
-    const height = Math.abs(this.getY(start.y - end.y));
+    const x = start.x < end.x ? start.x : end.x;
+    const y = start.y < end.y ? start.y : end.y;
+    const width = Math.abs(start.x - end.x);
+    const height = Math.abs(start.y - end.y);
     let length;
     let direction;
 
@@ -160,10 +160,10 @@ class Diagram extends Component {
   drawLine() {
     const { start, end } = this.state;
     const { zoomLevel } = this.props;
-    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
-    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
-    const width = Math.abs(this.getX(start.x - end.x));
-    const height = Math.abs(this.getY(start.y - end.y));
+    const x = start.x < end.x ? start.x : end.x;
+    const y = start.y < end.y ? start.y : end.y;
+    const width = Math.abs(start.x - end.x);
+    const height = Math.abs(start.y - end.y);
     let length;
     let direction;
 
@@ -189,10 +189,10 @@ class Diagram extends Component {
   drawRectangle() {
     const { start, end } = this.state;
     const { zoomLevel } = this.props;
-    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
-    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
-    const width = Math.abs(this.getX(start.x - end.x));
-    const height = Math.abs(this.getY(start.y - end.y));
+    const x = start.x < end.x ? start.x : end.x;
+    const y = start.y < end.y ? start.y : end.y;
+    const width = Math.abs(start.x - end.x);
+    const height = Math.abs(start.y - end.y);
 
     return (
       <Rectangle
@@ -209,7 +209,7 @@ class Diagram extends Component {
   drawText(textBuffer) {
     const { start } = this.state;
     const { zoomLevel } = this.props;
-    const x = this.getX(start.x);
+    const { x } = start;
     const y = this.getY(start.y);
     return (
       <Text
@@ -225,10 +225,10 @@ class Diagram extends Component {
   erase() {
     const { start, end } = this.state;
     const { zoomLevel } = this.props;
-    const x = start.x < end.x ? this.getX(start.x) : this.getX(end.x);
-    const y = start.y < end.y ? this.getY(start.y) : this.getY(end.y);
-    const width = Math.abs(this.getX(start.x - end.x));
-    const height = Math.abs(this.getY(start.y - end.y));
+    const x = start.x < end.x ? start.x : end.x;
+    const y = start.y < end.y ? start.y : end.y;
+    const width = Math.abs(start.x - end.x);
+    const height = Math.abs(start.y - end.y);
 
     return (
       <Eraser
