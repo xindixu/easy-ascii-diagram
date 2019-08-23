@@ -8,9 +8,9 @@ import Eraser from "./shape/eraser";
 import { randomId } from "../util";
 import { DIRECTION_LINE, DIRECTION_ARROW } from "../constants";
 
-export const drawRectangle = ({ x, y, width, height, id, ref, zoomLevel }) => (
+export const drawRectangle = ({ x, y, width, height, key, ref, zoomLevel }) => (
   <Rectangle
-    key={id}
+    key={key}
     ref={ref}
     x={x}
     y={y}
@@ -26,15 +26,15 @@ drawRectangle.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
+  key: PropTypes.string.isRequired,
   ref: PropTypes.shape({
     current: PropTypes.any.isRequired
   }).isRequired
 };
 
-export const drawLine = ({ x, y, length, direction, id, ref, zoomLevel }) => (
+export const drawLine = ({ x, y, length, direction, key, ref, zoomLevel }) => (
   <Line
-    key={id}
+    key={key}
     ref={ref}
     x={x}
     y={y}
@@ -50,15 +50,15 @@ drawLine.propTypes = {
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
+  key: PropTypes.string.isRequired,
   ref: PropTypes.shape({
     current: PropTypes.any.isRequired
   }).isRequired
 };
 
-export const drawArrow = ({ x, y, length, direction, id, ref, zoomLevel }) => (
+export const drawArrow = ({ x, y, length, direction, key, ref, zoomLevel }) => (
   <Arrow
-    key={id}
+    key={key}
     ref={ref}
     x={x}
     y={y}
@@ -74,7 +74,7 @@ drawArrow.propTypes = {
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
+  key: PropTypes.string.isRequired,
   ref: PropTypes.shape({
     current: PropTypes.any.isRequired
   }).isRequired
@@ -99,10 +99,10 @@ erase.propTypes = {
   zoomLevel: PropTypes.number.isRequired
 };
 
-export const drawText = ({ x, y, content, id, ref, zoomLevel }) => {
+export const drawText = ({ x, y, content, key, ref, zoomLevel }) => {
   return (
     <Text
-      key={id}
+      key={key}
       ref={ref}
       x={x}
       y={y}
@@ -117,7 +117,7 @@ drawText.propTypes = {
   y: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
+  key: PropTypes.string.isRequired,
   ref: PropTypes.shape({
     current: PropTypes.any.isRequired
   }).isRequired

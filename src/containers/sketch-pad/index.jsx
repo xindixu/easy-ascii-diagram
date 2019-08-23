@@ -191,7 +191,6 @@ class SketchPad extends Component {
         default:
           break;
       }
-      console.log(el);
       this.addToResult(el.props.x, el.props.y, text);
     });
     const resultText = this.result.map(arr => arr.join("")).join("\n");

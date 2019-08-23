@@ -14,10 +14,6 @@ function editable(WrappedComponent) {
       id: randomId()
     };
 
-    componentDidMount() {
-      console.log(this.props);
-    }
-
     handleClick = e => {
       const { id } = this.state;
       if (e.target.closest(`#${id}`)) return;

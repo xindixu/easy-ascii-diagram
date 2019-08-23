@@ -25,7 +25,11 @@ class Diagram extends Component {
     isTyping: false,
     start: null,
     end: null,
-    drawing: null,
+    drawing: {
+      shape: null,
+      id: "",
+      ref: null
+    },
     textBuffer: "",
     borderBuffer: {
       up: 0,
@@ -122,13 +126,19 @@ class Diagram extends Component {
 
   commit() {
     const { drawing, borderBuffer } = this.state;
-    console.log(this.nodes);
+    const { shape, id, ref } = drawing;
 
-    if (drawing !== null) {
-      this.props.commitDrawing(drawing);
+    if (shape !== null) {
+      this.props.commitDrawing(shape);
       this.props.updateBorder(borderBuffer);
+      this.nodes.set(id, ref);
+
       this.setState({
-        drawing: null,
+        drawing: {
+          shape: null,
+          id: "",
+          ref: null
+        },
         textBuffer: ""
       });
     }
@@ -142,9 +152,8 @@ class Diagram extends Component {
     const { start, end } = this.state;
 
     let shape = null;
-    const id = randomId();
+    const key = randomId();
     const ref = React.createRef();
-    this.nodes.set(id, ref);
 
     const x = start.x < end.x ? start.x : end.x;
     const y = start.y < end.y ? start.y : end.y;
@@ -155,7 +164,7 @@ class Diagram extends Component {
 
     switch (tool) {
       case TOOLS.rectangle:
-        shape = drawRectangle({ x, y, width, height, id, ref, zoomLevel });
+        shape = drawRectangle({ x, y, width, height, key, ref, zoomLevel });
         break;
 
       case TOOLS.arrow:
@@ -168,7 +177,7 @@ class Diagram extends Component {
           direction =
             start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
         }
-        shape = drawArrow({ x, y, length, direction, id, ref, zoomLevel });
+        shape = drawArrow({ x, y, length, direction, key, ref, zoomLevel });
         break;
 
       case TOOLS.line:
@@ -179,11 +188,11 @@ class Diagram extends Component {
           length = width;
           direction = DIRECTION_LINE.horizontal;
         }
-        shape = drawLine({ x, y, length, direction, id, ref, zoomLevel });
+        shape = drawLine({ x, y, length, direction, key, ref, zoomLevel });
         break;
 
       case TOOLS.text:
-        shape = drawText({ x, y, content, id, ref, zoomLevel });
+        shape = drawText({ x, y, content, key, ref, zoomLevel });
         break;
 
       case TOOLS.eraser:
@@ -195,7 +204,7 @@ class Diagram extends Component {
     }
 
     this.setState({
-      drawing: shape,
+      drawing: { shape, key, ref },
       borderBuffer: {
         up: y,
         down: y + height + 1,
@@ -220,7 +229,7 @@ class Diagram extends Component {
         onKeyDown={this.handleKeyDown}
       >
         {content.map(el => el)}
-        {drawing}
+        {drawing.shape}
       </Wrapper>
     );
   }
