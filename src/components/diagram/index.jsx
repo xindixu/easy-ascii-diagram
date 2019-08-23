@@ -175,8 +175,7 @@ class Diagram extends Component {
     const { drawing, borderBuffer } = this.state;
     if (drawing !== null) {
       this.props.commitDrawing(drawing);
-      console.log(borderBuffer);
-      this.props.updateBorder({ ...borderBuffer });
+      this.props.updateBorder(borderBuffer);
       this.setState({
         drawing: null,
         textBuffer: ""
@@ -199,19 +198,12 @@ class Diagram extends Component {
     const height = Math.abs(start.y - end.y);
     let direction;
     let length;
-    this.setState({
-      borderBuffer: {
-        up: y,
-        down: height,
-        left: x,
-        right: width
-      }
-    });
 
     switch (tool) {
       case TOOLS.rectangle:
         shape = this.drawRectangle({ x, y, width, height });
         break;
+
       case TOOLS.arrow:
         if (width < height) {
           length = height;
@@ -224,6 +216,7 @@ class Diagram extends Component {
         }
         shape = this.drawArrow({ x, y, length, direction });
         break;
+
       case TOOLS.line:
         if (width < height) {
           length = height;
@@ -234,16 +227,29 @@ class Diagram extends Component {
         }
         shape = this.drawLine({ x, y, length, direction });
         break;
+
       case TOOLS.text:
         shape = this.drawText({ x, y, content });
         break;
+
       case TOOLS.eraser:
         shape = this.erase({ x, y, width, height });
         break;
+
       default:
         break;
     }
-    this.setState({ drawing: shape });
+    console.log(y + height + 1);
+
+    this.setState({
+      drawing: shape,
+      borderBuffer: {
+        up: y,
+        down: y + height + 1,
+        left: x,
+        right: x + width + 1
+      }
+    });
   }
 
   render() {

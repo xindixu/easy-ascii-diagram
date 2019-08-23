@@ -12,11 +12,12 @@ import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
 
-import { TextArea } from "./style";
+import { TextArea, Border } from "./style";
 
 class SketchPad extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       zoomLevel: 1,
       tool: TOOLS.arrow,
@@ -25,20 +26,32 @@ class SketchPad extends Component {
       showPopUp: false,
       resultText: "",
       border: {
-        left: 0,
-        right: 0,
         up: 0,
-        bottom: 0
+        down: 0,
+        left: 0,
+        right: 0
       }
     };
     this.result = null;
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { totalRow, totalColumn } = this.calculateTotalGridNumber();
+    this.state = {
+      ...this.state,
+      border: {
+        up: totalRow,
+        down: 0,
+        left: totalColumn,
+        right: 0
+      }
+    };
+  }
 
   addToResult = (x, y, text) => {
-    let curX = x;
-    let curY = y;
+    const { border } = this.state;
+    let curX = x - border.left;
+    let curY = y - border.up;
     let index = 0;
     while (index < text.length) {
       if (text[index] === "\n") {
@@ -46,6 +59,7 @@ class SketchPad extends Component {
         curX = x;
       } else {
         curX += 1;
+        console.log(curY, curX);
         this.result[curY][curX] = text[index];
       }
       index += 1;
@@ -71,8 +85,27 @@ class SketchPad extends Component {
     });
   };
 
-  updateBorder = ({ up, down, left, right }) => {
-    console.log({ up, down, left, right });
+  updateBorder = borderBuffer => {
+    const { border } = this.state;
+    console.log(borderBuffer);
+    const newUp = borderBuffer.up < border.up ? borderBuffer.up : border.up;
+    const newLeft =
+      borderBuffer.left < border.left ? borderBuffer.left : border.left;
+    const newDown =
+      borderBuffer.down > border.down ? borderBuffer.down : border.down;
+    const newRight =
+      borderBuffer.right > border.right ? borderBuffer.right : border.right;
+    const newBorder = {
+      up: newUp,
+      down: newDown,
+      left: newLeft,
+      right: newRight
+    };
+    console.log("newBorder", newBorder);
+
+    this.setState({
+      border: newBorder
+    });
   };
 
   handleHistory = e => {
@@ -126,12 +159,13 @@ class SketchPad extends Component {
   }
 
   export() {
-    const { content } = this.state;
-    const { totalRow, totalColumn } = this.calculateTotalGridNumber();
-    this.result = Array(totalRow)
-      .fill()
-      .map(() => Array(totalColumn).fill());
-
+    const { content, border } = this.state;
+    console.log("rows", border.down - border.up);
+    console.log("cols", border.right - border.left);
+    this.result = Array(border.down - border.up)
+      .fill(" ")
+      .map(() => Array(border.right - border.left).fill(" "));
+    console.log(this.result);
     // const bottom = 0;
     // const right = 0;
     // let left = totalColumn;
@@ -169,13 +203,20 @@ class SketchPad extends Component {
       this.addToResult(el.props.x, el.props.y, text);
     });
     console.log(this.result);
-    const resultText = "";
+    const resultText = this.result.map(arr => arr.join("")).join("\n");
 
     this.setState({ showPopUp: true, resultText });
   }
 
   render() {
-    const { tool, zoomLevel, content, showPopUp, resultText } = this.state;
+    const {
+      tool,
+      zoomLevel,
+      content,
+      showPopUp,
+      resultText,
+      border
+    } = this.state;
     return (
       <React.Fragment>
         <ToolBar
@@ -193,6 +234,12 @@ class SketchPad extends Component {
           content={content}
           commitDrawing={this.commitDrawing}
           updateBorder={this.updateBorder}
+        />
+        <Border
+          up={border.up}
+          left={border.left}
+          right={border.right}
+          down={border.down}
         />
         {showPopUp ? (
           <PopUp
