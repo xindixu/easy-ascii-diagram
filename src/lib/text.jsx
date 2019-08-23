@@ -7,10 +7,6 @@ import { TOOLS } from "../constants";
 class Text extends Component {
   static shape = TOOLS.text;
 
-  static convert(content) {
-    return content;
-  }
-
   state = {
     x: this.props.x,
     y: this.props.y,
@@ -20,8 +16,13 @@ class Text extends Component {
 
   componentDidMount() {
     const { content } = this.state;
-    const text = Text.convert(content);
+    const text = this.convert(content);
     this.setState({ text });
+  }
+
+  convert() {
+    const { content } = this.state;
+    return content;
   }
 
   render() {

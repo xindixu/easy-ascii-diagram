@@ -33,17 +33,7 @@ class Diagram extends Component {
     }
   };
 
-  handleResize = debounce(e => {
-    console.log(e);
-  }, 500);
-
-  componentDidMount() {
-    window.addEventListener("resize", this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  }
+  nodes = new Map();
 
   handleMouseDown = e => {
     const { isTyping } = this.state;
@@ -161,15 +151,21 @@ class Diagram extends Component {
     />
   );
 
-  drawText = ({ x, y, content }) => (
-    <Text
-      key={randomId()}
-      x={x}
-      y={y}
-      content={content}
-      zoomLevel={this.props.zoomLevel}
-    />
-  );
+  drawText = ({ x, y, content }) => {
+    const id = randomId();
+    const ref = React.createRef();
+    this.nodes.set(id, ref);
+    return (
+      <Text
+        key={id}
+        ref={ref}
+        x={x}
+        y={y}
+        content={content}
+        zoomLevel={this.props.zoomLevel}
+      />
+    );
+  };
 
   erase = ({ x, y, width, height }) => (
     <Eraser
@@ -184,6 +180,8 @@ class Diagram extends Component {
 
   commit() {
     const { drawing, borderBuffer } = this.state;
+    console.log(drawing);
+
     if (drawing !== null) {
       this.props.commitDrawing(drawing);
       this.props.updateBorder(borderBuffer);
@@ -291,7 +289,8 @@ Diagram.propTypes = {
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
   commitDrawing: PropTypes.func.isRequired,
-  updateBorder: PropTypes.func.isRequired
+  updateBorder: PropTypes.func.isRequired,
+  setRef: PropTypes.func.isRequired
 };
 
 export default Diagram;

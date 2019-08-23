@@ -46,6 +46,7 @@ class SketchPad extends Component {
       }
     };
     this.result = null;
+    this.nodes = new Map();
   }
 
   componentDidMount() {
@@ -191,6 +192,7 @@ class SketchPad extends Component {
         default:
           break;
       }
+      console.log(el);
       this.addToResult(el.props.x, el.props.y, text);
     });
     const resultText = this.result.map(arr => arr.join("")).join("\n");
@@ -223,6 +225,7 @@ class SketchPad extends Component {
           content={content}
           commitDrawing={this.commitDrawing}
           updateBorder={this.updateBorder}
+          setRef={(key, ref) => this.nodes.set(key, ref)}
         />
         <Border
           up={border.up}

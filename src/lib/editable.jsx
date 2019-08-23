@@ -9,11 +9,11 @@ const randomId = () =>
     .substring(2, 8);
 
 function editable(WrappedComponent) {
-  return class extends Component {
+  class Editable extends Component {
     state = {
       editing: false,
       x: null,
-      top: null,
+      y: null,
       width: null,
       height: null,
       id: randomId()
@@ -37,12 +37,14 @@ function editable(WrappedComponent) {
 
     render() {
       const { editing, x, y, width, height, id } = this.state;
+      const { forwardedRef, ...rest } = this.props;
 
       return (
         <>
           <WrappedComponent
             enterEditMode={this.handleOnDoubleClick}
-            {...this.props}
+            ref={forwardedRef}
+            {...rest}
           />
           {editing ? (
             <EditBox id={id} x={x} y={y} width={width} height={height} />
@@ -50,6 +52,17 @@ function editable(WrappedComponent) {
         </>
       );
     }
+  }
+
+  Editable.propTypes = {
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    forwardedRef: PropTypes.element.isRequired
   };
+
+  return React.forwardRef((props, ref) => {
+    return <Editable {...props} forwardedRef={ref} />;
+  });
 }
+
 export default editable;
