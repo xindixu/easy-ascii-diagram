@@ -9,7 +9,10 @@ import {
 
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
+import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
+
+import { TextArea } from "./style";
 
 class SketchPad extends Component {
   constructor(props) {
@@ -18,7 +21,9 @@ class SketchPad extends Component {
       zoomLevel: 1,
       tool: TOOLS.arrow,
       content: [],
-      future: []
+      future: [],
+      showPopUp: false,
+      resultText: ""
     };
     this.result = null;
   }
@@ -31,7 +36,6 @@ class SketchPad extends Component {
     let index = 0;
     while (index < text.length) {
       this.result[curY][curX] = text[index];
-
       if (text[index] === "\n") {
         curY += 1;
         curX = x;
@@ -40,6 +44,10 @@ class SketchPad extends Component {
       }
       index += 1;
     }
+  };
+
+  closePopUp = e => {
+    this.setState({ showPopUp: false });
   };
 
   setDrawingTool = e => {
@@ -83,6 +91,31 @@ class SketchPad extends Component {
   };
 
   handleAction = e => {
+    switch (e.target.value) {
+      case ACTIONS.export:
+        this.export();
+        break;
+      case ACTIONS.save:
+        break;
+      default:
+        break;
+    }
+  };
+
+  selectAndCopy = e => {
+    e.target.focus();
+    e.target.select();
+    document.execCommand("copy");
+  };
+
+  calculateTotalGridNumber() {
+    const { zoomLevel } = this.state;
+    const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
+    const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
+    return { totalRow, totalColumn };
+  }
+
+  export() {
     const { content } = this.state;
     const { totalRow, totalColumn } = this.calculateTotalGridNumber();
     this.result = Array(totalRow)
@@ -112,27 +145,12 @@ class SketchPad extends Component {
       }
       this.addToResult(el.props.x, el.props.y, text);
     });
-    console.log(this.result);
-
-    switch (e.target.value) {
-      case ACTIONS.export:
-        break;
-      case ACTIONS.save:
-        break;
-      default:
-        break;
-    }
-  };
-
-  calculateTotalGridNumber() {
-    const { zoomLevel } = this.state;
-    const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
-    const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
-    return { totalRow, totalColumn };
+    const resultText = this.result.map(el => el.join("")).join("");
+    this.setState({ showPopUp: true, resultText });
   }
 
   render() {
-    const { tool, zoomLevel, content } = this.state;
+    const { tool, zoomLevel, content, showPopUp, resultText } = this.state;
     return (
       <React.Fragment>
         <ToolBar
@@ -150,6 +168,16 @@ class SketchPad extends Component {
           content={content}
           commitDrawing={this.commitDrawing}
         />
+        {showPopUp ? (
+          <PopUp
+            closePopUp={this.closePopUp}
+            header="Click to copy, paste it into doc with a monospace font"
+          >
+            <TextArea onClick={this.selectAndCopy} rows="20" cols="80">
+              {resultText}
+            </TextArea>
+          </PopUp>
+        ) : null}
       </React.Fragment>
     );
   }
