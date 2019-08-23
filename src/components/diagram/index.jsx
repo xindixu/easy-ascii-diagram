@@ -23,7 +23,13 @@ class Diagram extends Component {
     start: null,
     end: null,
     drawing: null,
-    textBuffer: ""
+    textBuffer: "",
+    borderBuffer: {
+      up: 0,
+      down: 0,
+      left: 0,
+      rigth: 0
+    }
   };
 
   componentDidMount() {}
@@ -111,11 +117,66 @@ class Diagram extends Component {
 
   getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
+  drawArrow = ({ x, y, length, direction }) => (
+    <Arrow
+      key={randomId()}
+      x={x}
+      y={y}
+      length={length}
+      direction={direction}
+      zoomLevel={this.props.zoomLevel}
+    />
+  );
+
+  drawLine = ({ x, y, length, direction }) => (
+    <Line
+      key={randomId()}
+      x={x}
+      y={y}
+      length={length}
+      direction={direction}
+      zoomLevel={this.props.zoomLevel}
+    />
+  );
+
+  drawRectangle = ({ x, y, width, height }) => (
+    <Rectangle
+      key={randomId()}
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      zoomLevel={this.props.zoomLevel}
+    />
+  );
+
+  drawText = ({ x, y, content }) => (
+    <Text
+      key={randomId()}
+      x={x}
+      y={y}
+      content={content}
+      zoomLevel={this.props.zoomLevel}
+    />
+  );
+
+  erase = ({ x, y, width, height }) => (
+    <Eraser
+      key={randomId()}
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      zoomLevel={this.props.zoomLevel}
+    />
+  );
+
   commit() {
-    const { drawing, start, end } = this.state;
-    console.log(start, end);
+    const { drawing, borderBuffer } = this.state;
     if (drawing !== null) {
       this.props.commitDrawing(drawing);
+      console.log(borderBuffer);
+      this.props.updateBorder({ ...borderBuffer });
       this.setState({
         drawing: null,
         textBuffer: ""
@@ -126,141 +187,58 @@ class Diagram extends Component {
     });
   }
 
-  drawArrow() {
-    const { start, end } = this.state;
-    const { zoomLevel } = this.props;
-    const x = start.x < end.x ? start.x : end.x;
-    const y = start.y < end.y ? start.y : end.y;
-    const width = Math.abs(start.x - end.x);
-    const height = Math.abs(start.y - end.y);
-    let length;
-    let direction;
-
-    if (width < height) {
-      length = height;
-      direction = start.y < end.y ? DIRECTION_ARROW.down : DIRECTION_ARROW.up;
-    } else {
-      length = width;
-      direction =
-        start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
-    }
-
-    return (
-      <Arrow
-        key={randomId()}
-        x={x}
-        y={y}
-        length={length}
-        direction={direction}
-        zoomLevel={zoomLevel}
-      />
-    );
-  }
-
-  drawLine() {
-    const { start, end } = this.state;
-    const { zoomLevel } = this.props;
-    const x = start.x < end.x ? start.x : end.x;
-    const y = start.y < end.y ? start.y : end.y;
-    const width = Math.abs(start.x - end.x);
-    const height = Math.abs(start.y - end.y);
-    let length;
-    let direction;
-
-    if (width < height) {
-      length = height;
-      direction = DIRECTION_LINE.vertical;
-    } else {
-      length = width;
-      direction = DIRECTION_LINE.horizontal;
-    }
-    return (
-      <Line
-        key={randomId()}
-        x={x}
-        y={y}
-        length={length}
-        direction={direction}
-        zoomLevel={zoomLevel}
-      />
-    );
-  }
-
-  drawRectangle() {
-    const { start, end } = this.state;
-    const { zoomLevel } = this.props;
-    const x = start.x < end.x ? start.x : end.x;
-    const y = start.y < end.y ? start.y : end.y;
-    const width = Math.abs(start.x - end.x);
-    const height = Math.abs(start.y - end.y);
-
-    return (
-      <Rectangle
-        key={randomId()}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        zoomLevel={zoomLevel}
-      />
-    );
-  }
-
-  drawText(textBuffer) {
-    const { start } = this.state;
-    const { zoomLevel } = this.props;
-    const { x } = start;
-    const y = this.getY(start.y);
-    return (
-      <Text
-        key={randomId()}
-        x={x}
-        y={y}
-        content={textBuffer}
-        zoomLevel={zoomLevel}
-      />
-    );
-  }
-
-  erase() {
-    const { start, end } = this.state;
-    const { zoomLevel } = this.props;
-    const x = start.x < end.x ? start.x : end.x;
-    const y = start.y < end.y ? start.y : end.y;
-    const width = Math.abs(start.x - end.x);
-    const height = Math.abs(start.y - end.y);
-
-    return (
-      <Eraser
-        key={randomId()}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        zoomLevel={zoomLevel}
-      />
-    );
-  }
-
   draw(content) {
     const { tool } = this.props;
+    const { start, end } = this.state;
 
     let shape = null;
+
+    const x = start.x < end.x ? start.x : end.x;
+    const y = start.y < end.y ? start.y : end.y;
+    const width = Math.abs(start.x - end.x);
+    const height = Math.abs(start.y - end.y);
+    let direction;
+    let length;
+    this.setState({
+      borderBuffer: {
+        up: y,
+        down: height,
+        left: x,
+        right: width
+      }
+    });
+
     switch (tool) {
       case TOOLS.rectangle:
-        shape = this.drawRectangle();
+        shape = this.drawRectangle({ x, y, width, height });
         break;
       case TOOLS.arrow:
-        shape = this.drawArrow();
+        if (width < height) {
+          length = height;
+          direction =
+            start.y < end.y ? DIRECTION_ARROW.down : DIRECTION_ARROW.up;
+        } else {
+          length = width;
+          direction =
+            start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
+        }
+        shape = this.drawArrow({ x, y, length, direction });
         break;
       case TOOLS.line:
-        shape = this.drawLine();
+        if (width < height) {
+          length = height;
+          direction = DIRECTION_LINE.vertical;
+        } else {
+          length = width;
+          direction = DIRECTION_LINE.horizontal;
+        }
+        shape = this.drawLine({ x, y, length, direction });
         break;
       case TOOLS.text:
-        shape = this.drawText(content);
+        shape = this.drawText({ x, y, content });
         break;
       case TOOLS.eraser:
-        shape = this.erase();
+        shape = this.erase({ x, y, width, height });
         break;
       default:
         break;
@@ -296,7 +274,8 @@ Diagram.propTypes = {
   tool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
-  commitDrawing: PropTypes.func.isRequired
+  commitDrawing: PropTypes.func.isRequired,
+  updateBorder: PropTypes.func.isRequired
 };
 
 export default Diagram;

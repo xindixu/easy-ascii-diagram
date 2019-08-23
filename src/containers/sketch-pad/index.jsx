@@ -71,7 +71,9 @@ class SketchPad extends Component {
     });
   };
 
-  updateBorder = ({ up, down, left, right }) => {};
+  updateBorder = ({ up, down, left, right }) => {
+    console.log({ up, down, left, right });
+  };
 
   handleHistory = e => {
     const { content, future } = this.state;
