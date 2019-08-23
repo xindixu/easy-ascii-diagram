@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { debounce } from "lodash";
 import { Wrapper } from "./style";
 import {
   TOOLS,
@@ -28,11 +29,21 @@ class Diagram extends Component {
       up: 0,
       down: 0,
       left: 0,
-      rigth: 0
+      right: 0
     }
   };
 
-  componentDidMount() {}
+  handleResize = debounce(e => {
+    console.log(e);
+  }, 500);
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
 
   handleMouseDown = e => {
     const { isTyping } = this.state;

@@ -1,14 +1,9 @@
 import styled from "styled-components";
-import {
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
-  TOOLBAR_HEIGHT,
-  TOOLS
-} from "../../constants";
+import { TOOLBAR_HEIGHT, TOOLS } from "../../constants";
 
 export const Wrapper = styled.div`
-  width: ${CANVAS_WIDTH}px;
-  height: ${CANVAS_HEIGHT}px;
+  height: calc(100vh - ${TOOLBAR_HEIGHT}px);
+  width: 100vw;
   position: absolute;
   top: ${TOOLBAR_HEIGHT}px;
   left: 0;

@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import {
-  TOOLS,
-  COMMANDS,
-  ACTIONS,
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH
-} from "../../constants";
+import { debounce } from "lodash";
+
+import { TOOLS, COMMANDS, ACTIONS, TOOLBAR_HEIGHT } from "../../constants";
 
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
@@ -15,8 +11,10 @@ import ToolBar from "../toolbar";
 import { TextArea, Border } from "./style";
 
 const calculateTotalGridNumber = zoomLevel => {
-  const totalRow = Math.floor(CANVAS_HEIGHT / zoomLevel);
-  const totalColumn = Math.floor(CANVAS_WIDTH / zoomLevel);
+  const totalRow = Math.floor(
+    (window.innerHeight - TOOLBAR_HEIGHT) / zoomLevel
+  );
+  const totalColumn = Math.floor(window.innerWidth / zoomLevel);
   return { totalRow, totalColumn };
 };
 
@@ -48,6 +46,14 @@ class SketchPad extends Component {
       }
     };
     this.result = null;
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   }
 
   addToResult = (x, y, text) => {
@@ -101,6 +107,13 @@ class SketchPad extends Component {
       border: newBorder
     });
   };
+
+  handleResize = () =>
+    debounce(() => {
+      const { zoomLevel } = this.state;
+      const { totalRow, totalColumn } = calculateTotalGridNumber(zoomLevel);
+      this.setState({ totalRow, totalColumn });
+    }, 500);
 
   handleAction = e => {
     switch (e.target.value) {
@@ -186,7 +199,14 @@ class SketchPad extends Component {
   }
 
   render() {
-    const { tool, zoomLevel, content, showPopUp, resultText } = this.state;
+    const {
+      tool,
+      zoomLevel,
+      content,
+      showPopUp,
+      resultText,
+      border
+    } = this.state;
     return (
       <React.Fragment>
         <ToolBar
@@ -203,6 +223,12 @@ class SketchPad extends Component {
           content={content}
           commitDrawing={this.commitDrawing}
           updateBorder={this.updateBorder}
+        />
+        <Border
+          up={border.up}
+          left={border.left}
+          right={border.right}
+          down={border.down}
         />
         {showPopUp ? (
           <PopUp

@@ -5,9 +5,8 @@ import { GRID_WIDTH, GRID_HEIGHT } from "../constants";
 const { yellow, blue, pink, borderWidth } = styleSettings;
 
 const Base = styled.code`
-  // pointer-events: none;
   user-select: none;
-  white-space: pre-wrap;
+  white-space: pre;
   display: inline;
   font-family: Courier, monospace;
   font-size: ${GRID_WIDTH / 0.6}px;
