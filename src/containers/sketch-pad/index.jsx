@@ -113,7 +113,6 @@ class SketchPad extends Component {
     debounce(() => {
       const { zoomLevel } = this.state;
       const { totalRow, totalColumn } = calculateTotalGridNumber(zoomLevel);
-      this.setState({ totalRow, totalColumn });
     }, 500);
 
   handleAction = e => {
@@ -219,12 +218,12 @@ class SketchPad extends Component {
           handleTool={this.handleTool}
         />
         <Grid zoomLevel={zoomLevel} />
-        <Border
+        {/* <Border
           up={border.up}
           left={border.left}
           right={border.right}
           down={border.down}
-        />
+        /> */}
         <Diagram
           tool={tool}
           zoomLevel={zoomLevel}

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import editable from "./editable";
-import { BorderOnly } from "./style";
-import { TOOLS } from "../constants";
+import editable from "../editable";
+import { BorderOnly } from "../style";
+import { TOOLS } from "../../constants";
 
 class Rectangle extends Component {
   static shape = TOOLS.rectangle;
@@ -84,27 +84,3 @@ Rectangle.propTypes = {
 };
 
 export default editable(Rectangle);
-
-export const drawRectangle = ({ x, y, width, height, id, ref, zoomLevel }) => (
-  <Rectangle
-    key={id}
-    ref={ref}
-    x={x}
-    y={y}
-    width={width}
-    height={height}
-    zoomLevel={zoomLevel}
-  />
-);
-
-drawRectangle.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
-};

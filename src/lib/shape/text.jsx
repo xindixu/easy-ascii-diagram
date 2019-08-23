@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import editable from "./editable";
-import { WithBackground } from "./style";
-import { TOOLS } from "../constants";
+import editable from "../editable";
+import { WithBackground } from "../style";
+import { TOOLS } from "../../constants";
 
 class Text extends Component {
   static shape = TOOLS.text;
@@ -50,27 +50,3 @@ Text.propTypes = {
 };
 
 export default editable(Text);
-
-export const drawText = ({ x, y, content, id, ref, zoomLevel }) => {
-  return (
-    <Text
-      key={id}
-      ref={ref}
-      x={x}
-      y={y}
-      content={content}
-      zoomLevel={zoomLevel}
-    />
-  );
-};
-
-drawText.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  content: PropTypes.string.isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
-};

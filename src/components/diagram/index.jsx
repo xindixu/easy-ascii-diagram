@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { debounce } from "lodash";
 import { Wrapper } from "./style";
 import {
   TOOLS,
@@ -10,11 +9,13 @@ import {
   DIRECTION_LINE
 } from "../../constants";
 
-import { drawRectangle } from "../../lib/rectangle";
-import { drawLine } from "../../lib/line";
-import { drawArrow } from "../../lib/arrow";
-import { drawText } from "../../lib/text";
-import { erase } from "../../lib/eraser";
+import {
+  drawRectangle,
+  drawLine,
+  drawArrow,
+  drawText,
+  erase
+} from "../../lib/draw";
 
 const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
 

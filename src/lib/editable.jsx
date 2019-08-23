@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 import { EditBox } from "./style";
 import { randomId } from "../util";
@@ -13,6 +13,10 @@ function editable(WrappedComponent) {
       height: null,
       id: randomId()
     };
+
+    componentDidMount() {
+      console.log(this.props);
+    }
 
     handleClick = e => {
       const { id } = this.state;
@@ -55,9 +59,7 @@ function editable(WrappedComponent) {
     }).isRequired
   };
 
-  return React.forwardRef((props, ref) => {
-    return <Editable {...props} forwardedRef={ref} />;
-  });
+  return forwardRef((props, ref) => <Editable {...props} forwardedRef={ref} />);
 }
 
 export default editable;

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import editable from "./editable";
-import { WithBackground } from "./style";
-import { TOOLS, DIRECTION, DIRECTION_LINE } from "../constants";
+import editable from "../editable";
+import { WithBackground } from "../style";
+import { TOOLS, DIRECTION, DIRECTION_LINE } from "../../constants";
 
 class Line extends Component {
   static shape = TOOLS.line;
@@ -67,27 +67,3 @@ Line.propTypes = {
 };
 
 export default editable(Line);
-
-export const drawLine = ({ x, y, length, direction, id, ref, zoomLevel }) => (
-  <Line
-    key={id}
-    ref={ref}
-    x={x}
-    y={y}
-    length={length}
-    direction={direction}
-    zoomLevel={zoomLevel}
-  />
-);
-
-drawLine.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  length: PropTypes.number.isRequired,
-  direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
-};
