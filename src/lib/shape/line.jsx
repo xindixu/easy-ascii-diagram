@@ -42,14 +42,14 @@ class Line extends Component {
 
   render() {
     const { x, y, text } = this.state;
-    const { zoomLevel, enterEditMode } = this.props;
+    const { zoomLevel, handleOnDoubleClick } = this.props;
 
     return (
       <WithBackground
         x={x}
         y={y}
         zoomLevel={zoomLevel}
-        onDoubleClick={enterEditMode}
+        onDoubleClick={handleOnDoubleClick}
       >
         {text}
       </WithBackground>
@@ -63,7 +63,7 @@ Line.propTypes = {
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  enterEditMode: PropTypes.func.isRequired
+  handleOnDoubleClick: PropTypes.func.isRequired
 };
 
 export default editable(Line);

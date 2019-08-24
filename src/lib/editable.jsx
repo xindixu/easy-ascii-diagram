@@ -19,17 +19,8 @@ function editable(WrappedComponent) {
 
     componentDidMount() {}
 
-    handleClick = e => {
-      const { id } = this.state;
-      if (e.target.closest(`#${id}`)) return;
-      this.setState({ editing: false });
-      window.removeEventListener("click", this.handleClick);
-    };
-
-    handleOnDoubleClick = e => {
-      const { width, height } = e.target.getBoundingClientRect();
-      const { x, y, forwardedRef } = this.props;
-      const { direction } = forwardedRef.current.state;
+    getResizeDirection() {
+      const { direction, content } = this.props.forwardedRef.current.state;
 
       let horizontal;
       let vertical;
@@ -44,7 +35,25 @@ function editable(WrappedComponent) {
         vertical = true;
       }
 
-      console.log(vertical, horizontal);
+      if (content != null) {
+        horizontal = false;
+        vertical = false;
+      }
+      return { horizontal, vertical };
+    }
+
+    handleClick = e => {
+      const { id } = this.state;
+      if (e.target.closest(`#${id}`)) return;
+      this.setState({ editing: false });
+      window.removeEventListener("click", this.handleClick);
+    };
+
+    handleOnDoubleClick = e => {
+      const { width, height } = e.target.getBoundingClientRect();
+      const { x, y, enterEditMode } = this.props;
+      console.log(enterEditMode);
+      const { horizontal, vertical } = this.getResizeDirection();
       this.setState({
         editing: true,
         x,
@@ -55,6 +64,7 @@ function editable(WrappedComponent) {
         vertical
       });
 
+      enterEditMode();
       window.addEventListener("click", this.handleClick);
     };
 
@@ -74,20 +84,22 @@ function editable(WrappedComponent) {
       return (
         <>
           <WrappedComponent
-            enterEditMode={this.handleOnDoubleClick}
+            handleOnDoubleClick={this.handleOnDoubleClick}
             ref={forwardedRef}
             {...rest}
           />
           {editing ? (
-            <Editor
-              id={id}
-              x={x}
-              y={y}
-              width={width}
-              height={height}
-              horizontal={horizontal}
-              vertical={vertical}
-            />
+            <>
+              <Editor
+                id={id}
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                horizontal={horizontal}
+                vertical={vertical}
+              />
+            </>
           ) : null}
         </>
       );
@@ -99,7 +111,9 @@ function editable(WrappedComponent) {
     y: PropTypes.number.isRequired,
     forwardedRef: PropTypes.shape({
       current: PropTypes.any
-    }).isRequired
+    }).isRequired,
+    enterEditMode: PropTypes.func.isRequired,
+    exitEditMode: PropTypes.func.isRequired
   };
 
   return forwardRef((props, ref) => <Editable {...props} forwardedRef={ref} />);

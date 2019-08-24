@@ -13,6 +13,7 @@ export const Wrapper = styled.div`
   left: ${props.x * GRID_WIDTH}px; 
   top:${props.y * GRID_HEIGHT}px; 
   `}
+  cursor: move;
 `;
 
 const Resizer = styled.span`

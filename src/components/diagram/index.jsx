@@ -22,6 +22,7 @@ const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
 class Diagram extends Component {
   state = {
     isDrawing: false,
+    // isEditing: false,
     isTyping: false,
     start: null,
     end: null,
@@ -30,6 +31,9 @@ class Diagram extends Component {
       id: "",
       ref: null
     },
+    // editing: {
+    //   target: null
+    // },
     textBuffer: "",
     borderBuffer: {
       up: 0,
@@ -41,8 +45,23 @@ class Diagram extends Component {
 
   nodes = new Map();
 
+  enterEditMode = () => {
+    console.log("enter");
+
+    this.setState({
+      isEditing: true
+    });
+  };
+
+  exitEditMode = () => {
+    this.setState({
+      isEditing: false
+    });
+  };
+
   handleMouseDown = e => {
-    const { isTyping } = this.state;
+    const { isTyping, isEditing } = this.state;
+    if (isEditing) return;
     if (isTyping) {
       this.commit();
       this.setState({ isTyping: false });
@@ -161,10 +180,19 @@ class Diagram extends Component {
     const height = Math.abs(start.y - end.y);
     let direction;
     let length;
-
     switch (tool) {
       case TOOLS.rectangle:
-        shape = drawRectangle({ x, y, width, height, key, ref, zoomLevel });
+        shape = drawRectangle({
+          x,
+          y,
+          width,
+          height,
+          key,
+          ref,
+          zoomLevel,
+          enterEditMode: this.enterEditMode,
+          exitEditMode: this.enterEditMode
+        });
         break;
 
       case TOOLS.arrow:
@@ -177,7 +205,17 @@ class Diagram extends Component {
           direction =
             start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
         }
-        shape = drawArrow({ x, y, length, direction, key, ref, zoomLevel });
+        shape = drawArrow({
+          x,
+          y,
+          length,
+          direction,
+          key,
+          ref,
+          zoomLevel,
+          enterEditMode: this.enterEditMode,
+          exitEditMode: this.enterEditMode
+        });
         break;
 
       case TOOLS.line:
@@ -188,11 +226,30 @@ class Diagram extends Component {
           length = width;
           direction = DIRECTION_LINE.horizontal;
         }
-        shape = drawLine({ x, y, length, direction, key, ref, zoomLevel });
+        shape = drawLine({
+          x,
+          y,
+          length,
+          direction,
+          key,
+          ref,
+          zoomLevel,
+          enterEditMode: this.enterEditMode,
+          exitEditMode: this.enterEditMode
+        });
         break;
 
       case TOOLS.text:
-        shape = drawText({ x, y, content, key, ref, zoomLevel });
+        shape = drawText({
+          x,
+          y,
+          content,
+          key,
+          ref,
+          zoomLevel,
+          enterEditMode: this.enterEditMode,
+          exitEditMode: this.enterEditMode
+        });
         break;
 
       case TOOLS.eraser:

@@ -6,90 +6,55 @@ import Arrow from "./shape/arrow";
 import Text from "./shape/text";
 import Eraser from "./shape/eraser";
 import { randomId } from "../util";
+
 import { DIRECTION_LINE, DIRECTION_ARROW } from "../constants";
 
-export const drawRectangle = ({ x, y, width, height, key, ref, zoomLevel }) => (
-  <Rectangle
-    key={key}
-    ref={ref}
-    x={x}
-    y={y}
-    width={width}
-    height={height}
-    zoomLevel={zoomLevel}
-  />
-);
+const sharedProps = {
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  zoomLevel: PropTypes.number.isRequired,
+  key: PropTypes.string.isRequired,
+  ref: PropTypes.shape({
+    current: PropTypes.any.isRequired
+  }).isRequired,
+  enterEditMode: PropTypes.func.isRequired,
+  exitEditMode: PropTypes.func.isRequired
+};
+
+export const drawRectangle = props => <Rectangle {...props} />;
 
 drawRectangle.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  key: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
+  ...sharedProps
 };
 
-export const drawLine = ({ x, y, length, direction, key, ref, zoomLevel }) => (
-  <Line
-    key={key}
-    ref={ref}
-    x={x}
-    y={y}
-    length={length}
-    direction={direction}
-    zoomLevel={zoomLevel}
-  />
-);
+export const drawLine = props => <Line {...props} />;
 
 drawLine.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  key: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
+  ...sharedProps
 };
 
-export const drawArrow = ({ x, y, length, direction, key, ref, zoomLevel }) => (
-  <Arrow
-    key={key}
-    ref={ref}
-    x={x}
-    y={y}
-    length={length}
-    direction={direction}
-    zoomLevel={zoomLevel}
-  />
-);
+export const drawArrow = props => <Arrow {...props} />;
 
 drawArrow.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  key: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
+  ...sharedProps
 };
 
-export const erase = ({ x, y, width, height, zoomLevel }) => (
-  <Eraser
-    key={randomId()}
-    x={x}
-    y={y}
-    width={width}
-    height={height}
-    zoomLevel={zoomLevel}
-  />
-);
+export const drawText = props => {
+  return <Text {...props} />;
+};
+
+drawText.propTypes = {
+  content: PropTypes.string.isRequired,
+  ...sharedProps
+};
+
+export const erase = props => <Eraser key={randomId()} {...props} />;
 
 erase.propTypes = {
   x: PropTypes.number.isRequired,
@@ -97,28 +62,4 @@ erase.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired
-};
-
-export const drawText = ({ x, y, content, key, ref, zoomLevel }) => {
-  return (
-    <Text
-      key={key}
-      ref={ref}
-      x={x}
-      y={y}
-      content={content}
-      zoomLevel={zoomLevel}
-    />
-  );
-};
-
-drawText.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  content: PropTypes.string.isRequired,
-  zoomLevel: PropTypes.number.isRequired,
-  key: PropTypes.string.isRequired,
-  ref: PropTypes.shape({
-    current: PropTypes.any.isRequired
-  }).isRequired
 };
