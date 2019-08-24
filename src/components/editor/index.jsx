@@ -48,7 +48,13 @@ class Editor extends Component {
     }
   };
 
-  edit() {}
+  edit() {
+    const { edit, target } = this.props;
+    const { start, end } = this.state;
+    const { length } = target;
+
+    edit({ ...target, length: length + end.x - start.x });
+  }
 
   commit() {
     const { start, end } = this.state;
@@ -100,7 +106,9 @@ Editor.propTypes = {
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   horizontal: PropTypes.bool.isRequired,
-  vertical: PropTypes.bool.isRequired
+  vertical: PropTypes.bool.isRequired,
+  edit: PropTypes.func.isRequired,
+  target: PropTypes.object.isRequired
 };
 
 export default Editor;

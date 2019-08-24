@@ -6,16 +6,21 @@ import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from "../constants";
 
 function editable(WrappedComponent) {
   class Editable extends Component {
-    state = {
-      editing: false,
-      x: null,
-      y: null,
-      width: null,
-      height: null,
-      horizontal: false,
-      vertical: false,
-      id: randomId()
-    };
+    constructor(props) {
+      super(props);
+      const { forwardedRef, ...rest } = this.props;
+      this.state = {
+        editing: false,
+        x: null,
+        y: null,
+        width: null,
+        height: null,
+        horizontal: false,
+        vertical: false,
+        id: randomId(),
+        newProps: rest
+      };
+    }
 
     componentDidMount() {}
 
@@ -67,8 +72,14 @@ function editable(WrappedComponent) {
         horizontal,
         vertical
       });
+
       enterEditMode();
       window.addEventListener("click", this.handleClickOutside);
+    };
+
+    edit = newProps => {
+      // console.log(newProps);
+      this.setState({ newProps });
     };
 
     render() {
@@ -80,7 +91,8 @@ function editable(WrappedComponent) {
         height,
         horizontal,
         vertical,
-        id
+        id,
+        newProps
       } = this.state;
       const { forwardedRef, ...rest } = this.props;
 
@@ -89,7 +101,7 @@ function editable(WrappedComponent) {
           <WrappedComponent
             handleOnDoubleClick={this.handleOnDoubleClick}
             ref={forwardedRef}
-            {...rest}
+            {...newProps}
           />
           {editing ? (
             <>
@@ -101,6 +113,8 @@ function editable(WrappedComponent) {
                 height={height}
                 horizontal={horizontal}
                 vertical={vertical}
+                target={rest}
+                edit={this.edit}
               />
             </>
           ) : null}
