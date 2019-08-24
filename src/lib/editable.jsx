@@ -1,6 +1,6 @@
 import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
-import { EditBox } from "./style";
+import Editor from "../components/editor";
 import { randomId } from "../util";
 
 function editable(WrappedComponent) {
@@ -40,7 +40,7 @@ function editable(WrappedComponent) {
             {...rest}
           />
           {editing ? (
-            <EditBox id={id} x={x} y={y} width={width} height={height} />
+            <Editor id={id} x={x} y={y} width={width} height={height} />
           ) : null}
         </>
       );

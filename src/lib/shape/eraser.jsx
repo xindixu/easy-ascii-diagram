@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { NoBackground } from "../style";
+import { NoBackground } from "./style";
 import { TOOLS } from "../../constants";
 
 class Eraser extends Component {

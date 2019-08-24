@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
-import { WithBackground } from "../style";
+import { WithBackground } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_ARROW } from "../../constants";
 
 class Arrow extends Component {

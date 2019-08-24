@@ -171,8 +171,8 @@ class SketchPad extends Component {
       .map(() => Array(border.right - border.left).fill(" "));
 
     content.forEach(el => {
-      const { text } = el.ref.current.state;
-      this.addToResult(el.props.x, el.props.y, text);
+      const { state } = el.ref.current;
+      this.addToResult(state.x, state.y, state.text);
     });
     const resultText = this.result.map(arr => arr.join("")).join("\n");
 

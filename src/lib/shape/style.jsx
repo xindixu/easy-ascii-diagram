@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { styleSettings } from "../assets/styles/settings";
-import { GRID_WIDTH, GRID_HEIGHT } from "../constants";
+import { styleSettings } from "../../assets/styles/settings";
+import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
 
-const { yellow, blue, pink, borderWidth } = styleSettings;
+const { yellow, pink, borderWidth } = styleSettings;
 
 const Base = styled.code`
   user-select: none;
@@ -45,15 +45,3 @@ export const WithBackground = styled(Base)`
 `;
 
 export const NoBackground = styled(WithGrid)``;
-
-export const EditBox = styled.div`
-  pointer-event: none;
-  position: absolute;
-  outline: 2px solid ${blue};
-
-  ${props => `width: ${props.width}px; 
-  height: ${props.height}px;
-  left: ${props.x * GRID_WIDTH}px; 
-    top:${props.y * GRID_HEIGHT}px; 
-  `}
-`;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
-import { BorderOnly } from "../style";
+import { BorderOnly } from "./style";
 import { TOOLS } from "../../constants";
 
 class Rectangle extends Component {
