@@ -2,6 +2,7 @@ import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 import Editor from "../components/editor";
 import { randomId } from "../util";
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from "../constants";
 
 function editable(WrappedComponent) {
   class Editable extends Component {
@@ -11,8 +12,12 @@ function editable(WrappedComponent) {
       y: null,
       width: null,
       height: null,
+      horizontal: false,
+      vertical: false,
       id: randomId()
     };
+
+    componentDidMount() {}
 
     handleClick = e => {
       const { id } = this.state;
@@ -23,13 +28,47 @@ function editable(WrappedComponent) {
 
     handleOnDoubleClick = e => {
       const { width, height } = e.target.getBoundingClientRect();
-      const { x, y } = this.props;
-      this.setState({ editing: true, x, y, width, height });
+      const { x, y, forwardedRef } = this.props;
+      const { direction } = forwardedRef.current.state;
+
+      let horizontal;
+      let vertical;
+      if (Object.values(DIRECTION_HORIZONTAL).includes(direction)) {
+        horizontal = true;
+        vertical = false;
+      } else if (Object.values(DIRECTION_VERTICAL).includes(direction)) {
+        horizontal = false;
+        vertical = true;
+      } else {
+        horizontal = true;
+        vertical = true;
+      }
+
+      console.log(vertical, horizontal);
+      this.setState({
+        editing: true,
+        x,
+        y,
+        width,
+        height,
+        horizontal,
+        vertical
+      });
+
       window.addEventListener("click", this.handleClick);
     };
 
     render() {
-      const { editing, x, y, width, height, id } = this.state;
+      const {
+        editing,
+        x,
+        y,
+        width,
+        height,
+        horizontal,
+        vertical,
+        id
+      } = this.state;
       const { forwardedRef, ...rest } = this.props;
 
       return (
@@ -40,7 +79,15 @@ function editable(WrappedComponent) {
             {...rest}
           />
           {editing ? (
-            <Editor id={id} x={x} y={y} width={width} height={height} />
+            <Editor
+              id={id}
+              x={x}
+              y={y}
+              width={width}
+              height={height}
+              horizontal={horizontal}
+              vertical={vertical}
+            />
           ) : null}
         </>
       );

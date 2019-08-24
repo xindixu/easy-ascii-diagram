@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
   ${props => `width: ${props.width}px; 
   height: ${props.height}px;
   left: ${props.x * GRID_WIDTH}px; 
-    top:${props.y * GRID_HEIGHT}px; 
+  top:${props.y * GRID_HEIGHT}px; 
   `}
 `;
 
@@ -22,64 +22,64 @@ const Resizer = styled.span`
 
 export const Top = styled(Resizer)`
   width: 100%;
-  height: 2px;
-  top: -1px;
-  left: 0px;
-  cursor: row-resize;
+  height: ${GRID_HEIGHT / 2}px;
+  top: 0;
+  left: 0;
+  cursor: n-resize;
 `;
 
 export const Bottom = styled(Resizer)`
   width: 100%;
-  height: 2px;
-  bottom: -1px;
-  left: 0px;
-  cursor: row-resize;
+  height: ${GRID_HEIGHT / 2}px;
+  bottom: 0;
+  left: 0;
+  cursor: s-resize;
 `;
 
 export const Left = styled(Resizer)`
-  width: 2px;
+  width: ${GRID_WIDTH / 2}px;
   height: 100%;
-  top: 0px;
-  left: -1px;
-  cursor: col-resize;
+  top: 0;
+  left: 0;
+  cursor: w-resize;
 `;
 
 export const Right = styled(Resizer)`
-  width: 2px;
+  width: ${GRID_WIDTH / 2}px;
   height: 100%;
-  top: 0px;
-  right: -1px;
-  cursor: col-resize;
+  top: 0;
+  right: 0;
+  cursor: e-resize;
 `;
 
 export const TopLeft = styled(Resizer)`
-  width: 2px;
-  height: 2px;
-  top: -1px;
-  left: -1px;
+  width: ${GRID_WIDTH / 2}px;
+  height: ${GRID_HEIGHT / 2}px;
+  top: 0;
+  left: 0;
   cursor: nw-resize;
 `;
 
 export const TopRight = styled(Resizer)`
-  width: 2px;
-  height: 2px;
-  top: -1px;
-  right: -1px;
+  width: ${GRID_WIDTH / 2}px;
+  height: ${GRID_HEIGHT / 2}px;
+  top: 0;
+  right: -2px;
   cursor: ne-resize;
 `;
 
 export const BottomLeft = styled(Resizer)`
-  width: 2px;
-  height: 2px;
-  bottom: -1px;
-  left: -1px;
+  width: ${GRID_WIDTH / 2}px;
+  height: ${GRID_HEIGHT / 2}px;
+  bottom: 0;
+  left: 0;
   cursor: sw-resize;
 `;
 
 export const BottomRight = styled(Resizer)`
-  width: 2px;
-  height: 2px;
-  bottom: -1px;
-  right: -1px;
+  width: ${GRID_WIDTH / 2}px;
+  height: ${GRID_HEIGHT / 2}px;
+  bottom: 0;
+  right: -2px;
   cursor: se-resize;
 `;

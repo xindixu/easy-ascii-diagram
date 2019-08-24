@@ -14,18 +14,32 @@ import {
 
 class Editor extends Component {
   render() {
-    const { x, y, width, height, id } = this.props;
+    const { x, y, width, height, id, horizontal, vertical } = this.props;
 
     return (
       <Wrapper id={id} x={x} y={y} width={width} height={height}>
-        <Top />
-        <Bottom />
-        <Left />
-        <Right />
-        <TopLeft />
-        <TopRight />
-        <BottomLeft />
-        <BottomRight />
+        {horizontal ? (
+          <>
+            <Left />
+            <Right />
+          </>
+        ) : null}
+
+        {vertical ? (
+          <>
+            <Top />
+            <Bottom />
+          </>
+        ) : null}
+
+        {horizontal && vertical ? (
+          <>
+            <TopLeft />
+            <TopRight />
+            <BottomLeft />
+            <BottomRight />
+          </>
+        ) : null}
       </Wrapper>
     );
   }
@@ -36,7 +50,9 @@ Editor.propTypes = {
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  horizontal: PropTypes.bool.isRequired,
+  vertical: PropTypes.bool.isRequired
 };
 
 export default Editor;

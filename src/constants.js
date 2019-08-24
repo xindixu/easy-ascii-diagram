@@ -50,3 +50,15 @@ export const DIRECTION_ARROW = {
   left: DIRECTION.left,
   right: DIRECTION.right
 };
+
+export const DIRECTION_HORIZONTAL = {
+  horizontal: DIRECTION.horizontal,
+  left: DIRECTION.left,
+  right: DIRECTION.right
+};
+
+export const DIRECTION_VERTICAL = {
+  vertical: DIRECTION.vertical,
+  up: DIRECTION.up,
+  down: DIRECTION.down
+};
