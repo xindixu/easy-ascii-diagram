@@ -42,18 +42,22 @@ function editable(WrappedComponent) {
       return { horizontal, vertical };
     }
 
-    handleClick = e => {
+    handleClickOutside = e => {
       const { id } = this.state;
+
       if (e.target.closest(`#${id}`)) return;
+      const { exitEditMode } = this.props;
+
       this.setState({ editing: false });
-      window.removeEventListener("click", this.handleClick);
+      exitEditMode();
+      window.removeEventListener("click", this.handleClickOutside);
     };
 
     handleOnDoubleClick = e => {
       const { width, height } = e.target.getBoundingClientRect();
       const { x, y, enterEditMode } = this.props;
-      console.log(enterEditMode);
       const { horizontal, vertical } = this.getResizeDirection();
+
       this.setState({
         editing: true,
         x,
@@ -63,9 +67,8 @@ function editable(WrappedComponent) {
         horizontal,
         vertical
       });
-
       enterEditMode();
-      window.addEventListener("click", this.handleClick);
+      window.addEventListener("click", this.handleClickOutside);
     };
 
     render() {

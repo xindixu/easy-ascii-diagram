@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
-import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
+import { GRID_WIDTH, GRID_HEIGHT, TOOLBAR_HEIGHT } from "../../constants";
 
 const { blue } = styleSettings;
 export const Wrapper = styled.div`
@@ -14,6 +14,15 @@ export const Wrapper = styled.div`
   top:${props.y * GRID_HEIGHT}px; 
   `}
   cursor: move;
+`;
+
+export const EditArea = styled.div`
+  position: absolute;
+  top: ${TOOLBAR_HEIGHT}px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - ${TOOLBAR_HEIGHT}px);
+  background: #2c2c2c08;
 `;
 
 const Resizer = styled.span`

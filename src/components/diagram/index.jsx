@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Wrapper } from "./style";
-import {
-  TOOLS,
-  GRID_WIDTH,
-  GRID_HEIGHT,
-  DIRECTION_ARROW,
-  DIRECTION_LINE
-} from "../../constants";
+import { TOOLS, DIRECTION_ARROW, DIRECTION_LINE } from "../../constants";
 
 import {
   drawRectangle,
@@ -17,7 +11,7 @@ import {
   erase
 } from "../../lib/draw";
 
-const randomId = () => Date.now() / 10000 + Math.random().toFixed(4);
+import { getX, getY, randomId } from "../../util";
 
 class Diagram extends Component {
   state = {
@@ -46,8 +40,6 @@ class Diagram extends Component {
   nodes = new Map();
 
   enterEditMode = () => {
-    console.log("enter");
-
     this.setState({
       isEditing: true
     });
@@ -69,18 +61,18 @@ class Diagram extends Component {
     }
     this.setState({
       isDrawing: true,
-      start: { x: this.getX(e.clientX), y: this.getY(e.clientY) },
-      end: { x: this.getX(e.clientX), y: this.getY(e.clientY) }
+      start: { x: getX(e.clientX), y: getY(e.clientY) },
+      end: { x: getX(e.clientX), y: getY(e.clientY) }
     });
   };
 
   handleMouseMove = e => {
     const { tool } = this.props;
     if (tool === TOOLS.text) return;
-
-    if (this.state.isDrawing === true) {
+    const { isDrawing } = this.state;
+    if (isDrawing === true) {
       this.setState({
-        end: { x: this.getX(e.clientX), y: this.getY(e.clientY) }
+        end: { x: getX(e.clientX), y: getY(e.clientY) }
       });
       this.draw();
     }
@@ -90,7 +82,7 @@ class Diagram extends Component {
     const { tool } = this.props;
     if (tool === TOOLS.text) return;
     this.setState({
-      end: { x: this.getX(e.clientX), y: this.getY(e.clientY) }
+      end: { x: getX(e.clientX), y: getY(e.clientY) }
     });
 
     this.commit();
@@ -138,10 +130,6 @@ class Diagram extends Component {
       this.setState({ textBuffer: content, isTyping: true });
     }
   };
-
-  getX = x => Math.floor(x / GRID_WIDTH / this.props.zoomLevel);
-
-  getY = y => Math.floor(y / GRID_HEIGHT / this.props.zoomLevel) - 1;
 
   commit() {
     const { drawing, borderBuffer } = this.state;
@@ -191,7 +179,7 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.enterEditMode
+          exitEditMode: this.exitEditMode
         });
         break;
 
@@ -214,7 +202,7 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.enterEditMode
+          exitEditMode: this.exitEditMode
         });
         break;
 
@@ -235,7 +223,7 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.enterEditMode
+          exitEditMode: this.exitEditMode
         });
         break;
 
@@ -248,7 +236,7 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.enterEditMode
+          exitEditMode: this.exitEditMode
         });
         break;
 
@@ -272,7 +260,7 @@ class Diagram extends Component {
   }
 
   render() {
-    const { drawing } = this.state;
+    const { drawing, isEditing, isDrawing } = this.state;
     const { tool, content } = this.props;
 
     return (
@@ -287,6 +275,8 @@ class Diagram extends Component {
       >
         {content.map(el => el)}
         {drawing.shape}
+        {isEditing ? <p>Editing</p> : null}
+        {isDrawing ? <p>Drawing</p> : null}
       </Wrapper>
     );
   }
@@ -300,8 +290,7 @@ Diagram.propTypes = {
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
   commitDrawing: PropTypes.func.isRequired,
-  updateBorder: PropTypes.func.isRequired,
-  setRef: PropTypes.func.isRequired
+  updateBorder: PropTypes.func.isRequired
 };
 
 export default Diagram;
