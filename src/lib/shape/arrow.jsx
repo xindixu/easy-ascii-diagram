@@ -58,30 +58,30 @@ class Arrow extends Component {
     return text;
   }
 
-  state = {
-    x: this.props.x,
-    y: this.props.y,
-    length: this.props.length,
-    direction: this.props.direction,
-    text: ""
-  };
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps !== prevState) {
+      const { direction, length } = nextProps;
+      const state = {
+        ...nextProps,
+        text: Arrow.convert(direction, length)
+      };
+      return state;
+    }
+    return null;
+  }
 
-  componentDidMount() {
-    const { direction, length } = this.state;
-    const text = Arrow.convert(direction, length);
-    this.setState({ text });
+  constructor(props) {
+    super(props);
+    const { direction, length } = this.props;
+    this.state = {
+      ...this.props,
+      text: Arrow.convert(direction, length)
+    };
   }
 
   render() {
-    // const { x, y, text } = this.state;
-    const {
-      zoomLevel,
-      handleOnDoubleClick,
-      x,
-      y,
-      direction,
-      length
-    } = this.props;
+    const { text } = this.state;
+    const { zoomLevel, handleOnDoubleClick, x, y } = this.props;
     return (
       <WithBackground
         x={x}
@@ -89,7 +89,7 @@ class Arrow extends Component {
         zoomLevel={zoomLevel}
         onDoubleClick={handleOnDoubleClick}
       >
-        {Arrow.convert(direction, length)}
+        {text}
       </WithBackground>
     );
   }
