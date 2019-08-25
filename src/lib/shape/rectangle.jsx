@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
 import { BorderOnly } from "./style";
-import { TOOLS } from "../../constants";
+import { TOOLS, EDITOR } from "../../constants";
 
 class Rectangle extends Component {
   static shape = TOOLS.rectangle;
@@ -34,21 +34,63 @@ class Rectangle extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { x, y, width, height, editing, ...rest } = nextProps;
+    const { editing, ...rest } = nextProps;
     if (!editing) return null;
 
-    const { x: oldX, y: oldY, width: oldWidth, height: oldHeight } = prevState;
-    const { start, end } = editing;
-    const newWidth = oldWidth + end.x - start.x;
-    const newHeight = oldHeight + end.y - start.y;
+    const { x, y, width, height } = prevState;
+    const { start, end, direction } = editing;
+
+    let newWidth;
+    let newHeight;
+    let newX;
+    let newY;
+
+    switch (direction) {
+      case EDITOR.left:
+        newX = end.x;
+        newWidth = x - end.x + width;
+        break;
+      case EDITOR.right:
+        newWidth = end.x - x;
+        break;
+      case EDITOR.top:
+        newY = end.y;
+        newHeight = y - end.y + height;
+        break;
+      case EDITOR.bottom:
+        newHeight = end.y - y;
+        break;
+      case EDITOR.topLeft:
+        newX = end.x;
+        newWidth = x - end.x + width;
+        newY = end.y;
+        newHeight = y - end.y + height;
+        break;
+      case EDITOR.topRight:
+        newWidth = end.x - x;
+        newY = end.y;
+        newHeight = y - end.y + height;
+        break;
+      case EDITOR.bottomLeft:
+        newX = end.x;
+        newWidth = x - end.x + width;
+        newHeight = end.y - y;
+        break;
+      case EDITOR.bottomRight:
+        newWidth = end.x - x;
+        newHeight = end.y - y;
+        break;
+      default:
+        break;
+    }
 
     const state = {
       ...rest,
-      x,
-      y,
-      width: newWidth,
-      height: newHeight,
-      text: Rectangle.convert(newWidth, newHeight)
+      x: newX || x,
+      y: newY || y,
+      width: newWidth || width,
+      height: newHeight || height,
+      text: Rectangle.convert(newWidth || width, newHeight || height)
     };
     return state;
   }

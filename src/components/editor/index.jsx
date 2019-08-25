@@ -54,48 +54,8 @@ class Editor extends Component {
   edit() {
     const { edit, target } = this.props;
     const { start, end, direction } = this.state;
-    const { length, width, height } = target;
-    // let newLength;
-    // let newWidth;
-    // let newHeight;
-    // let x;
-    // let y;
 
-    // switch (direction) {
-    //   case EDITOR.left:
-    //     newLength = length + end.x - start.x;
-    //     newWidth = width + end.x - start.x;
-    //     break;
-    //   case EDITOR.right:
-    //     newLength = length + end.x - start.x;
-    //     newWidth = width + end.x - start.x;
-    //     break;
-    //   case EDITOR.top:
-    //     newLength = length + end.y - start.y;
-    //     newHeight = height + end.y - start.y;
-    //     break;
-    //   case EDITOR.bottom:
-    //     newLength = length + end.y - start.y;
-    //     newHeight = height + end.y - start.y;
-    //     break;
-    //   case EDITOR.topLeft:
-    //     newWidth = width + end.x - start.x;
-    //     newHeight = height + end.y - start.y;
-    //     break;
-    //   case EDITOR.topRight:
-    //     break;
-    //   case EDITOR.bottomLeft:
-    //     break;
-    //   case EDITOR.bottomRight:
-    //     break;
-    //   default:
-    //     break;
-    // }
-
-    edit({ ...target, editing: { start, end } });
-    // if (length) edit({ ...target, length: newLength });
-    // if (width && newWidth) edit({ ...target, width: newWidth });
-    // if (height && newHeight) edit({ ...target, height: newHeight });
+    edit({ ...target, editing: { start, end, direction } });
   }
 
   commit() {

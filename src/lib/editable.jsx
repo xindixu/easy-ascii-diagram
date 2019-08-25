@@ -1,7 +1,7 @@
 import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 import Editor from "../components/editor";
-import { randomId } from "../util";
+import { randomId, getX, getY } from "../util";
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from "../constants";
 
 function editable(WrappedComponent) {
@@ -59,14 +59,16 @@ function editable(WrappedComponent) {
     };
 
     handleOnDoubleClick = e => {
-      const { width, height } = e.target.getBoundingClientRect();
-      const { x, y, enterEditMode } = this.props;
+      const { x, y, width, height } = e.target.getBoundingClientRect();
+      const { enterEditMode } = this.props;
       const { horizontal, vertical } = this.getResizeDirection();
+
+      console.log(e.target.getBoundingClientRect());
 
       this.setState({
         editing: true,
-        x,
-        y,
+        x: getX(x),
+        y: getY(y),
         width,
         height,
         horizontal,
