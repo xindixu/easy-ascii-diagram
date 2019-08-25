@@ -80,8 +80,8 @@ class Arrow extends Component {
   }
 
   render() {
-    const { text } = this.state;
-    const { zoomLevel, handleOnDoubleClick, x, y } = this.props;
+    const { x, y, text } = this.state;
+    const { zoomLevel, handleOnDoubleClick } = this.props;
     return (
       <WithBackground
         x={x}

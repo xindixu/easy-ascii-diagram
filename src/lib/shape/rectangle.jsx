@@ -33,29 +33,25 @@ class Rectangle extends Component {
     return text;
   }
 
-  state = {
-    x: this.props.x,
-    y: this.props.y,
-    width: this.props.width,
-    height: this.props.height,
-    text: ""
-  };
-
-  componentDidMount() {
-    const { width, height } = this.state;
-    const text = Rectangle.convert(width, height);
-    this.setState({ text });
-  }
-
-  handleDrag(x, y) {
-    const { edit } = this.state;
-    if (edit) {
-      this.setState({ x, y });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps !== prevState) {
+      const { width, height } = nextProps;
+      const state = {
+        ...nextProps,
+        text: Rectangle.convert(width, height)
+      };
+      return state;
     }
+    return null;
   }
 
-  resize(width, height) {
-    this.setState({ width, height });
+  constructor(props) {
+    super(props);
+    const { width, height } = this.props;
+    this.state = {
+      ...this.props,
+      text: Rectangle.convert(width, height)
+    };
   }
 
   render() {

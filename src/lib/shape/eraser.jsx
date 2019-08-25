@@ -21,18 +21,13 @@ class Eraser extends Component {
     return text;
   }
 
-  state = {
-    x: this.props.x,
-    y: this.props.y,
-    width: this.props.width,
-    height: this.props.height,
-    text: ""
-  };
-
-  componentDidMount() {
-    const { width, height } = this.state;
-    const text = Eraser.convert(width, height);
-    this.setState({ text });
+  constructor(props) {
+    super(props);
+    const { width, height } = this.props;
+    this.state = {
+      ...this.props,
+      text: Eraser.convert(width, height)
+    };
   }
 
   render() {

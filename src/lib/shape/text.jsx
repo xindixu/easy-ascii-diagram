@@ -11,17 +11,25 @@ class Text extends Component {
     return content;
   }
 
-  state = {
-    x: this.props.x,
-    y: this.props.y,
-    content: this.props.content,
-    text: ""
-  };
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps !== prevState) {
+      const { content } = nextProps;
+      const state = {
+        ...nextProps,
+        text: Text.convert(content)
+      };
+      return state;
+    }
+    return null;
+  }
 
-  componentDidMount() {
-    const { content } = this.state;
-    const text = Text.convert(content);
-    this.setState({ text });
+  constructor(props) {
+    super(props);
+    const { content } = this.props;
+    this.state = {
+      ...this.props,
+      text: Text.convert(content)
+    };
   }
 
   render() {

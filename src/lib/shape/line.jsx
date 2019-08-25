@@ -26,18 +26,25 @@ class Line extends Component {
     return text;
   }
 
-  state = {
-    x: this.props.x,
-    y: this.props.y,
-    length: this.props.length,
-    direction: this.props.direction,
-    text: ""
-  };
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps !== prevState) {
+      const { direction, length } = nextProps;
+      const state = {
+        ...nextProps,
+        text: Line.convert(direction, length)
+      };
+      return state;
+    }
+    return null;
+  }
 
-  componentDidMount() {
-    const { direction, length } = this.state;
-    const text = Line.convert(direction, length);
-    this.setState({ text });
+  constructor(props) {
+    super(props);
+    const { direction, length } = this.props;
+    this.state = {
+      ...this.props,
+      text: Line.convert(direction, length)
+    };
   }
 
   render() {
