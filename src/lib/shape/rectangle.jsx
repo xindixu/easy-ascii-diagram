@@ -34,15 +34,23 @@ class Rectangle extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps !== prevState) {
-      const { width, height } = nextProps;
-      const state = {
-        ...nextProps,
-        text: Rectangle.convert(width, height)
-      };
-      return state;
-    }
-    return null;
+    const { x, y, width, height, editing, ...rest } = nextProps;
+    if (!editing) return null;
+
+    const { x: oldX, y: oldY, width: oldWidth, height: oldHeight } = prevState;
+    const { start, end } = editing;
+    const newWidth = oldWidth + end.x - start.x;
+    const newHeight = oldHeight + end.y - start.y;
+
+    const state = {
+      ...rest,
+      x,
+      y,
+      width: newWidth,
+      height: newHeight,
+      text: Rectangle.convert(newWidth, newHeight)
+    };
+    return state;
   }
 
   constructor(props) {
@@ -71,12 +79,20 @@ class Rectangle extends Component {
 }
 
 Rectangle.propTypes = {
+  editing: null
+};
+
+Rectangle.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  handleOnDoubleClick: PropTypes.func.isRequired
+  handleOnDoubleClick: PropTypes.func.isRequired,
+  editing: PropTypes.shape({
+    start: PropTypes.any,
+    end: PropTypes.any
+  })
 };
 
 export default editable(Rectangle);

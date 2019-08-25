@@ -78,7 +78,7 @@ function editable(WrappedComponent) {
     };
 
     edit = newProps => {
-      // console.log(newProps);
+      console.log(newProps);
       this.setState({ newProps });
     };
 

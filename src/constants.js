@@ -62,3 +62,14 @@ export const DIRECTION_VERTICAL = {
   up: DIRECTION.up,
   down: DIRECTION.down
 };
+
+export const EDITOR = {
+  top: "TOP",
+  bottom: "BOTTOM",
+  left: "LEFT",
+  right: "RIGHT",
+  topLeft: "TOP_LEFT",
+  topRight: "TOP_RIGHT",
+  bottomLeft: "BOTTOM_LEFT",
+  bottomRight: "BOTTOM_RIGHT"
+};

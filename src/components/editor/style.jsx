@@ -20,13 +20,15 @@ export const EditArea = styled.div`
   position: absolute;
   top: ${TOOLBAR_HEIGHT}px;
   left: 0;
-  width: 100vw;
-  height: calc(100vh - ${TOOLBAR_HEIGHT}px);
+  width: 100%;
+  height: 100%;
   background: #2c2c2c08;
 `;
 
-const Resizer = styled.span`
+const Resizer = styled.button`
   position: absolute;
+  outline: none;
+  background: #00000000;
   border: 0.4px solid black;
 `;
 
