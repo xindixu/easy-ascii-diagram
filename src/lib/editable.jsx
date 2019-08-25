@@ -63,8 +63,6 @@ function editable(WrappedComponent) {
       const { enterEditMode } = this.props;
       const { horizontal, vertical } = this.getResizeDirection();
 
-      console.log(e.target.getBoundingClientRect());
-
       this.setState({
         editing: true,
         x: getX(x),
@@ -80,7 +78,6 @@ function editable(WrappedComponent) {
     };
 
     edit = newProps => {
-      console.log(newProps);
       this.setState({ newProps });
     };
 

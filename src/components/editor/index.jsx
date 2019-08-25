@@ -17,12 +17,16 @@ import { getX, getY } from "../../util";
 import { EDITOR } from "../../constants";
 
 class Editor extends Component {
-  state = {
-    isDragging: false,
-    start: null,
-    end: null,
-    direction: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDragging: false,
+      start: null,
+      end: null,
+      direction: null,
+      ...props
+    };
+  }
 
   handleMouseDown = e => {
     this.setState({

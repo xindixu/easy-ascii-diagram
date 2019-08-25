@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   pointer-event: none;
   position: absolute;
   outline: 2px solid ${blue};
-  z-index: 100;
+  z-index: 10;
   ${props => `width: ${props.width}px; 
   height: ${props.height}px;
   left: ${props.x * GRID_WIDTH}px; 
@@ -29,7 +29,7 @@ const Resizer = styled.button`
   position: absolute;
   outline: none;
   background: #00000000;
-  border: 0.4px solid black;
+  border: none;
 `;
 
 export const Top = styled(Resizer)`
@@ -76,7 +76,7 @@ export const TopRight = styled(Resizer)`
   width: ${GRID_WIDTH / 2}px;
   height: ${GRID_HEIGHT / 2}px;
   top: 0;
-  right: -2px;
+  right: 0;
   cursor: ne-resize;
 `;
 
@@ -92,6 +92,6 @@ export const BottomRight = styled(Resizer)`
   width: ${GRID_WIDTH / 2}px;
   height: ${GRID_HEIGHT / 2}px;
   bottom: 0;
-  right: -2px;
+  right: 0;
   cursor: se-resize;
 `;
