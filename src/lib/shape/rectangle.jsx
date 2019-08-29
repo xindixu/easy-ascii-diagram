@@ -33,67 +33,14 @@ class Rectangle extends Component {
     return text;
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { editing, ...rest } = nextProps;
-    if (!editing) return null;
-
-    const { x, y, width, height } = prevState;
-    const { start, end, direction } = editing;
-
-    let newWidth;
-    let newHeight;
-    let newX;
-    let newY;
-
-    switch (direction) {
-      case EDITOR.left:
-        newX = end.x;
-        newWidth = x - end.x + width;
-        break;
-      case EDITOR.right:
-        newWidth = end.x - x;
-        break;
-      case EDITOR.top:
-        newY = end.y;
-        newHeight = y - end.y + height;
-        break;
-      case EDITOR.bottom:
-        newHeight = end.y - y;
-        break;
-      case EDITOR.topLeft:
-        newX = end.x;
-        newWidth = x - end.x + width;
-        newY = end.y;
-        newHeight = y - end.y + height;
-        break;
-      case EDITOR.topRight:
-        newWidth = end.x - x;
-        newY = end.y;
-        newHeight = y - end.y + height;
-        break;
-      case EDITOR.bottomLeft:
-        newX = end.x;
-        newWidth = x - end.x + width;
-        newHeight = end.y - y;
-        break;
-      case EDITOR.bottomRight:
-        newWidth = end.x - x;
-        newHeight = end.y - y;
-        break;
-      default:
-        break;
-    }
-
-    const state = {
-      ...rest,
-      x: newX || x,
-      y: newY || y,
-      width: newWidth || width,
-      height: newHeight || height,
-      text: Rectangle.convert(newWidth || width, newHeight || height)
-    };
-    return state;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   const { editing, width, height, ...rest } = nextProps;
+  //   const state = {
+  //     ...nextProps,
+  //     text: Rectangle.convert(width, height)
+  //   };
+  //   return state;
+  // }
 
   constructor(props) {
     super(props);
@@ -105,8 +52,7 @@ class Rectangle extends Component {
   }
 
   render() {
-    const { x, y, text } = this.state;
-    const { zoomLevel, handleOnDoubleClick } = this.props;
+    const { x, y, width, height, zoomLevel, handleOnDoubleClick } = this.props;
     return (
       <BorderOnly
         x={x}
@@ -114,7 +60,7 @@ class Rectangle extends Component {
         zoomLevel={zoomLevel}
         onDoubleClick={handleOnDoubleClick}
       >
-        {text}
+        {Rectangle.convert(width, height)}
       </BorderOnly>
     );
   }

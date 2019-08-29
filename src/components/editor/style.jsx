@@ -1,15 +1,14 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
-import { GRID_WIDTH, GRID_HEIGHT, TOOLBAR_HEIGHT } from "../../constants";
+import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
 
 const { blue } = styleSettings;
 export const Wrapper = styled.div`
-  pointer-event: none;
   position: absolute;
   outline: 2px solid ${blue};
   z-index: 10;
-  ${props => `width: ${props.width}px; 
-  height: ${props.height}px;
+  ${props => `width: ${props.width * GRID_WIDTH}px; 
+  height: ${props.height * GRID_HEIGHT}px;
   left: ${props.x * GRID_WIDTH}px; 
   top:${props.y * GRID_HEIGHT}px; 
   `}
@@ -18,7 +17,8 @@ export const Wrapper = styled.div`
 
 export const EditArea = styled.div`
   position: absolute;
-  top: ${TOOLBAR_HEIGHT}px;
+  z-index: 20;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -37,7 +37,7 @@ export const Top = styled(Resizer)`
   height: ${GRID_HEIGHT / 2}px;
   top: 0;
   left: 0;
-  cursor: n-resize;
+  cursor: ns-resize;
 `;
 
 export const Bottom = styled(Resizer)`
@@ -45,7 +45,7 @@ export const Bottom = styled(Resizer)`
   height: ${GRID_HEIGHT / 2}px;
   bottom: 0;
   left: 0;
-  cursor: s-resize;
+  cursor: ns-resize;
 `;
 
 export const Left = styled(Resizer)`
@@ -53,7 +53,7 @@ export const Left = styled(Resizer)`
   height: 100%;
   top: 0;
   left: 0;
-  cursor: w-resize;
+  cursor: ew-resize;
 `;
 
 export const Right = styled(Resizer)`
@@ -61,7 +61,7 @@ export const Right = styled(Resizer)`
   height: 100%;
   top: 0;
   right: 0;
-  cursor: e-resize;
+  cursor: ew-resize;
 `;
 
 export const TopLeft = styled(Resizer)`

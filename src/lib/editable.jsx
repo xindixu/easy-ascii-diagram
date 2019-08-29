@@ -60,6 +60,7 @@ function editable(WrappedComponent) {
 
     handleOnDoubleClick = e => {
       const { x, y, width, height } = e.target.getBoundingClientRect();
+      console.log(e.target.getBoundingClientRect());
       const { enterEditMode } = this.props;
       const { horizontal, vertical } = this.getResizeDirection();
 
@@ -67,8 +68,8 @@ function editable(WrappedComponent) {
         editing: true,
         x: getX(x),
         y: getY(y),
-        width,
-        height,
+        width: getX(width),
+        height: getY(height) + 1,
         horizontal,
         vertical
       });

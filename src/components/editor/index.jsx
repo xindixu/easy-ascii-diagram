@@ -39,6 +39,7 @@ class Editor extends Component {
 
   handleMouseUp = e => {
     this.setState({
+      isDragging: false,
       end: { x: getX(e.clientX), y: getY(e.clientY) }
     });
     this.commit();
@@ -46,7 +47,7 @@ class Editor extends Component {
 
   handleMouseMove = e => {
     const { isDragging } = this.state;
-
+    console.log(getX(e.clientX), getY(e.clientY));
     if (isDragging === true) {
       this.setState({
         end: { x: getX(e.clientX), y: getY(e.clientY) }
@@ -57,9 +58,65 @@ class Editor extends Component {
 
   edit() {
     const { edit, target } = this.props;
-    const { start, end, direction } = this.state;
+    const { start, end, direction, x, y, width, height } = this.state;
+    let newWidth;
+    let newHeight;
+    let newX;
+    let newY;
 
-    edit({ ...target, editing: { start, end, direction } });
+    switch (direction) {
+      case EDITOR.left:
+        newX = end.x;
+        newWidth = x - end.x + width;
+        break;
+      case EDITOR.right:
+        newWidth = end.x - x;
+        break;
+      case EDITOR.top:
+        newY = end.y;
+        newHeight = y - end.y + height;
+        break;
+      case EDITOR.bottom:
+        newHeight = end.y - y;
+        break;
+      case EDITOR.topLeft:
+        newX = end.x;
+        newWidth = x - end.x + width;
+        newY = end.y;
+        newHeight = y - end.y + height;
+        break;
+      case EDITOR.topRight:
+        newWidth = end.x - x;
+        newY = end.y;
+        newHeight = y - end.y + height;
+        break;
+      case EDITOR.bottomLeft:
+        newX = end.x;
+        newWidth = x - end.x + width;
+        newHeight = end.y - y;
+        break;
+      case EDITOR.bottomRight:
+        newWidth = end.x - x;
+        newHeight = end.y - y;
+        break;
+      default:
+        break;
+    }
+
+    this.setState({
+      x: newX || x,
+      y: newY || y,
+      width: newWidth || width,
+      height: newHeight || height
+    });
+
+    edit({
+      ...target,
+      x: newX || x,
+      y: newY || y,
+      width: newWidth || width,
+      height: newHeight || height
+    });
   }
 
   commit() {
@@ -67,14 +124,11 @@ class Editor extends Component {
   }
 
   render() {
-    const { x, y, width, height, id, horizontal, vertical } = this.props;
+    const { id, horizontal, vertical } = this.props;
+    const { x, y, width, height } = this.state;
 
     return (
       <>
-        <EditArea
-          onMouseMove={this.handleMouseMove}
-          onMouseUp={this.handleMouseUp}
-        />
         <Wrapper id={id} x={x} y={y} width={width} height={height}>
           {horizontal ? (
             <>
@@ -114,6 +168,10 @@ class Editor extends Component {
             </>
           ) : null}
         </Wrapper>
+        <EditArea
+          onMouseMove={this.handleMouseMove}
+          onMouseUp={this.handleMouseUp}
+        />
       </>
     );
   }

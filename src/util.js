@@ -5,6 +5,6 @@ export const randomId = () =>
     .toString(36)
     .substring(2, 8)}`;
 
-export const getX = x => Math.floor(x / GRID_WIDTH);
+export const getX = x => Math.ceil(x / GRID_WIDTH);
 
-export const getY = y => Math.floor(y / GRID_HEIGHT) - 1;
+export const getY = y => Math.ceil(y / GRID_HEIGHT) - 1;
