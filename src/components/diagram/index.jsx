@@ -179,7 +179,8 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode
+          exitEditMode: this.exitEditMode,
+          commitEditing: this.commitDrawing
         });
         break;
 
@@ -202,7 +203,8 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode
+          exitEditMode: this.exitEditMode,
+          commitEditing: this.commitDrawing
         });
         break;
 
@@ -223,7 +225,8 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode
+          exitEditMode: this.exitEditMode,
+          commitEditing: this.commitDrawing
         });
         break;
 
@@ -236,7 +239,8 @@ class Diagram extends Component {
           ref,
           zoomLevel,
           enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode
+          exitEditMode: this.exitEditMode,
+          commitEditing: this.commitDrawing
         });
         break;
 

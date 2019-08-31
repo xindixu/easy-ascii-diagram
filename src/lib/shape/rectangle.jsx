@@ -33,14 +33,14 @@ class Rectangle extends Component {
     return text;
   }
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   const { editing, width, height, ...rest } = nextProps;
-  //   const state = {
-  //     ...nextProps,
-  //     text: Rectangle.convert(width, height)
-  //   };
-  //   return state;
-  // }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { width, height, ...rest } = nextProps;
+    const state = {
+      ...rest,
+      text: Rectangle.convert(width, height)
+    };
+    return state;
+  }
 
   constructor(props) {
     super(props);
@@ -52,7 +52,8 @@ class Rectangle extends Component {
   }
 
   render() {
-    const { x, y, width, height, zoomLevel, handleOnDoubleClick } = this.props;
+    const { x, y, zoomLevel, handleOnDoubleClick } = this.props;
+    const { text } = this.state;
     return (
       <BorderOnly
         x={x}
@@ -60,7 +61,7 @@ class Rectangle extends Component {
         zoomLevel={zoomLevel}
         onDoubleClick={handleOnDoubleClick}
       >
-        {Rectangle.convert(width, height)}
+        {text}
       </BorderOnly>
     );
   }

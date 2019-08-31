@@ -146,6 +146,8 @@ class Editor extends Component {
   }
 
   commit() {
+    // connect to higher components
+    // log in history
     this.setState({
       isDragging: false,
       start: null,

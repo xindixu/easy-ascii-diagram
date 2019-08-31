@@ -166,9 +166,12 @@ class SketchPad extends Component {
 
   export() {
     const { content, border } = this.state;
-    this.result = Array(border.down - border.up)
+    const rows = border.down - border.up <= 0 ? 0 : border.down - border.up;
+    const cols =
+      border.right - border.left <= 0 ? 0 : border.right - border.left;
+    this.result = Array(rows)
       .fill(" ")
-      .map(() => Array(border.right - border.left).fill(" "));
+      .map(() => Array(cols).fill(" "));
 
     content.forEach(el => {
       const { state } = el.ref.current;

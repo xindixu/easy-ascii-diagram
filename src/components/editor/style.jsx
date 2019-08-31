@@ -30,6 +30,7 @@ export const Wrapper = styled.div`
 
 export const EditArea = styled.div`
   position: absolute;
+  z-index: 9;
   top: 0;
   left: 0;
   width: 100%;
