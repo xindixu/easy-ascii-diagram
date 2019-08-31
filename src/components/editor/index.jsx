@@ -81,6 +81,7 @@ class Editor extends Component {
   edit() {
     const { edit, target } = this.props;
     const { end, pivot, direction, x, y, width, height } = this.state;
+
     let newWidth;
     let newHeight;
     let newX;
@@ -135,7 +136,6 @@ class Editor extends Component {
       width: newWidth || width,
       height: newHeight || height
     });
-
     edit({
       ...target,
       x: newX || x,

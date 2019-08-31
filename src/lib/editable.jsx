@@ -2,7 +2,7 @@ import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 import Editor from "../components/editor";
 import { randomId, getX, getY } from "../util";
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from "../constants";
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TOOLS } from "../constants";
 
 function editable(WrappedComponent) {
   class Editable extends Component {
@@ -26,6 +26,7 @@ function editable(WrappedComponent) {
 
     getResizeDirection() {
       const { direction, content } = this.props.forwardedRef.current.state;
+      console.log(WrappedComponent.name);
 
       let horizontal;
       let vertical;
@@ -78,7 +79,26 @@ function editable(WrappedComponent) {
     };
 
     edit = newProps => {
-      this.setState({ newProps });
+      const { forwardedRef, ...rest } = this.props;
+      const { x, y, width, height, content } = newProps;
+      const length = width !== 0 ? width : height;
+
+      switch (WrappedComponent.name.toUpperCase()) {
+        case TOOLS.rectangle:
+          this.setState({ newProps });
+          break;
+        case TOOLS.arrow:
+          this.setState({ newProps: { ...rest, x, y, length } });
+          break;
+        case TOOLS.line:
+          this.setState({ newProps: { ...rest, x, y, length } });
+          break;
+        case TOOLS.text:
+          this.setState({ newProps: { ...rest, x, y } });
+          break;
+        default:
+          break;
+      }
     };
 
     render() {

@@ -12,15 +12,13 @@ class Text extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps !== prevState) {
-      const { content } = nextProps;
-      const state = {
-        ...nextProps,
-        text: Text.convert(content)
-      };
-      return state;
-    }
-    return null;
+    const { content, ...rest } = nextProps;
+    if (prevState.content === content) return { ...nextProps };
+    const state = {
+      ...rest,
+      text: Text.convert(content)
+    };
+    return state;
   }
 
   constructor(props) {
@@ -33,8 +31,8 @@ class Text extends Component {
   }
 
   render() {
-    const { x, y, text } = this.state;
-    const { zoomLevel, handleOnDoubleClick } = this.props;
+    const { text } = this.state;
+    const { x, y, zoomLevel, handleOnDoubleClick } = this.props;
 
     return (
       <WithBackground

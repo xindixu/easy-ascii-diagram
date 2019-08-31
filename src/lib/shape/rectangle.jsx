@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
 import { BorderOnly } from "./style";
-import { TOOLS, EDITOR } from "../../constants";
+import { TOOLS } from "../../constants";
 
 class Rectangle extends Component {
   static shape = TOOLS.rectangle;
@@ -35,6 +35,9 @@ class Rectangle extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { width, height, ...rest } = nextProps;
+    if (prevState.width === width && prevState.height === height)
+      return { ...nextProps };
+
     const state = {
       ...rest,
       text: Rectangle.convert(width, height)
@@ -68,20 +71,12 @@ class Rectangle extends Component {
 }
 
 Rectangle.propTypes = {
-  editing: null
-};
-
-Rectangle.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  handleOnDoubleClick: PropTypes.func.isRequired,
-  editing: PropTypes.shape({
-    start: PropTypes.any,
-    end: PropTypes.any
-  })
+  handleOnDoubleClick: PropTypes.func.isRequired
 };
 
 export default editable(Rectangle);

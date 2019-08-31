@@ -59,15 +59,15 @@ class Arrow extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps !== prevState) {
-      const { direction, length } = nextProps;
-      const state = {
-        ...nextProps,
-        text: Arrow.convert(direction, length)
-      };
-      return state;
-    }
-    return null;
+    const { direction, length, ...rest } = nextProps;
+    if (prevState.direction === direction && prevState.length === length)
+      return { ...nextProps };
+
+    const state = {
+      ...rest,
+      text: Arrow.convert(direction, length)
+    };
+    return state;
   }
 
   constructor(props) {
@@ -80,8 +80,8 @@ class Arrow extends Component {
   }
 
   render() {
-    const { x, y, text } = this.state;
-    const { zoomLevel, handleOnDoubleClick } = this.props;
+    const { text } = this.state;
+    const { x, y, zoomLevel, handleOnDoubleClick } = this.props;
     return (
       <WithBackground
         x={x}
