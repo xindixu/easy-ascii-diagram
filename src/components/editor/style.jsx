@@ -1,9 +1,22 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
-import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
+import { GRID_WIDTH, GRID_HEIGHT, EDITOR } from "../../constants";
 
 const { blue } = styleSettings;
+
+const cursor = {
+  [EDITOR.top]: "ns-resize",
+  [EDITOR.bottom]: "ns-resize",
+  [EDITOR.left]: "ew-resize",
+  [EDITOR.right]: "ew-resize",
+  [EDITOR.topLeft]: "nwse-resize",
+  [EDITOR.topRight]: "nesw-resize",
+  [EDITOR.bottomLeft]: "nesw-resize",
+  [EDITOR.bottomRight]: "nwse-resize"
+};
+
 export const Wrapper = styled.div`
+  // pointer-events: none;
   position: absolute;
   outline: 2px solid ${blue};
   z-index: 10;
@@ -17,15 +30,16 @@ export const Wrapper = styled.div`
 
 export const EditArea = styled.div`
   position: absolute;
-  z-index: 20;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: #2c2c2c08;
+  ${props => (props.direction ? `cursor: ${cursor[props.direction]}` : null)}
 `;
 
 const Resizer = styled.button`
+  pointer-events: initial;
   position: absolute;
   outline: none;
   background: #00000000;
@@ -34,64 +48,76 @@ const Resizer = styled.button`
 
 export const Top = styled(Resizer)`
   width: 100%;
-  height: ${GRID_HEIGHT / 2}px;
+  height: ${GRID_HEIGHT}px;
+  max-height: calc(100% / 2);
   top: 0;
   left: 0;
-  cursor: ns-resize;
+  cursor: ${cursor[EDITOR.top]};
 `;
 
 export const Bottom = styled(Resizer)`
   width: 100%;
-  height: ${GRID_HEIGHT / 2}px;
+  height: ${GRID_HEIGHT}px;
+  max-height: calc(100% / 2);
   bottom: 0;
   left: 0;
-  cursor: ns-resize;
+  cursor: ${cursor[EDITOR.bottom]};
 `;
 
 export const Left = styled(Resizer)`
-  width: ${GRID_WIDTH / 2}px;
+  width: ${GRID_WIDTH}px;
+  max-width: calc(100% / 2);
   height: 100%;
   top: 0;
   left: 0;
-  cursor: ew-resize;
+  cursor: ${cursor[EDITOR.left]};
 `;
 
 export const Right = styled(Resizer)`
-  width: ${GRID_WIDTH / 2}px;
+  width: ${GRID_WIDTH}px;
+  max-width: calc(100% / 2);
   height: 100%;
   top: 0;
   right: 0;
-  cursor: ew-resize;
+  cursor: ${cursor[EDITOR.right]};
 `;
 
 export const TopLeft = styled(Resizer)`
-  width: ${GRID_WIDTH / 2}px;
-  height: ${GRID_HEIGHT / 2}px;
+  width: ${GRID_WIDTH}px;
+  max-width: calc(100% / 2);
+  height: ${GRID_HEIGHT}px;
+  max-height: calc(100% / 2);
   top: 0;
   left: 0;
-  cursor: nw-resize;
+  cursor: ${cursor[EDITOR.topLeft]};
 `;
 
 export const TopRight = styled(Resizer)`
-  width: ${GRID_WIDTH / 2}px;
-  height: ${GRID_HEIGHT / 2}px;
+  width: ${GRID_WIDTH}px;
+  max-width: calc(100% / 2);
+  height: ${GRID_HEIGHT}px;
+  max-height: calc(100% / 2);
   top: 0;
   right: 0;
-  cursor: ne-resize;
+  cursor: ${cursor[EDITOR.topRight]};
 `;
 
 export const BottomLeft = styled(Resizer)`
-  width: ${GRID_WIDTH / 2}px;
-  height: ${GRID_HEIGHT / 2}px;
+  width: ${GRID_WIDTH}px;
+  max-width: calc(100% / 2);
+  height: ${GRID_HEIGHT}px;
+  max-height: calc(100% / 2);
   bottom: 0;
   left: 0;
-  cursor: sw-resize;
+  cursor: ${cursor[EDITOR.bottomLeft]};
 `;
 
 export const BottomRight = styled(Resizer)`
-  width: ${GRID_WIDTH / 2}px;
-  height: ${GRID_HEIGHT / 2}px;
+  width: ${GRID_WIDTH}px;
+  max-width: calc(100% / 2);
+  height: ${GRID_HEIGHT}px;
+  max-height: calc(100% / 2);
   bottom: 0;
   right: 0;
-  cursor: se-resize;
+  cursor: ${cursor[EDITOR.bottomRight]};
 `;

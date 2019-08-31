@@ -23,18 +23,30 @@ class Editor extends Component {
       isDragging: false,
       start: null,
       end: null,
+      pivot: null,
       direction: null,
       ...props
     };
   }
 
   handleMouseDown = e => {
+    const start = { x: getX(e.clientX), y: getY(e.clientY) };
     this.setState({
       isDragging: true,
-      start: { x: getX(e.clientX), y: getY(e.clientY) },
-      end: { x: getX(e.clientX), y: getY(e.clientY) },
-      direction: e.target.value
+      direction: e.target.value,
+      start,
+      end: start
     });
+  };
+
+  handleMouseMove = e => {
+    const { isDragging } = this.state;
+    if (isDragging === true) {
+      this.setState({
+        end: { x: getX(e.clientX), y: getY(e.clientY) }
+      });
+      this.edit();
+    }
   };
 
   handleMouseUp = e => {
@@ -45,20 +57,30 @@ class Editor extends Component {
     this.commit();
   };
 
-  handleMouseMove = e => {
-    const { isDragging } = this.state;
-    console.log(getX(e.clientX), getY(e.clientY));
-    if (isDragging === true) {
-      this.setState({
-        end: { x: getX(e.clientX), y: getY(e.clientY) }
-      });
-      this.edit();
-    }
+  handleMoveStart = e => {
+    const { x, y } = this.state;
+    const start = { x: getX(e.clientX), y: getY(e.clientY) };
+    const pivot = { deltaX: start.x - x, deltaY: start.y - y };
+    this.setState({
+      isDragging: true,
+      start,
+      end: start,
+      pivot
+    });
+    this.edit();
+  };
+
+  handleMoveEnd = e => {
+    this.setState({
+      isDragging: false,
+      end: { x: getX(e.clientX), y: getY(e.clientY) }
+    });
+    this.commit();
   };
 
   edit() {
     const { edit, target } = this.props;
-    const { start, end, direction, x, y, width, height } = this.state;
+    const { end, pivot, direction, x, y, width, height } = this.state;
     let newWidth;
     let newHeight;
     let newX;
@@ -100,6 +122,10 @@ class Editor extends Component {
         newHeight = end.y - y;
         break;
       default:
+        if (end) {
+          newX = end.x - pivot.deltaX;
+          newY = end.y - pivot.deltaY;
+        }
         break;
     }
 
@@ -120,28 +146,57 @@ class Editor extends Component {
   }
 
   commit() {
-    const { start, end } = this.state;
+    this.setState({
+      isDragging: false,
+      start: null,
+      end: null,
+      pivot: null,
+      direction: null
+    });
   }
 
   render() {
     const { id, horizontal, vertical } = this.props;
-    const { x, y, width, height } = this.state;
+    const { x, y, width, height, isDragging, direction } = this.state;
 
     return (
       <>
-        <Wrapper id={id} x={x} y={y} width={width} height={height}>
+        <Wrapper
+          id={id}
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          onMouseDown={this.handleMoveStart}
+          onMouseUp={this.handleMoveEnd}
+          onMouseMove={this.handleMouseMove}
+          direction={isDragging ? direction : null}
+        >
           {horizontal ? (
             <>
-              <Left onMouseDown={this.handleMouseDown} value={EDITOR.left} />
-              <Right onMouseDown={this.handleMouseDown} value={EDITOR.right} />
+              <Left
+                onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
+                value={EDITOR.left}
+              />
+              <Right
+                onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
+                value={EDITOR.right}
+              />
             </>
           ) : null}
 
           {vertical ? (
             <>
-              <Top onMouseDown={this.handleMouseDown} value={EDITOR.top} />
+              <Top
+                onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
+                value={EDITOR.top}
+              />
               <Bottom
                 onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
                 value={EDITOR.bottom}
               />
             </>
@@ -151,26 +206,30 @@ class Editor extends Component {
             <>
               <TopLeft
                 onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
                 value={EDITOR.topLeft}
               />
               <TopRight
                 onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
                 value={EDITOR.topRight}
               />
               <BottomLeft
                 onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
                 value={EDITOR.bottomLeft}
               />
               <BottomRight
                 onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}
                 value={EDITOR.bottomRight}
               />
             </>
           ) : null}
         </Wrapper>
         <EditArea
+          direction={isDragging ? direction : null}
           onMouseMove={this.handleMouseMove}
-          onMouseUp={this.handleMouseUp}
         />
       </>
     );
