@@ -162,25 +162,30 @@ class Diagram extends Component {
     const key = randomId();
     const ref = React.createRef();
 
-    const x = start.x < end.x ? start.x : end.x;
-    const y = start.y < end.y ? start.y : end.y;
+    let x = start.x < end.x ? start.x : end.x;
+    let y = start.y < end.y ? start.y : end.y;
     const width = Math.abs(start.x - end.x);
     const height = Math.abs(start.y - end.y);
     let direction;
     let length;
+
+    const sharedProps = {
+      x,
+      y,
+      key,
+      ref,
+      zoomLevel,
+      enterEditMode: this.enterEditMode,
+      exitEditMode: this.exitEditMode,
+      commitEditing: this.commitDrawing
+    };
+
     switch (tool) {
       case TOOLS.rectangle:
         shape = drawRectangle({
-          x,
-          y,
+          ...sharedProps,
           width,
-          height,
-          key,
-          ref,
-          zoomLevel,
-          enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode,
-          commitEditing: this.commitDrawing
+          height
         });
         break;
 
@@ -189,22 +194,20 @@ class Diagram extends Component {
           length = height;
           direction =
             start.y < end.y ? DIRECTION_ARROW.down : DIRECTION_ARROW.up;
+          x = start.x;
         } else {
           length = width;
           direction =
             start.x < end.x ? DIRECTION_ARROW.right : DIRECTION_ARROW.left;
+          y = start.y;
         }
+
         shape = drawArrow({
+          ...sharedProps,
           x,
           y,
           length,
-          direction,
-          key,
-          ref,
-          zoomLevel,
-          enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode,
-          commitEditing: this.commitDrawing
+          direction
         });
         break;
 
@@ -212,35 +215,25 @@ class Diagram extends Component {
         if (width < height) {
           length = height;
           direction = DIRECTION_LINE.vertical;
+          x = start.x;
         } else {
           length = width;
           direction = DIRECTION_LINE.horizontal;
+          y = start.y;
         }
         shape = drawLine({
+          ...sharedProps,
           x,
           y,
           length,
-          direction,
-          key,
-          ref,
-          zoomLevel,
-          enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode,
-          commitEditing: this.commitDrawing
+          direction
         });
         break;
 
       case TOOLS.text:
         shape = drawText({
-          x,
-          y,
-          content,
-          key,
-          ref,
-          zoomLevel,
-          enterEditMode: this.enterEditMode,
-          exitEditMode: this.exitEditMode,
-          commitEditing: this.commitDrawing
+          ...sharedProps,
+          content
         });
         break;
 
