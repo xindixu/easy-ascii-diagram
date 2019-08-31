@@ -55,7 +55,7 @@ class Rectangle extends Component {
   }
 
   render() {
-    const { x, y, zoomLevel, handleOnDoubleClick } = this.props;
+    const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
     const { text } = this.state;
     return (
       <BorderOnly
@@ -63,6 +63,7 @@ class Rectangle extends Component {
         y={y}
         zoomLevel={zoomLevel}
         onDoubleClick={handleOnDoubleClick}
+        editing={editing}
       >
         {text}
       </BorderOnly>
@@ -76,7 +77,8 @@ Rectangle.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  handleOnDoubleClick: PropTypes.func.isRequired
+  handleOnDoubleClick: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired
 };
 
 export default editable(Rectangle);

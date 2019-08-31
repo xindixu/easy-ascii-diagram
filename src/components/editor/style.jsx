@@ -15,16 +15,17 @@ const cursor = {
   [EDITOR.bottomRight]: "nwse-resize"
 };
 
-export const Wrapper = styled.div`
-  // pointer-events: none;
+export const Wrapper = styled.div.attrs(({ x, y, width, height }) => ({
+  style: {
+    left: x * GRID_WIDTH,
+    top: y * GRID_HEIGHT,
+    width: width * GRID_WIDTH,
+    height: height * GRID_HEIGHT
+  }
+}))`
   position: absolute;
   outline: 2px solid ${blue};
   z-index: 10;
-  ${props => `width: ${props.width * GRID_WIDTH}px; 
-  height: ${props.height * GRID_HEIGHT}px;
-  left: ${props.x * GRID_WIDTH}px; 
-  top:${props.y * GRID_HEIGHT}px; 
-  `}
   cursor: move;
 `;
 

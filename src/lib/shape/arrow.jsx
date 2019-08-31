@@ -81,13 +81,14 @@ class Arrow extends Component {
 
   render() {
     const { text } = this.state;
-    const { x, y, zoomLevel, handleOnDoubleClick } = this.props;
+    const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
     return (
       <WithBackground
         x={x}
         y={y}
         zoomLevel={zoomLevel}
         onDoubleClick={handleOnDoubleClick}
+        editing={editing}
       >
         {text}
       </WithBackground>
@@ -101,7 +102,8 @@ Arrow.propTypes = {
   length: PropTypes.number.isRequired,
   direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
   zoomLevel: PropTypes.number.isRequired,
-  handleOnDoubleClick: PropTypes.func.isRequired
+  handleOnDoubleClick: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired
 };
 
 export default editable(Arrow);

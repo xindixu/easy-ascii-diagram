@@ -2,9 +2,16 @@ import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
 import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
 
-const { yellow, pink, borderWidth } = styleSettings;
+const { yellow, pink, borderWidth, zTop, zBase } = styleSettings;
 
-const Base = styled.code`
+const Base = styled.code.attrs(({ x, y, editing }) => ({
+  style: {
+    left: x * GRID_WIDTH,
+    top: y * GRID_HEIGHT,
+    zIndex: editing ? zTop : zBase,
+    opacity: editing ? 0.8 : 1
+  }
+}))`
   user-select: none;
   white-space: pre;
   display: inline;
@@ -14,9 +21,6 @@ const Base = styled.code`
   margin: 0;
   padding: 0;
   position: absolute;
-  ${props => `left: ${props.x * GRID_WIDTH}px; 
-    top:${props.y * GRID_HEIGHT}px; 
-  `}
 `;
 
 export const WithGrid = styled(Base)`

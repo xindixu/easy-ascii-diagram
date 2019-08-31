@@ -120,6 +120,7 @@ function editable(WrappedComponent) {
           <WrappedComponent
             handleOnDoubleClick={this.handleOnDoubleClick}
             ref={forwardedRef}
+            editing={editing}
             {...newProps}
           />
           {editing ? (
