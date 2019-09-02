@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
-import { WithBackground } from "./style";
+import { WithBackground, Debug } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_ARROW } from "../../constants";
 
 class Arrow extends Component {
@@ -98,18 +98,23 @@ class Arrow extends Component {
   }
 
   render() {
-    const { text } = this.state;
+    const { text, width, height } = this.state;
     const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
     return (
-      <WithBackground
-        x={x}
-        y={y}
-        zoomLevel={zoomLevel}
-        onDoubleClick={handleOnDoubleClick}
-        editing={editing}
-      >
-        {text}
-      </WithBackground>
+      <>
+        <WithBackground
+          x={x}
+          y={y}
+          zoomLevel={zoomLevel}
+          onDoubleClick={handleOnDoubleClick}
+          editing={editing}
+        >
+          {text}
+        </WithBackground>
+        <Debug x={x + 2} y={y + 2}>
+          L{x}R{x + width}T{y}B{y + height}
+        </Debug>
+      </>
     );
   }
 }

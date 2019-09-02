@@ -30,16 +30,19 @@ const selectAndCopy = e => {
   document.execCommand("copy");
 };
 
-const isOnTop = (target, other) => {
-  console.log(target.ref.current.state, other.ref.current.state);
-  const {
-    x: targetX,
-    y: targetY,
-    width,
-    height,
-    direction,
-    length
-  } = target.ref.current.state;
+const isOverlapped = (targetNode, otherNode) => {
+  const { state: target } = targetNode.ref.current;
+  const { state: other } = otherNode.ref.current;
+  if (
+    target.x + target.width >= other.x &&
+    target.x <= other.x + other.width &&
+    target.y + target.height >= other.y &&
+    target.y <= other.y + other.height
+  ) {
+    return true;
+  }
+
+  return false;
 };
 
 class SketchPad extends Component {
@@ -183,19 +186,33 @@ class SketchPad extends Component {
 
   handleLayer = (e, id) => {
     const { content } = this.state;
-
     const targetIndex = content.findIndex(el => el.key === id);
     const target = content[targetIndex];
+
     switch (e.target.value) {
       case EDITOR_COMMAND.moveUp:
         for (let i = targetIndex + 1; i < content.length; i++) {
-          if (isOnTop(target, content[i])) {
-            console.log("isOnTop");
+          if (isOverlapped(target, content[i])) {
+            content.splice(targetIndex, 1);
+            content.splice(i, 0, target);
+            this.setState({
+              content
+            });
+            break;
           }
         }
-
         break;
       case EDITOR_COMMAND.moveDown:
+        for (let i = targetIndex - 1; i >= 0; i--) {
+          if (isOverlapped(target, content[i])) {
+            content.splice(targetIndex, 1);
+            content.splice(i, 0, target);
+            this.setState({
+              content
+            });
+            break;
+          }
+        }
         break;
       case EDITOR_COMMAND.delete:
         content.splice(targetIndex, 1);
@@ -206,7 +223,6 @@ class SketchPad extends Component {
       default:
         break;
     }
-    console.log(targetIndex);
   };
 
   export() {

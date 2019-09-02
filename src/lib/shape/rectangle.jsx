@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
-import { BorderOnly } from "./style";
+import { BorderOnly, Debug } from "./style";
 import { TOOLS } from "../../constants";
 
 class Rectangle extends Component {
@@ -56,17 +56,22 @@ class Rectangle extends Component {
 
   render() {
     const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
-    const { text } = this.state;
+    const { text, width, height } = this.state;
     return (
-      <BorderOnly
-        x={x}
-        y={y}
-        zoomLevel={zoomLevel}
-        onDoubleClick={handleOnDoubleClick}
-        editing={editing}
-      >
-        {text}
-      </BorderOnly>
+      <>
+        <BorderOnly
+          x={x}
+          y={y}
+          zoomLevel={zoomLevel}
+          onDoubleClick={handleOnDoubleClick}
+          editing={editing}
+        >
+          {text}
+        </BorderOnly>
+        <Debug x={x + 2} y={y + 2}>
+          L{x}R{x + width}T{y}B{y + height}
+        </Debug>
+      </>
     );
   }
 }

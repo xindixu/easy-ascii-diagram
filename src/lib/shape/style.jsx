@@ -49,3 +49,7 @@ export const WithBackground = styled(Base)`
 `;
 
 export const NoBackground = styled(WithGrid)``;
+
+export const Debug = styled(Base)`
+  position: absolute;
+`;
