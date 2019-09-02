@@ -112,7 +112,7 @@ function editable(WrappedComponent) {
         id,
         newProps
       } = this.state;
-      const { forwardedRef, ...rest } = this.props;
+      const { forwardedRef, handleLayer, id: target } = this.props;
 
       return (
         <>
@@ -132,8 +132,9 @@ function editable(WrappedComponent) {
                 height={height}
                 horizontal={horizontal}
                 vertical={vertical}
-                target={rest}
                 edit={this.edit}
+                handleLayer={handleLayer}
+                target={target}
               />
             </>
           ) : null}
@@ -145,11 +146,13 @@ function editable(WrappedComponent) {
   Editable.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     forwardedRef: PropTypes.shape({
       current: PropTypes.any
     }).isRequired,
     enterEditMode: PropTypes.func.isRequired,
-    exitEditMode: PropTypes.func.isRequired
+    exitEditMode: PropTypes.func.isRequired,
+    handleLayer: PropTypes.func.isRequired
   };
 
   return forwardRef((props, ref) => <Editable {...props} forwardedRef={ref} />);

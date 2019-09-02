@@ -20,6 +20,7 @@ import FloatingMenu from "../floating-menu";
 class Editor extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isDragging: false,
       start: null,
@@ -80,7 +81,7 @@ class Editor extends Component {
   };
 
   edit() {
-    const { edit, target } = this.props;
+    const { edit } = this.props;
     const { end, pivot, direction, x, y, width, height } = this.state;
 
     let newWidth;
@@ -138,7 +139,6 @@ class Editor extends Component {
       height: newHeight || height
     });
     edit({
-      ...target,
       x: newX || x,
       y: newY || y,
       width: newWidth || width,
@@ -159,7 +159,7 @@ class Editor extends Component {
   }
 
   render() {
-    const { id, horizontal, vertical } = this.props;
+    const { id, horizontal, vertical, handleLayer, target } = this.props;
     const { x, y, width, height, isDragging, direction } = this.state;
 
     return (
@@ -230,8 +230,18 @@ class Editor extends Component {
             </>
           ) : null}
           <FloatingMenu x={x} y={y}>
-            <button value={EDITOR_COMMAND.moveUp}>U</button>
-            <button value={EDITOR_COMMAND.moveDown}>D</button>
+            <button
+              value={EDITOR_COMMAND.moveUp}
+              onClick={e => handleLayer(e, target)}
+            >
+              U
+            </button>
+            <button
+              value={EDITOR_COMMAND.moveDown}
+              onClick={e => handleLayer(e, target)}
+            >
+              D
+            </button>
           </FloatingMenu>
         </Wrapper>
 
@@ -250,10 +260,11 @@ Editor.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
+  target: PropTypes.string.isRequired,
   horizontal: PropTypes.bool.isRequired,
   vertical: PropTypes.bool.isRequired,
   edit: PropTypes.func.isRequired,
-  target: PropTypes.object.isRequired
+  handleLayer: PropTypes.func.isRequired
 };
 
 export default Editor;

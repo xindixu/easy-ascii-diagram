@@ -13,6 +13,7 @@ const sharedProps = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   key: PropTypes.string.isRequired,
   ref: PropTypes.shape({
     current: PropTypes.any.isRequired

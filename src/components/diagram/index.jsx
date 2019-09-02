@@ -22,7 +22,7 @@ class Diagram extends Component {
     end: null,
     drawing: {
       shape: null,
-      id: "",
+      key: "",
       ref: null
     },
     // editing: {
@@ -36,8 +36,6 @@ class Diagram extends Component {
       right: 0
     }
   };
-
-  nodes = new Map();
 
   enterEditMode = () => {
     this.setState({
@@ -133,17 +131,15 @@ class Diagram extends Component {
 
   commit() {
     const { drawing, borderBuffer } = this.state;
-    const { shape, id, ref } = drawing;
-
+    const { commitDrawing, updateBorder } = this.props;
+    const { shape } = drawing;
     if (shape !== null) {
-      this.props.commitDrawing(shape);
-      this.props.updateBorder(borderBuffer);
-      this.nodes.set(id, ref);
-
+      commitDrawing(drawing);
+      updateBorder(borderBuffer);
       this.setState({
         drawing: {
           shape: null,
-          id: "",
+          key: "",
           ref: null
         },
         textBuffer: ""
@@ -155,11 +151,11 @@ class Diagram extends Component {
   }
 
   draw(content) {
-    const { tool, zoomLevel } = this.props;
+    const { tool, zoomLevel, handleLayer } = this.props;
     const { start, end } = this.state;
 
     let shape = null;
-    const key = randomId();
+    const id = randomId();
     const ref = React.createRef();
 
     let x = start.x < end.x ? start.x : end.x;
@@ -172,12 +168,14 @@ class Diagram extends Component {
     const sharedProps = {
       x,
       y,
-      key,
+      id,
+      key: id,
       ref,
       zoomLevel,
       enterEditMode: this.enterEditMode,
       exitEditMode: this.exitEditMode,
-      commitEditing: this.commitDrawing
+      commitEditing: this.commitDrawing,
+      handleLayer
     };
 
     switch (tool) {
@@ -246,7 +244,7 @@ class Diagram extends Component {
     }
 
     this.setState({
-      drawing: { shape, key, ref },
+      drawing: { shape, id, ref },
       borderBuffer: {
         up: y,
         down: y + height + 1,

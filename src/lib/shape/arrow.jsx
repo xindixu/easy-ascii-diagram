@@ -60,7 +60,6 @@ class Arrow extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { direction, length, ...rest } = nextProps;
-    console.log(nextProps);
     if (prevState.length === length) return { ...nextProps };
 
     const state = {

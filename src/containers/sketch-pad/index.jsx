@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { debounce } from "lodash";
 
-import { TOOLS, COMMANDS, ACTIONS, TOOLBAR_HEIGHT } from "../../constants";
+import {
+  TOOLS,
+  COMMANDS,
+  ACTIONS,
+  TOOLBAR_HEIGHT,
+  EDITOR_COMMAND
+} from "../../constants";
 
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
@@ -82,8 +88,11 @@ class SketchPad extends Component {
     this.setState({ zoomLevel: zoom });
   };
 
-  commitDrawing = shape => {
+  commitDrawing = drawing => {
     const { content } = this.state;
+    const { shape, id, ref } = drawing;
+    this.nodes.set(id, ref);
+
     this.setState({
       content: [...content, shape]
     });
@@ -147,10 +156,6 @@ class SketchPad extends Component {
           future
         });
         break;
-      case COMMANDS.moveUp:
-        break;
-      case COMMANDS.moveDown:
-        break;
       case COMMANDS.zoomIn:
         break;
       case COMMANDS.zoomOut:
@@ -162,6 +167,13 @@ class SketchPad extends Component {
 
   handleTool = e => {
     this.setState({ tool: e.target.value });
+  };
+
+  handleLayer = (e, id) => {
+    const { content } = this.state;
+
+    const target = content.find(el => el.key === id);
+    console.log(target);
   };
 
   export() {
@@ -213,7 +225,7 @@ class SketchPad extends Component {
           content={content}
           commitDrawing={this.commitDrawing}
           updateBorder={this.updateBorder}
-          setRef={(key, ref) => this.nodes.set(key, ref)}
+          handleLayer={this.handleLayer}
         />
 
         {showPopUp ? (
