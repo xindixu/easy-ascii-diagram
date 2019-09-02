@@ -230,18 +230,11 @@ class Editor extends Component {
             </>
           ) : null}
           <FloatingMenu x={x} y={y}>
-            <button
-              value={EDITOR_COMMAND.moveUp}
-              onClick={e => handleLayer(e, target)}
-            >
-              Up
-            </button>
-            <button
-              value={EDITOR_COMMAND.moveDown}
-              onClick={e => handleLayer(e, target)}
-            >
-              Down
-            </button>
+            {Object.values(EDITOR_COMMAND).map(el => (
+              <button value={el} key={el} onClick={e => handleLayer(e, target)}>
+                {el}
+              </button>
+            ))}
           </FloatingMenu>
         </Wrapper>
 

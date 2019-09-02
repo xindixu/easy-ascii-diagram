@@ -5,7 +5,7 @@ import { GRID_WIDTH, GRID_HEIGHT, EDITOR } from "../../constants";
 const { blue, zTopMost } = styleSettings;
 
 export const Wrapper = styled.div`
-  left: -${GRID_WIDTH * 3}px;
+  left: -${GRID_WIDTH * 7}px;
   position: absolute;
   outline: 2px solid ${blue};
   z-index: ${zTopMost};

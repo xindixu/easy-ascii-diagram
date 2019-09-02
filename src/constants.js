@@ -74,5 +74,6 @@ export const EDITOR = {
 
 export const EDITOR_COMMAND = {
   moveUp: "MOVE_UP",
-  moveDown: "MOVE_DOWN"
+  moveDown: "MOVE_DOWN",
+  delete: "DELETE"
 };

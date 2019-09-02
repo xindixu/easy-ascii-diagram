@@ -9,7 +9,6 @@ function editable(WrappedComponent) {
     constructor(props) {
       super(props);
       const { forwardedRef, ...rest } = this.props;
-      console.log(props);
       this.state = {
         editing: false,
         x: null,
@@ -24,6 +23,12 @@ function editable(WrappedComponent) {
     }
 
     componentDidMount() {}
+
+    componentWillUnmount() {
+      window.removeEventListener("click", this.handleClickOutside);
+      const { exitEditMode } = this.props;
+      exitEditMode();
+    }
 
     getResizeDirection() {
       const { direction, content } = this.props.forwardedRef.current.state;

@@ -30,6 +30,18 @@ const selectAndCopy = e => {
   document.execCommand("copy");
 };
 
+const isOnTop = (target, other) => {
+  console.log(target.ref.current.state, other.ref.current.state);
+  const {
+    x: targetX,
+    y: targetY,
+    width,
+    height,
+    direction,
+    length
+  } = target.ref.current.state;
+};
+
 class SketchPad extends Component {
   constructor(props) {
     super(props);
@@ -172,8 +184,29 @@ class SketchPad extends Component {
   handleLayer = (e, id) => {
     const { content } = this.state;
 
-    const target = content.find(el => el.key === id);
-    console.log(target);
+    const targetIndex = content.findIndex(el => el.key === id);
+    const target = content[targetIndex];
+    switch (e.target.value) {
+      case EDITOR_COMMAND.moveUp:
+        for (let i = targetIndex + 1; i < content.length; i++) {
+          if (isOnTop(target, content[i])) {
+            console.log("isOnTop");
+          }
+        }
+
+        break;
+      case EDITOR_COMMAND.moveDown:
+        break;
+      case EDITOR_COMMAND.delete:
+        content.splice(targetIndex, 1);
+        this.setState({
+          content
+        });
+        break;
+      default:
+        break;
+    }
+    console.log(targetIndex);
   };
 
   export() {

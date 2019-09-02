@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
 import { GRID_WIDTH, GRID_HEIGHT, EDITOR } from "../../constants";
 
-const { blue } = styleSettings;
+const { blue, zToppest } = styleSettings;
 
 const cursor = {
   [EDITOR.top]: "ns-resize",
@@ -25,18 +25,18 @@ export const Wrapper = styled.div.attrs(({ x, y, width, height }) => ({
 }))`
   position: absolute;
   outline: 2px solid ${blue};
-  z-index: 10;
+  z-index: ${zToppest};
   cursor: move;
 `;
 
 export const EditArea = styled.div`
+  background: #2c2c2c08;
   position: absolute;
-  z-index: 9;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #2c2c2c08;
+  z-index: ${zToppest - 2};
   ${props => (props.direction ? `cursor: ${cursor[props.direction]}` : null)}
 `;
 

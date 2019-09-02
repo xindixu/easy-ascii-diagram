@@ -58,12 +58,27 @@ class Arrow extends Component {
     return text;
   }
 
+  static getWidthHeight = (direction, length) => {
+    let width;
+    let height;
+    if ([DIRECTION.up, DIRECTION.down].includes(direction)) {
+      width = 1;
+      height = length;
+    } else {
+      width = length;
+      height = 1;
+    }
+    return { width, height };
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const { direction, length, ...rest } = nextProps;
     if (prevState.length === length) return { ...nextProps };
-
+    const { width, height } = Arrow.getWidthHeight(direction, length);
     const state = {
       ...rest,
+      width,
+      height,
       text: Arrow.convert(direction, length)
     };
     return state;
@@ -72,8 +87,12 @@ class Arrow extends Component {
   constructor(props) {
     super(props);
     const { direction, length } = this.props;
+    const { width, height } = Arrow.getWidthHeight(direction, length);
+
     this.state = {
       ...this.props,
+      width,
+      height,
       text: Arrow.convert(direction, length)
     };
   }
