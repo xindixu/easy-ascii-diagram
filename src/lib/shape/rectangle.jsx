@@ -68,9 +68,9 @@ class Rectangle extends Component {
         >
           {text}
         </BorderOnly>
-        <Debug x={x + 2} y={y + 2}>
+        {/* <Debug x={x + 2} y={y + 2}>
           L{x}R{x + width}T{y}B{y + height}
-        </Debug>
+        </Debug> */}
       </>
     );
   }

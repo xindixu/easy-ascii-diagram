@@ -19,3 +19,9 @@ export const Border = styled.div`
     height: ${(props.down - props.up + 1) * GRID_HEIGHT}px;
   `}
 `;
+
+export const Debug = styled.div`
+  position: absolute;
+  top: ${GRID_HEIGHT * 2}px;
+  left: ${GRID_WIDTH * 2}px;
+`;

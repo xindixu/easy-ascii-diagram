@@ -14,7 +14,7 @@ import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
 
-import { TextArea, Border } from "./style";
+import { TextArea, Border, Debug } from "./style";
 
 const calculateTotalGridNumber = zoomLevel => {
   const totalRow = Math.floor(
@@ -107,7 +107,7 @@ class SketchPad extends Component {
     const { content } = this.state;
     const { shape, id, ref } = drawing;
     this.nodes.set(id, ref);
-
+    console.log(content);
     this.setState({
       content: [...content, shape]
     });
@@ -262,12 +262,12 @@ class SketchPad extends Component {
           handleTool={this.handleTool}
         />
         <Grid zoomLevel={zoomLevel} />
-        {/* <Border
+        <Border
           up={border.up}
           left={border.left}
           right={border.right}
           down={border.down}
-        /> */}
+        />
         <Diagram
           tool={tool}
           zoomLevel={zoomLevel}

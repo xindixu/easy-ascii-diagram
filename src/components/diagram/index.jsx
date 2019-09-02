@@ -43,7 +43,8 @@ class Diagram extends Component {
     });
   };
 
-  exitEditMode = () => {
+  exitEditMode = (originalProps, newProps) => {
+    console.log(originalProps, newProps);
     this.setState({
       isEditing: false
     });

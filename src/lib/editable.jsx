@@ -18,6 +18,7 @@ function editable(WrappedComponent) {
         horizontal: false,
         vertical: false,
         id: randomId(),
+        originalProps: rest,
         newProps: rest
       };
     }
@@ -27,7 +28,8 @@ function editable(WrappedComponent) {
     componentWillUnmount() {
       window.removeEventListener("click", this.handleClickOutside);
       const { exitEditMode } = this.props;
-      exitEditMode();
+      const { originalProps, newProps } = this.state;
+      exitEditMode(originalProps, newProps);
     }
 
     getResizeDirection() {
@@ -54,13 +56,14 @@ function editable(WrappedComponent) {
     }
 
     handleClickOutside = e => {
-      const { id } = this.state;
+      const { id, originalProps, newProps } = this.state;
 
       if (e.target.closest(`#${id}`)) return;
       const { exitEditMode } = this.props;
 
       this.setState({ editing: false });
-      exitEditMode();
+
+      exitEditMode(originalProps, newProps);
       window.removeEventListener("click", this.handleClickOutside);
     };
 
