@@ -26,11 +26,14 @@ function editable(WrappedComponent) {
 
     getResizeDirection() {
       const { direction, content } = this.props.forwardedRef.current.state;
-      console.log(WrappedComponent.name);
 
       let horizontal;
       let vertical;
-      if (Object.values(DIRECTION_HORIZONTAL).includes(direction)) {
+
+      if (content != null) {
+        horizontal = false;
+        vertical = false;
+      } else if (Object.values(DIRECTION_HORIZONTAL).includes(direction)) {
         horizontal = true;
         vertical = false;
       } else if (Object.values(DIRECTION_VERTICAL).includes(direction)) {
@@ -41,10 +44,6 @@ function editable(WrappedComponent) {
         vertical = true;
       }
 
-      if (content != null) {
-        horizontal = false;
-        vertical = false;
-      }
       return { horizontal, vertical };
     }
 
@@ -81,7 +80,7 @@ function editable(WrappedComponent) {
     edit = newProps => {
       const { forwardedRef, ...rest } = this.props;
       const { x, y, width, height, content } = newProps;
-      const length = width !== 0 ? width : height;
+      const length = width !== 1 ? width : height;
 
       switch (WrappedComponent.name.toUpperCase()) {
         case TOOLS.rectangle:

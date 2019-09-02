@@ -14,7 +14,8 @@ import {
 } from "./style";
 
 import { getX, getY } from "../../util";
-import { EDITOR } from "../../constants";
+import { EDITOR, EDITOR_COMMAND } from "../../constants";
+import FloatingMenu from "../floating-menu";
 
 class Editor extends Component {
   constructor(props) {
@@ -228,7 +229,12 @@ class Editor extends Component {
               />
             </>
           ) : null}
+          <FloatingMenu x={x} y={y}>
+            <button value={EDITOR_COMMAND.moveUp}>U</button>
+            <button value={EDITOR_COMMAND.moveDown}>D</button>
+          </FloatingMenu>
         </Wrapper>
+
         <EditArea
           direction={isDragging ? direction : null}
           onMouseMove={this.handleMouseMove}

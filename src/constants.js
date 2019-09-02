@@ -15,8 +15,6 @@ export const TOOLS_DRAWING = {
 export const COMMANDS = {
   undo: "UNDO",
   redo: "REDO",
-  moveUp: "MOVE_UP",
-  moveDown: "MOVE_DOWN",
   zoomIn: "ZOOM_IN",
   zoomOut: "ZOOM_OUT"
 };
@@ -72,4 +70,9 @@ export const EDITOR = {
   topRight: "TOP_RIGHT",
   bottomLeft: "BOTTOM_LEFT",
   bottomRight: "BOTTOM_RIGHT"
+};
+
+export const EDITOR_COMMAND = {
+  moveUp: "MOVE_UP",
+  moveDown: "MOVE_DOWN"
 };
