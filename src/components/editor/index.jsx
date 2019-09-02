@@ -234,13 +234,13 @@ class Editor extends Component {
               value={EDITOR_COMMAND.moveUp}
               onClick={e => handleLayer(e, target)}
             >
-              U
+              Up
             </button>
             <button
               value={EDITOR_COMMAND.moveDown}
               onClick={e => handleLayer(e, target)}
             >
-              D
+              Down
             </button>
           </FloatingMenu>
         </Wrapper>

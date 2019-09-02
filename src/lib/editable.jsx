@@ -9,6 +9,7 @@ function editable(WrappedComponent) {
     constructor(props) {
       super(props);
       const { forwardedRef, ...rest } = this.props;
+      console.log(props);
       this.state = {
         editing: false,
         x: null,
@@ -84,7 +85,7 @@ function editable(WrappedComponent) {
 
       switch (WrappedComponent.name.toUpperCase()) {
         case TOOLS.rectangle:
-          this.setState({ newProps });
+          this.setState({ newProps: { ...rest, x, y, width, height } });
           break;
         case TOOLS.arrow:
           this.setState({ newProps: { ...rest, x, y, length } });
