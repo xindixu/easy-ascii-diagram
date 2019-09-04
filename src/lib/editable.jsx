@@ -116,9 +116,16 @@ function editable(WrappedComponent) {
     };
 
     commit() {
-      const { newProps } = this.state;
-      console.log(newProps);
-      const tx = new Transaction(TRANSACTION.edit);
+      const { newProps, originalProps } = this.state;
+      const { id } = newProps;
+      const { forwardedRef } = this.props;
+      const tx = new Transaction(
+        TRANSACTION.edit,
+        id,
+        forwardedRef.current,
+        originalProps,
+        newProps
+      );
     }
 
     render() {

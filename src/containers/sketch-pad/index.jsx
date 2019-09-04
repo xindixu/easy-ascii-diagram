@@ -110,7 +110,7 @@ class SketchPad extends Component {
     const { content } = this.state;
     const { shape, id, ref } = drawing;
     this.nodes.set(id, ref);
-    console.log(shape);
+    console.log(shape.ref.current);
 
     const tx = new Transaction(
       TRANSACTION.create,
