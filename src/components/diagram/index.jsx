@@ -43,8 +43,7 @@ class Diagram extends Component {
     });
   };
 
-  exitEditMode = (originalProps, newProps) => {
-    console.log(originalProps, newProps);
+  exitEditMode = () => {
     this.setState({
       isEditing: false
     });
@@ -248,9 +247,9 @@ class Diagram extends Component {
       drawing: { shape, id, ref },
       borderBuffer: {
         up: y,
-        down: y + height + 1,
+        down: height === 0 ? y + 1 : y + height,
         left: x,
-        right: x + width + 1
+        right: width === 0 ? x + 1 : x + width
       }
     });
   }

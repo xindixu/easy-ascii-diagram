@@ -56,7 +56,6 @@ class Editor extends Component {
       isDragging: false,
       end: { x: getX(e.clientX), y: getY(e.clientY) }
     });
-    this.commit();
   };
 
   handleMoveStart = e => {
@@ -77,7 +76,6 @@ class Editor extends Component {
       isDragging: false,
       end: { x: getX(e.clientX), y: getY(e.clientY) }
     });
-    this.commit();
   };
 
   edit() {
@@ -143,18 +141,6 @@ class Editor extends Component {
       y: newY || y,
       width: newWidth || width,
       height: newHeight || height
-    });
-  }
-
-  commit() {
-    // connect to higher components
-    // log in history
-    this.setState({
-      isDragging: false,
-      start: null,
-      end: null,
-      pivot: null,
-      direction: null
     });
   }
 

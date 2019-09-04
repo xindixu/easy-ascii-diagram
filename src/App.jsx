@@ -1,9 +1,8 @@
-import React from 'react';
+import React from "react";
 // import Pusher from 'pusher-js';
-import SketchPad from './containers/sketch-pad';
+import SketchPad from "./containers/sketch-pad";
 
-import './App.css';
-
+import "./App.css";
 
 function App() {
   // Pusher.logToConsole = true;
@@ -17,7 +16,6 @@ function App() {
   // channel.bind('my-event', (data) => {
   //   alert(JSON.stringify(data));
   // });
-
 
   return (
     <div className="App">

@@ -2,7 +2,13 @@ import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 import Editor from "../components/editor";
 import { randomId, getX, getY } from "../util";
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TOOLS } from "../constants";
+import Transaction from "./transaction";
+import {
+  DIRECTION_HORIZONTAL,
+  DIRECTION_VERTICAL,
+  TOOLS,
+  TRANSACTION
+} from "../constants";
 
 function editable(WrappedComponent) {
   class Editable extends Component {
@@ -28,8 +34,7 @@ function editable(WrappedComponent) {
     componentWillUnmount() {
       window.removeEventListener("click", this.handleClickOutside);
       const { exitEditMode } = this.props;
-      const { originalProps, newProps } = this.state;
-      exitEditMode(originalProps, newProps);
+      exitEditMode();
     }
 
     getResizeDirection() {
@@ -56,14 +61,15 @@ function editable(WrappedComponent) {
     }
 
     handleClickOutside = e => {
-      const { id, originalProps, newProps } = this.state;
+      const { id } = this.state;
 
       if (e.target.closest(`#${id}`)) return;
       const { exitEditMode } = this.props;
 
       this.setState({ editing: false });
 
-      exitEditMode(originalProps, newProps);
+      exitEditMode();
+      this.commit();
       window.removeEventListener("click", this.handleClickOutside);
     };
 
@@ -108,6 +114,12 @@ function editable(WrappedComponent) {
           break;
       }
     };
+
+    commit() {
+      const { newProps } = this.state;
+      console.log(newProps);
+      const tx = new Transaction(TRANSACTION.edit);
+    }
 
     render() {
       const {

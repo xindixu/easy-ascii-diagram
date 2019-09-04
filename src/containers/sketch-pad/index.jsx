@@ -6,13 +6,15 @@ import {
   COMMANDS,
   ACTIONS,
   TOOLBAR_HEIGHT,
-  EDITOR_COMMAND
+  EDITOR_COMMAND,
+  TRANSACTION
 } from "../../constants";
 
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
+import Transaction from "../../lib/transaction";
 
 import { TextArea, Border, Debug } from "./style";
 
@@ -56,6 +58,7 @@ class SketchPad extends Component {
       zoomLevel,
       tool: TOOLS.arrow,
       content: [],
+      past: [],
       future: [],
       showPopUp: false,
       resultText: "",
@@ -107,7 +110,16 @@ class SketchPad extends Component {
     const { content } = this.state;
     const { shape, id, ref } = drawing;
     this.nodes.set(id, ref);
-    console.log(content);
+    console.log(shape);
+
+    const tx = new Transaction(
+      TRANSACTION.create,
+      id,
+      shape,
+      null,
+      shape.props
+    );
+    console.log(tx);
     this.setState({
       content: [...content, shape]
     });
