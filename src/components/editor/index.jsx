@@ -145,7 +145,7 @@ class Editor extends Component {
   }
 
   render() {
-    const { id, horizontal, vertical, handleLayer, target } = this.props;
+    const { id, horizontal, vertical, handleFloatingMenu, target } = this.props;
     const { x, y, width, height, isDragging, direction } = this.state;
 
     return (
@@ -217,7 +217,11 @@ class Editor extends Component {
           ) : null}
           <FloatingMenu x={x} y={y}>
             {Object.values(EDITOR_COMMAND).map(el => (
-              <button value={el} key={el} onClick={e => handleLayer(e, target)}>
+              <button
+                value={el}
+                key={el}
+                onClick={e => handleFloatingMenu(e, target)}
+              >
                 {el}
               </button>
             ))}
@@ -243,7 +247,7 @@ Editor.propTypes = {
   horizontal: PropTypes.bool.isRequired,
   vertical: PropTypes.bool.isRequired,
   edit: PropTypes.func.isRequired,
-  handleLayer: PropTypes.func.isRequired
+  handleFloatingMenu: PropTypes.func.isRequired
 };
 
 export default Editor;

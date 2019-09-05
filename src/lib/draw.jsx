@@ -7,7 +7,7 @@ import Text from "./shape/text";
 import Eraser from "./shape/eraser";
 import { randomId } from "../util";
 
-import { DIRECTION_LINE, DIRECTION_ARROW } from "../constants";
+import { DIRECTION_LINE, DIRECTION_ARROW, TOOLS } from "../constants";
 
 const sharedProps = {
   x: PropTypes.number.isRequired,
@@ -19,10 +19,13 @@ const sharedProps = {
     current: PropTypes.any.isRequired
   }).isRequired,
   enterEditMode: PropTypes.func.isRequired,
-  exitEditMode: PropTypes.func.isRequired
+  exitEditMode: PropTypes.func.isRequired,
+  handleFloatingMenu: PropTypes.func.isRequired
 };
 
-export const drawRectangle = props => <Rectangle {...props} />;
+export const drawRectangle = props => (
+  <Rectangle shape={TOOLS.rectangle} {...props} />
+);
 
 drawRectangle.propTypes = {
   width: PropTypes.number.isRequired,
@@ -30,7 +33,7 @@ drawRectangle.propTypes = {
   ...sharedProps
 };
 
-export const drawLine = props => <Line {...props} />;
+export const drawLine = props => <Line shape={TOOLS.line} {...props} />;
 
 drawLine.propTypes = {
   length: PropTypes.number.isRequired,
@@ -38,7 +41,7 @@ drawLine.propTypes = {
   ...sharedProps
 };
 
-export const drawArrow = props => <Arrow {...props} />;
+export const drawArrow = props => <Arrow shape={TOOLS.arrow} {...props} />;
 
 drawArrow.propTypes = {
   length: PropTypes.number.isRequired,
@@ -46,16 +49,16 @@ drawArrow.propTypes = {
   ...sharedProps
 };
 
-export const drawText = props => {
-  return <Text {...props} />;
-};
+export const drawText = props => <Text shape={TOOLS.text} {...props} />;
 
 drawText.propTypes = {
   content: PropTypes.string.isRequired,
   ...sharedProps
 };
 
-export const erase = props => <Eraser key={randomId()} {...props} />;
+export const erase = props => (
+  <Eraser shape={TOOLS.eraser} key={randomId()} {...props} />
+);
 
 erase.propTypes = {
   x: PropTypes.number.isRequired,

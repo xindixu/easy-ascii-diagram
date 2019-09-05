@@ -117,6 +117,10 @@ function editable(WrappedComponent) {
 
     commit() {
       const { newProps, originalProps } = this.state;
+      if (newProps === originalProps) {
+        return;
+      }
+
       const { id } = newProps;
       const { forwardedRef } = this.props;
       const tx = new Transaction(
@@ -141,7 +145,7 @@ function editable(WrappedComponent) {
         id,
         newProps
       } = this.state;
-      const { forwardedRef, handleLayer, id: target } = this.props;
+      const { forwardedRef, handleFloatingMenu, id: target } = this.props;
 
       return (
         <>
@@ -162,7 +166,7 @@ function editable(WrappedComponent) {
                 horizontal={horizontal}
                 vertical={vertical}
                 edit={this.edit}
-                handleLayer={handleLayer}
+                handleFloatingMenu={handleFloatingMenu}
                 target={target}
               />
             </>
@@ -181,7 +185,7 @@ function editable(WrappedComponent) {
     }).isRequired,
     enterEditMode: PropTypes.func.isRequired,
     exitEditMode: PropTypes.func.isRequired,
-    handleLayer: PropTypes.func.isRequired
+    handleFloatingMenu: PropTypes.func.isRequired
   };
 
   return forwardRef((props, ref) => <Editable {...props} forwardedRef={ref} />);

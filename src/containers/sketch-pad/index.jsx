@@ -109,19 +109,44 @@ class SketchPad extends Component {
   commitDrawing = drawing => {
     const { content } = this.state;
     const { shape, id, ref } = drawing;
+    const { props } = shape;
     this.nodes.set(id, ref);
 
     const tx = new Transaction(
       TRANSACTION.create,
       id,
-      ref.current.shape,
+      props.shape,
       null,
-      shape.props
+      props
     );
+    console.log(this.nodes);
     console.log(tx);
 
     this.setState({
       content: [...content, shape]
+    });
+  };
+
+  commitDeleting = targetIndex => {
+    const { content } = this.state;
+    const shape = content.splice(targetIndex, 1)[0];
+    const { props } = shape;
+
+    const tx = new Transaction(
+      TRANSACTION.delete,
+      props.id,
+      props.shape,
+      props,
+      null
+    );
+
+    this.nodes.delete(props.id);
+
+    console.log(this.nodes);
+    console.log(tx);
+
+    this.setState({
+      content
     });
   };
 
@@ -196,7 +221,7 @@ class SketchPad extends Component {
     this.setState({ tool: e.target.value });
   };
 
-  handleLayer = (e, id) => {
+  handleFloatingMenu = (e, id) => {
     const { content } = this.state;
     const targetIndex = content.findIndex(el => el.key === id);
     const target = content[targetIndex];
@@ -227,23 +252,7 @@ class SketchPad extends Component {
         }
         break;
       case EDITOR_COMMAND.delete:
-        const deleted = content.splice(targetIndex, 1)[0];
-
-        const { props } = deleted;
-
-        const tx = new Transaction(
-          TRANSACTION.delete,
-          props.id,
-          null,
-          props,
-          null
-        );
-
-        console.log(tx);
-
-        this.setState({
-          content
-        });
+        this.commitDeleting(targetIndex);
         break;
       default:
         break;
@@ -299,7 +308,7 @@ class SketchPad extends Component {
           content={content}
           commitDrawing={this.commitDrawing}
           updateBorder={this.updateBorder}
-          handleLayer={this.handleLayer}
+          handleFloatingMenu={this.handleFloatingMenu}
         />
 
         {showPopUp ? (

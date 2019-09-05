@@ -151,7 +151,7 @@ class Diagram extends Component {
   }
 
   draw(content) {
-    const { tool, zoomLevel, handleLayer } = this.props;
+    const { tool, zoomLevel, handleFloatingMenu } = this.props;
     const { start, end } = this.state;
 
     let shape = null;
@@ -175,7 +175,7 @@ class Diagram extends Component {
       enterEditMode: this.enterEditMode,
       exitEditMode: this.exitEditMode,
       commitEditing: this.commitDrawing,
-      handleLayer
+      handleFloatingMenu
     };
 
     switch (tool) {
@@ -285,7 +285,8 @@ Diagram.propTypes = {
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
   commitDrawing: PropTypes.func.isRequired,
-  updateBorder: PropTypes.func.isRequired
+  updateBorder: PropTypes.func.isRequired,
+  handleFloatingMenu: PropTypes.func.isRequired
 };
 
 export default Diagram;
