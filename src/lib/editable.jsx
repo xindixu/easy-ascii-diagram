@@ -122,10 +122,11 @@ function editable(WrappedComponent) {
       const tx = new Transaction(
         TRANSACTION.edit,
         id,
-        forwardedRef.current,
+        forwardedRef.current.shape,
         originalProps,
         newProps
       );
+      console.log(tx);
     }
 
     render() {

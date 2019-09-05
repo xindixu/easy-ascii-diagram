@@ -6,12 +6,24 @@ class Transaction {
       throw new Error("Invalid transaction type");
     }
 
-    if (type === TRANSACTION.edit) {
-      if (oldProps === newProps || oldProps === null || newProps === null) {
-        throw new Error("Old props or new props is invalid");
-      }
-    } else if (oldProps !== null) {
-      throw new Error("Old props will be ignored");
+    switch (type) {
+      case TRANSACTION.edit:
+        if (oldProps === newProps || oldProps === null || newProps === null) {
+          throw new Error("Edit should receive both old props and new props");
+        }
+        break;
+      case TRANSACTION.delete:
+        if (oldProps === null || newProps !== null) {
+          throw new Error("Delete should receive old props but not new props");
+        }
+        break;
+      case TRANSACTION.create:
+        if (oldProps !== null || newProps === null) {
+          throw new Error("Create should receive new props but not old props");
+        }
+        break;
+      default:
+        break;
     }
 
     this.type = type;

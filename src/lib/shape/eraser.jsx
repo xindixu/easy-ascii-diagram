@@ -4,8 +4,6 @@ import { NoBackground } from "./style";
 import { TOOLS } from "../../constants";
 
 class Eraser extends Component {
-  static shape = TOOLS.eraser;
-
   static charSet = {
     inner: " "
   };
@@ -28,6 +26,7 @@ class Eraser extends Component {
       ...this.props,
       text: Eraser.convert(width, height)
     };
+    this.shape = TOOLS.eraser;
   }
 
   render() {

@@ -5,8 +5,6 @@ import { WithBackground } from "./style";
 import { TOOLS } from "../../constants";
 
 class Text extends Component {
-  static shape = TOOLS.text;
-
   static convert(content) {
     return content;
   }
@@ -44,6 +42,7 @@ class Text extends Component {
       height,
       text: Text.convert(content)
     };
+    this.shape = TOOLS.text;
   }
 
   render() {

@@ -5,8 +5,6 @@ import { WithBackground, Debug } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_ARROW } from "../../constants";
 
 class Arrow extends Component {
-  static shape = TOOLS.arrow;
-
   static charSet = {
     horizontal: "-",
     vertical: "|",
@@ -95,6 +93,7 @@ class Arrow extends Component {
       height,
       text: Arrow.convert(direction, length)
     };
+    this.shape = TOOLS.arrow;
   }
 
   render() {

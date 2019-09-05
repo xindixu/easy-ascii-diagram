@@ -5,8 +5,6 @@ import { WithBackground } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_LINE } from "../../constants";
 
 class Line extends Component {
-  static shape = TOOLS.line;
-
   static charSet = {
     horizontalEdge: "-",
     verticalEdge: "|"
@@ -66,6 +64,7 @@ class Line extends Component {
       height,
       text: Line.convert(direction, length)
     };
+    this.shape = TOOLS.line;
   }
 
   render() {

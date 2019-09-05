@@ -110,16 +110,16 @@ class SketchPad extends Component {
     const { content } = this.state;
     const { shape, id, ref } = drawing;
     this.nodes.set(id, ref);
-    console.log(shape.ref.current);
 
     const tx = new Transaction(
       TRANSACTION.create,
       id,
-      shape,
+      ref.current.shape,
       null,
       shape.props
     );
     console.log(tx);
+
     this.setState({
       content: [...content, shape]
     });
@@ -227,7 +227,20 @@ class SketchPad extends Component {
         }
         break;
       case EDITOR_COMMAND.delete:
-        content.splice(targetIndex, 1);
+        const deleted = content.splice(targetIndex, 1)[0];
+
+        const { props } = deleted;
+
+        const tx = new Transaction(
+          TRANSACTION.delete,
+          props.id,
+          null,
+          props,
+          null
+        );
+
+        console.log(tx);
+
         this.setState({
           content
         });
