@@ -127,6 +127,19 @@ class SketchPad extends Component {
     });
   };
 
+  commitEditing = (target, oldProps, newProps) => {
+    const { id } = newProps;
+    const tx = new Transaction(
+      TRANSACTION.edit,
+      id,
+      target.shape,
+      oldProps,
+      newProps
+    );
+    console.log(this.nodes);
+    console.log(tx);
+  };
+
   commitDeleting = targetIndex => {
     const { content } = this.state;
     const shape = content.splice(targetIndex, 1)[0];
@@ -307,6 +320,7 @@ class SketchPad extends Component {
           zoomLevel={zoomLevel}
           content={content}
           commitDrawing={this.commitDrawing}
+          commitEditing={this.commitEditing}
           updateBorder={this.updateBorder}
           handleFloatingMenu={this.handleFloatingMenu}
         />

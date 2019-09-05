@@ -20,6 +20,7 @@ const sharedProps = {
   }).isRequired,
   enterEditMode: PropTypes.func.isRequired,
   exitEditMode: PropTypes.func.isRequired,
+  commitEditing: PropTypes.func.isRequired,
   handleFloatingMenu: PropTypes.func.isRequired
 };
 

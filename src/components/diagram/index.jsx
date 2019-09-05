@@ -16,7 +16,6 @@ import { getX, getY, randomId } from "../../util";
 class Diagram extends Component {
   state = {
     isDrawing: false,
-    // isEditing: false,
     isTyping: false,
     start: null,
     end: null,
@@ -25,9 +24,6 @@ class Diagram extends Component {
       key: "",
       ref: null
     },
-    // editing: {
-    //   target: null
-    // },
     textBuffer: "",
     borderBuffer: {
       up: 0,
@@ -151,7 +147,7 @@ class Diagram extends Component {
   }
 
   draw(content) {
-    const { tool, zoomLevel, handleFloatingMenu } = this.props;
+    const { tool, zoomLevel, handleFloatingMenu, commitEditing } = this.props;
     const { start, end } = this.state;
 
     let shape = null;
@@ -174,7 +170,7 @@ class Diagram extends Component {
       zoomLevel,
       enterEditMode: this.enterEditMode,
       exitEditMode: this.exitEditMode,
-      commitEditing: this.commitDrawing,
+      commitEditing,
       handleFloatingMenu
     };
 
@@ -285,6 +281,7 @@ Diagram.propTypes = {
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
   commitDrawing: PropTypes.func.isRequired,
+  commitEditing: PropTypes.func.isRequired,
   updateBorder: PropTypes.func.isRequired,
   handleFloatingMenu: PropTypes.func.isRequired
 };

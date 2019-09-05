@@ -121,16 +121,9 @@ function editable(WrappedComponent) {
         return;
       }
 
-      const { id } = newProps;
-      const { forwardedRef } = this.props;
-      const tx = new Transaction(
-        TRANSACTION.edit,
-        id,
-        forwardedRef.current.shape,
-        originalProps,
-        newProps
-      );
-      console.log(tx);
+      const { commitEditing, forwardedRef } = this.props;
+
+      commitEditing(forwardedRef.current, originalProps, newProps);
     }
 
     render() {
@@ -183,6 +176,7 @@ function editable(WrappedComponent) {
     forwardedRef: PropTypes.shape({
       current: PropTypes.any
     }).isRequired,
+    commitEditing: PropTypes.func.isRequired,
     enterEditMode: PropTypes.func.isRequired,
     exitEditMode: PropTypes.func.isRequired,
     handleFloatingMenu: PropTypes.func.isRequired
