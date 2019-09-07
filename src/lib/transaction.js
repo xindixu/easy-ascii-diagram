@@ -1,24 +1,24 @@
 import { TRANSACTION } from "../constants";
 
 class Transaction {
-  constructor(type, id, shape, oldProps, newProps) {
+  constructor(type, id, shape, oldState, newState) {
     if (!Object.values(TRANSACTION).includes(type)) {
       throw new Error("Invalid transaction type");
     }
 
     switch (type) {
       case TRANSACTION.edit:
-        if (oldProps === newProps || oldProps === null || newProps === null) {
+        if (oldState === newState || oldState === null || newState === null) {
           throw new Error("Edit should receive both old props and new props");
         }
         break;
       case TRANSACTION.delete:
-        if (oldProps === null || newProps !== null) {
+        if (oldState === null || newState !== null) {
           throw new Error("Delete should receive old props but not new props");
         }
         break;
       case TRANSACTION.create:
-        if (oldProps !== null || newProps === null) {
+        if (oldState !== null || newState === null) {
           throw new Error("Create should receive new props but not old props");
         }
         break;
@@ -29,8 +29,8 @@ class Transaction {
     this.type = type;
     this.id = id;
     this.shape = shape;
-    this.oldProps = oldProps;
-    this.newProps = newProps;
+    this.oldState = oldState;
+    this.newState = newState;
   }
 }
 

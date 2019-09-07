@@ -53,6 +53,7 @@ class Arrow extends Component {
       default:
         break;
     }
+
     return text;
   }
 
@@ -97,8 +98,8 @@ class Arrow extends Component {
   }
 
   render() {
-    const { text, width, height } = this.state;
-    const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
+    const { text, x, y } = this.state;
+    const { zoomLevel, handleOnDoubleClick, editing } = this.props;
     return (
       <>
         <WithBackground

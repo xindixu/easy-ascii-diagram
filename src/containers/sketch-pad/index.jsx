@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React, { Component } from "react";
 import { debounce } from "lodash";
 
@@ -15,6 +16,7 @@ import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
 import Transaction from "../../lib/transaction";
+// import Shape from "../../lib/shape/shape";
 
 import { TextArea, Border, Debug } from "./style";
 
@@ -107,7 +109,8 @@ class SketchPad extends Component {
   };
 
   commitDrawing = drawing => {
-    const { content } = this.state;
+    const { content, past } = this.state;
+    console.log(drawing);
     const { shape, id, ref } = drawing;
     const { props } = shape;
     this.nodes.set(id, ref);
@@ -119,16 +122,19 @@ class SketchPad extends Component {
       null,
       props
     );
-    console.log(this.nodes);
+
     console.log(tx);
 
     this.setState({
-      content: [...content, shape]
+      content: [...content, shape],
+      past: [...past, tx]
     });
   };
 
   commitEditing = (target, oldProps, newProps) => {
     const { id } = newProps;
+    const { past } = this.state;
+
     const tx = new Transaction(
       TRANSACTION.edit,
       id,
@@ -136,13 +142,16 @@ class SketchPad extends Component {
       oldProps,
       newProps
     );
-    console.log(this.nodes);
+
     console.log(tx);
+    this.setState({
+      past: [...past, tx]
+    });
   };
 
   commitDeleting = targetIndex => {
-    const { content } = this.state;
-    const shape = content.splice(targetIndex, 1)[0];
+    const { past, content } = this.state;
+    const shape = content[targetIndex];
     const { props } = shape;
 
     const tx = new Transaction(
@@ -154,12 +163,14 @@ class SketchPad extends Component {
     );
 
     this.nodes.delete(props.id);
-
-    console.log(this.nodes);
     console.log(tx);
 
     this.setState({
-      content
+      content: [
+        ...content.slice(0, targetIndex),
+        ...content.slice(targetIndex + 1, content.length)
+      ],
+      past: [...past, tx]
     });
   };
 
@@ -202,16 +213,33 @@ class SketchPad extends Component {
   };
 
   handleCommand = e => {
-    const { content, future } = this.state;
+    const { content, future, past } = this.state;
     let present;
+    let tx;
+    let target;
     switch (e.target.value) {
       case COMMANDS.undo:
-        present = content.pop();
-        future.unshift(present);
-        this.setState({
-          content,
-          future
-        });
+        tx = past.pop();
+        if (tx) {
+          switch (tx.type) {
+            case TRANSACTION.create:
+              present = content.pop();
+              future.unshift(present);
+              this.setState({
+                content,
+                future
+              });
+              break;
+            case TRANSACTION.edit:
+              target = this.nodes.get(tx.id);
+              console.log(target.current, tx.oldState);
+
+              break;
+            default:
+              break;
+          }
+        }
+
         break;
       case COMMANDS.redo:
         present = future.shift();
@@ -324,6 +352,15 @@ class SketchPad extends Component {
           updateBorder={this.updateBorder}
           handleFloatingMenu={this.handleFloatingMenu}
         />
+        {/* <Debug>
+          {content.map(el =>
+            Object.keys(el.props).map(key => (
+              <p>
+                {key} : {el.props[key]}
+              </p>
+            ))
+          )}
+        </Debug> */}
 
         {showPopUp ? (
           <PopUp
