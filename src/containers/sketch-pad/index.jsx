@@ -8,7 +8,9 @@ import {
   ACTIONS,
   TOOLBAR_HEIGHT,
   EDITOR_COMMAND,
-  TRANSACTION
+  TRANSACTION,
+  DIRECTION_HORIZONTAL,
+  DIRECTION_VERTICAL
 } from "../../constants";
 
 import Grid from "../../components/grid";
@@ -123,6 +125,7 @@ class SketchPad extends Component {
       props
     );
 
+    this.updateBorder(props);
     console.log(tx);
 
     this.setState({
@@ -143,6 +146,7 @@ class SketchPad extends Component {
       newProps
     );
 
+    this.updateBorder(newProps);
     console.log(tx);
     this.setState({
       past: [...past, tx]
@@ -163,6 +167,7 @@ class SketchPad extends Component {
     );
 
     this.nodes.delete(props.id);
+    this.updateBorder(props);
     console.log(tx);
 
     this.setState({
@@ -174,7 +179,26 @@ class SketchPad extends Component {
     });
   };
 
-  updateBorder = borderBuffer => {
+  updateBorder = ({ x, y, height, width, length, direction }) => {
+    let calHeight;
+    let calWidth;
+    if (direction) {
+      if (Object.values(DIRECTION_HORIZONTAL).includes(direction)) {
+        calHeight = 1;
+        calWidth = length;
+      } else {
+        calHeight = length;
+        calWidth = 1;
+      }
+    }
+
+    const borderBuffer = {
+      up: y,
+      down: y + height || y + calHeight,
+      left: x,
+      right: x + width || x + calWidth
+    };
+
     const { border } = this.state;
     const newUp = borderBuffer.up < border.up ? borderBuffer.up : border.up;
     const newLeft =

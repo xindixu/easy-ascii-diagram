@@ -126,12 +126,11 @@ class Diagram extends Component {
   };
 
   commit() {
-    const { drawing, borderBuffer } = this.state;
-    const { commitDrawing, updateBorder } = this.props;
+    const { drawing } = this.state;
+    const { commitDrawing } = this.props;
     const { shape } = drawing;
     if (shape !== null) {
       commitDrawing(drawing);
-      updateBorder(borderBuffer);
       this.setState({
         drawing: {
           shape: null,
@@ -240,13 +239,13 @@ class Diagram extends Component {
     }
 
     this.setState({
-      drawing: { shape, id, ref },
-      borderBuffer: {
-        up: y,
-        down: height === 0 ? y + 1 : y + height,
-        left: x,
-        right: width === 0 ? x + 1 : x + width
-      }
+      drawing: { shape, id, ref }
+      // borderBuffer: {
+      //   up: y,
+      //   down: height === 0 ? y + 1 : y + height,
+      //   left: x,
+      //   right: width === 0 ? x + 1 : x + width
+      // }
     });
   }
 
