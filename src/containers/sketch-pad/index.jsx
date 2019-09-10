@@ -123,7 +123,6 @@ class SketchPad extends Component {
     );
 
     this.updateBorder(props);
-    console.log(tx);
 
     this.setState({
       content: [...content, shape],
@@ -131,19 +130,19 @@ class SketchPad extends Component {
     });
   };
 
-  commitEditing = (target, oldProps, newProps) => {
-    const { id } = newProps;
+  commitEditing = (target, oldState, newState) => {
+    const { id } = newState;
     const { past } = this.state;
 
     const tx = new Transaction(
       TRANSACTION.edit,
       id,
       target.shape,
-      oldProps,
-      newProps
+      oldState,
+      newState
     );
 
-    this.updateBorder(newProps);
+    this.updateBorder(newState);
     console.log(tx);
     this.setState({
       past: [...past, tx]
@@ -165,7 +164,6 @@ class SketchPad extends Component {
 
     this.nodes.delete(props.id);
     this.updateBorder(props);
-    console.log(tx);
 
     this.setState({
       content: [
@@ -254,9 +252,9 @@ class SketchPad extends Component {
               break;
             case TRANSACTION.edit:
               target = this.nodes.get(tx.id);
-              console.log(tx.oldProps);
+              console.log(tx.oldState.x, tx.oldState.length);
               target.current.updateWithState(tx.oldState);
-              console.log(target);
+
               break;
             default:
               break;

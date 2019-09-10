@@ -113,41 +113,8 @@ const convertRectangle = (width, height) => {
 const converText = content => content;
 
 class Shape extends Component {
-  static getWidthHeight = (direction, length) => {
-    let width;
-    let height;
-    if (direction === DIRECTION.vertical) {
-      width = 1;
-      height = length;
-    } else {
-      width = length;
-      height = 1;
-    }
-    return { width, height };
-  };
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { direction, length, ...rest } = nextProps;
-    if (prevState.direction === direction && prevState.length === length)
-      return { ...nextProps };
-
-    const { width, height } = Shape.getWidthHeight(direction, length);
-
-    const state = {
-      ...rest,
-      width,
-      height,
-      text: Shape.convert(direction, length)
-    };
-    return state;
-  }
-
-  constructor(props) {
-    super(props);
-    const { width, height, direction, length, content, shape } = this.props;
-
+  static convert(width, height, direction, length, content, shape) {
     let text;
-
     switch (shape) {
       case TOOLS.rectangle:
         text = convertRectangle(width, height);
@@ -167,12 +134,48 @@ class Shape extends Component {
       default:
         break;
     }
+    return text;
+  }
+
+  static getWidthHeight = (direction, length) => {
+    let width;
+    let height;
+    if (direction === DIRECTION.vertical) {
+      width = 1;
+      height = length;
+    } else {
+      width = length;
+      height = 1;
+    }
+    return { width, height };
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { width, height, direction, length, content, shape } = nextProps;
+    if (
+      (prevState.direction === direction && prevState.length === length)  ||
+      (prevState.width === width && prevState.height === height)
+    )
+      return { ...nextProps };
+
+    const state = {
+      ...nextProps,
+      width,
+      height,
+      text: Shape.convert(width, height, direction, length, content, shape)
+    };
+    return state;
+  }
+
+  constructor(props) {
+    super(props);
+    const { width, height, direction, length, content, shape } = this.props;
 
     this.state = {
       ...this.props,
       width,
       height,
-      text
+      text: Shape.convert(width, height, direction, length, content, shape)
     };
   }
 

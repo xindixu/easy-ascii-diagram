@@ -100,8 +100,11 @@ class Arrow extends Component {
   }
 
   updateWithState = state => {
-    console.log("update", state);
-    this.setState({ ...state });
+    const { direction, length } = state;
+    const { update } = this.props;
+    const text = Arrow.convert(direction, length);
+    this.setState({ ...state, text });
+    update(state);
   };
 
   render() {
@@ -133,6 +136,7 @@ Arrow.propTypes = {
   direction: PropTypes.oneOf([...Object.values(DIRECTION_ARROW)]).isRequired,
   zoomLevel: PropTypes.number.isRequired,
   handleOnDoubleClick: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired
 };
 

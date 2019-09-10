@@ -115,15 +115,19 @@ function editable(WrappedComponent) {
       }
     };
 
+    update = newProps => {
+      this.setState({ newProps });
+    };
+
     commit() {
       const { newProps, originalProps } = this.state;
       if (newProps === originalProps) {
         return;
       }
-
       const { commitEditing, forwardedRef } = this.props;
-
       commitEditing(forwardedRef.current, originalProps, newProps);
+      console.log(originalProps.length, newProps.length);
+      this.setState({ originalProps: newProps });
     }
 
     render() {
@@ -144,6 +148,7 @@ function editable(WrappedComponent) {
         <>
           <WrappedComponent
             handleOnDoubleClick={this.handleOnDoubleClick}
+            update={this.update}
             ref={forwardedRef}
             editing={editing}
             {...newProps}
