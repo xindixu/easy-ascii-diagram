@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Rectangle from "./shape/rectangle";
-import Line from "./shape/line";
-import Arrow from "./shape/arrow";
-import Text from "./shape/text";
-import Eraser from "./shape/eraser";
+// import Rectangle from "./shape/rectangle";
+// import Line from "./shape/line";
+// import Arrow from "./shape/arrow";
+// import Text from "./shape/text";
+// import Eraser from "./shape/eraser";
+import Shape from "./shape/shape";
 import { randomId } from "../util";
 
 import { DIRECTION_LINE, DIRECTION_ARROW, TOOLS } from "../constants";
@@ -25,7 +26,7 @@ const sharedProps = {
 };
 
 export const drawRectangle = props => (
-  <Rectangle shape={TOOLS.rectangle} {...props} />
+  <Shape shape={TOOLS.rectangle} {...props} />
 );
 
 drawRectangle.propTypes = {
@@ -34,7 +35,7 @@ drawRectangle.propTypes = {
   ...sharedProps
 };
 
-export const drawLine = props => <Line shape={TOOLS.line} {...props} />;
+export const drawLine = props => <Shape shape={TOOLS.line} {...props} />;
 
 drawLine.propTypes = {
   length: PropTypes.number.isRequired,
@@ -42,7 +43,7 @@ drawLine.propTypes = {
   ...sharedProps
 };
 
-export const drawArrow = props => <Arrow shape={TOOLS.arrow} {...props} />;
+export const drawArrow = props => <Shape shape={TOOLS.arrow} {...props} />;
 
 drawArrow.propTypes = {
   length: PropTypes.number.isRequired,
@@ -50,7 +51,7 @@ drawArrow.propTypes = {
   ...sharedProps
 };
 
-export const drawText = props => <Text shape={TOOLS.text} {...props} />;
+export const drawText = props => <Shape shape={TOOLS.text} {...props} />;
 
 drawText.propTypes = {
   content: PropTypes.string.isRequired,
@@ -58,7 +59,7 @@ drawText.propTypes = {
 };
 
 export const erase = props => (
-  <Eraser shape={TOOLS.eraser} key={randomId()} {...props} />
+  <Shape shape={TOOLS.eraser} key={randomId()} {...props} />
 );
 
 erase.propTypes = {

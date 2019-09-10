@@ -231,7 +231,7 @@ class Diagram extends Component {
         break;
 
       case TOOLS.eraser:
-        shape = erase({ x, y, width, height, zoomLevel });
+        shape = erase({ ...sharedProps, x, y, width, height });
         break;
 
       default:
@@ -240,12 +240,6 @@ class Diagram extends Component {
 
     this.setState({
       drawing: { shape, id, ref }
-      // borderBuffer: {
-      //   up: y,
-      //   down: height === 0 ? y + 1 : y + height,
-      //   left: x,
-      //   right: width === 0 ? x + 1 : x + width
-      // }
     });
   }
 

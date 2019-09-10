@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
-import { WithBackground } from "./style";
+import { WithBackground, NoBackground, BorderOnly } from "./style";
 import { TOOLS, DIRECTION, DIRECTION_LINE } from "../../constants";
 
 const convertArrow = (direction, length) => {
@@ -110,9 +110,9 @@ const convertRectangle = (width, height) => {
   return text;
 };
 
-class Shape extends Component {
-  static convert() {}
+const converText = content => content;
 
+class Shape extends Component {
   static getWidthHeight = (direction, length) => {
     let width;
     let height;
@@ -131,34 +131,80 @@ class Shape extends Component {
     if (prevState.direction === direction && prevState.length === length)
       return { ...nextProps };
 
-    const { width, height } = Line.getWidthHeight(direction, length);
+    const { width, height } = Shape.getWidthHeight(direction, length);
 
     const state = {
       ...rest,
       width,
       height,
-      text: Line.convert(direction, length)
+      text: Shape.convert(direction, length)
     };
     return state;
   }
 
   constructor(props) {
     super(props);
-    const { width, height, shape } = this.props;
-    console.log(Shape.charSet);
+    const { width, height, direction, length, content, shape } = this.props;
+
+    let text;
+
+    switch (shape) {
+      case TOOLS.rectangle:
+        text = convertRectangle(width, height);
+        break;
+      case TOOLS.line:
+        text = convertLine(direction, length);
+        break;
+      case TOOLS.arrow:
+        text = convertArrow(direction, length);
+        break;
+      case TOOLS.text:
+        text = converText(content);
+        break;
+      case TOOLS.eraser:
+        text = convertEraser(width, height);
+        break;
+      default:
+        break;
+    }
+
     this.state = {
       ...this.props,
       width,
       height,
-      text: Line.convert(direction, length)
+      text
     };
-    this.shape = TOOLS.line;
   }
 
   render() {
     const { text } = this.state;
-    const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
-
+    const { x, y, zoomLevel, handleOnDoubleClick, editing, shape } = this.props;
+    if (shape === TOOLS.rectangle) {
+      return (
+        <BorderOnly
+          x={x}
+          y={y}
+          zoomLevel={zoomLevel}
+          onDoubleClick={handleOnDoubleClick}
+          editing={editing}
+        >
+          {text}
+        </BorderOnly>
+      );
+    }
+    if (shape === TOOLS.eraser) {
+      return (
+        <NoBackground
+          x={x}
+          y={y}
+          zoomLevel={zoomLevel}
+          onDoubleClick={handleOnDoubleClick}
+          editing={editing}
+        >
+          {text}
+        </NoBackground>
+      );
+    }
     return (
       <WithBackground
         x={x}
@@ -173,11 +219,20 @@ class Shape extends Component {
   }
 }
 
+Shape.defaultProps = {
+  width: null,
+  height: null,
+  length: null,
+  direction: DIRECTION.right
+};
+
 Shape.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  length: PropTypes.number.isRequired,
-  direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  length: PropTypes.number,
+  direction: PropTypes.oneOf([...Object.values(DIRECTION)]),
   zoomLevel: PropTypes.number.isRequired,
   handleOnDoubleClick: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired

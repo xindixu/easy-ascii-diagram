@@ -17,7 +17,6 @@ import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
 import Transaction from "../../lib/transaction";
-// import Shape from "../../lib/shape/shape";
 
 import { TextArea, Border, Debug } from "./style";
 
