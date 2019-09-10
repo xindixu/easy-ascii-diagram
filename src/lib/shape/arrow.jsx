@@ -95,8 +95,6 @@ class Arrow extends Component {
       text: Arrow.convert(direction, length)
     };
     this.shape = TOOLS.arrow;
-
-    this.updateWithState = this.updateWithState.bind(this);
   }
 
   updateWithState = state => {

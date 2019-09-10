@@ -53,9 +53,17 @@ class Rectangle extends Component {
     this.shape = TOOLS.rectangle;
   }
 
+  updateWithState = state => {
+    const { width, height } = state;
+    const { update } = this.props;
+    const text = Rectangle.convert(width, height);
+    this.setState({ ...state, text });
+    update(state);
+  };
+
   render() {
-    const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
-    const { text, width, height } = this.state;
+    const { text, x, y } = this.state;
+    const { zoomLevel, handleOnDoubleClick, editing } = this.props;
     return (
       <>
         <BorderOnly
@@ -82,6 +90,7 @@ Rectangle.propTypes = {
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired,
   handleOnDoubleClick: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired
 };
 

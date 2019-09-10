@@ -45,6 +45,14 @@ class Text extends Component {
     this.shape = TOOLS.text;
   }
 
+  updateWithState = state => {
+    const { content } = state;
+    const { update } = this.props;
+    const text = Text.convert(content);
+    this.setState({ ...state, text });
+    update(state);
+  };
+
   render() {
     const { text } = this.state;
     const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
@@ -69,6 +77,7 @@ Text.propTypes = {
   content: PropTypes.string.isRequired,
   zoomLevel: PropTypes.number.isRequired,
   handleOnDoubleClick: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired
 };
 

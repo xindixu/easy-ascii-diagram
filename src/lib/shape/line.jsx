@@ -67,6 +67,14 @@ class Line extends Component {
     this.shape = TOOLS.line;
   }
 
+  updateWithState = state => {
+    const { direction, length } = state;
+    const { update } = this.props;
+    const text = Line.convert(direction, length);
+    this.setState({ ...state, text });
+    update(state);
+  };
+
   render() {
     const { text } = this.state;
     const { x, y, zoomLevel, handleOnDoubleClick, editing } = this.props;
@@ -92,6 +100,7 @@ Line.propTypes = {
   direction: PropTypes.oneOf([...Object.values(DIRECTION_LINE)]).isRequired,
   zoomLevel: PropTypes.number.isRequired,
   handleOnDoubleClick: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired
 };
 

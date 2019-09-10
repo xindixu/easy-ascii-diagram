@@ -252,9 +252,9 @@ class SketchPad extends Component {
               break;
             case TRANSACTION.edit:
               target = this.nodes.get(tx.id);
-              console.log(tx.oldState.x, tx.oldState.length);
               target.current.updateWithState(tx.oldState);
-
+              break;
+            case TRANSACTION.delete:
               break;
             default:
               break;
@@ -265,6 +265,27 @@ class SketchPad extends Component {
       case COMMANDS.redo:
         tx = future.shift();
         past.push(tx);
+
+        if (tx) {
+          switch (tx.type) {
+            case TRANSACTION.create:
+              console.log(tx);
+
+              this.setState({
+                content,
+                future
+              });
+              break;
+            case TRANSACTION.edit:
+              target = this.nodes.get(tx.id);
+              target.current.updateWithState(tx.newState);
+              break;
+            case TRANSACTION.delete:
+              break;
+            default:
+              break;
+          }
+        }
         this.setState({
           content,
           future,
