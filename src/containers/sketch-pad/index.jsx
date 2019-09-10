@@ -9,8 +9,7 @@ import {
   TOOLBAR_HEIGHT,
   EDITOR_COMMAND,
   TRANSACTION,
-  DIRECTION_HORIZONTAL,
-  DIRECTION_VERTICAL
+  DIRECTION_HORIZONTAL
 } from "../../constants";
 
 import Grid from "../../components/grid";
@@ -112,7 +111,6 @@ class SketchPad extends Component {
 
   commitDrawing = drawing => {
     const { content, past } = this.state;
-    console.log(drawing);
     const { shape, id, ref } = drawing;
     const { props } = shape;
     this.nodes.set(id, ref);
@@ -241,14 +239,15 @@ class SketchPad extends Component {
     let present;
     let tx;
     let target;
+
     switch (e.target.value) {
       case COMMANDS.undo:
         tx = past.pop();
+        future.unshift(tx);
         if (tx) {
           switch (tx.type) {
             case TRANSACTION.create:
-              present = content.pop();
-              future.unshift(present);
+              content.pop();
               this.setState({
                 content,
                 future
@@ -256,21 +255,23 @@ class SketchPad extends Component {
               break;
             case TRANSACTION.edit:
               target = this.nodes.get(tx.id);
-              console.log(target.current, tx.oldState);
-
+              console.log(tx.oldProps);
+              target.current.updateWithState(tx.oldState);
+              console.log(target);
               break;
             default:
               break;
           }
         }
-
+        this.setState({ content, future, past });
         break;
       case COMMANDS.redo:
-        present = future.shift();
-        content.push(present);
+        tx = future.shift();
+        past.push(tx);
         this.setState({
           content,
-          future
+          future,
+          past
         });
         break;
       case COMMANDS.zoomIn:

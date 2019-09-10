@@ -1,0 +1,9 @@
+const type = {
+  UNDO: "UNDO",
+  REDO: "REDO",
+  COMMIT_DRAWING: "COMMIT_DRAWING",
+  COMMIT_EDITING: "COMMIT_EDITING",
+  COMMIT_DELETING: "COMMIT_DELETING"
+};
+
+export default type;

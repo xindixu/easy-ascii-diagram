@@ -1,8 +1,10 @@
 import React from "react";
 // import Pusher from 'pusher-js';
+import { Provider } from "react-redux";
 import SketchPad from "./containers/sketch-pad";
+import store from "./store";
 
-import "./App.css";
+
 
 function App() {
   // Pusher.logToConsole = true;
@@ -16,11 +18,12 @@ function App() {
   // channel.bind('my-event', (data) => {
   //   alert(JSON.stringify(data));
   // });
-
   return (
-    <div className="App">
-      <SketchPad />
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <SketchPad />
+      </div>
+    </Provider>
   );
 }
 
