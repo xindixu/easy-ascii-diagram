@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
-import { GRID_WIDTH, GRID_HEIGHT, EDITOR } from "../../constants";
+import { GRID_WIDTH } from "../../constants";
 
 const { blue, zTopMost } = styleSettings;
 
