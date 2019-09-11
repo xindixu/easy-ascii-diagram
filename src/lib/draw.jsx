@@ -69,3 +69,20 @@ erase.propTypes = {
   height: PropTypes.number.isRequired,
   zoomLevel: PropTypes.number.isRequired
 };
+
+export const drawShape = props => {
+  const { shape } = props;
+
+  switch (shape) {
+    case TOOLS.rectangle:
+      return drawRectangle(props);
+    case TOOLS.arrow:
+      return drawArrow(props);
+    case TOOLS.line:
+      return drawLine(props);
+    case TOOLS.text:
+      return drawText(props);
+    default:
+      return null;
+  }
+};

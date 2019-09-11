@@ -17,7 +17,7 @@ import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
 import ToolBar from "../toolbar";
 import Transaction from "../../lib/transaction";
-
+import { drawShape } from "../../lib/draw";
 import { TextArea, Border, Debug } from "./style";
 
 const calculateTotalGridNumber = zoomLevel => {
@@ -108,59 +108,56 @@ class SketchPad extends Component {
     this.setState({ zoomLevel: zoom });
   };
 
-  commitDrawing = drawing => {
+  commitDrawing = (drawing, log = true) => {
     const { content, past } = this.state;
     const { shape, id, ref } = drawing;
     const { props } = shape;
     this.nodes.set(id, ref);
 
-    const tx = new Transaction(
-      TRANSACTION.create,
-      id,
-      props.shape,
-      null,
-      props
-    );
-
     this.updateBorder(props);
-
     this.setState({
-      content: [...content, shape],
-      past: [...past, tx]
+      content: [...content, shape]
     });
+
+    if (log) {
+      const tx = new Transaction(
+        TRANSACTION.create,
+        id,
+        props.shape,
+        null,
+        props
+      );
+      this.setState({
+        past: [...past, tx]
+      });
+    }
   };
 
-  commitEditing = (target, oldState, newState) => {
+  commitEditing = (target, oldState, newState, log = true) => {
     const { id } = newState;
     const { past } = this.state;
 
-    const tx = new Transaction(
-      TRANSACTION.edit,
-      id,
-      target.shape,
-      oldState,
-      newState
-    );
-
     this.updateBorder(newState);
-    console.log(tx);
-    this.setState({
-      past: [...past, tx]
-    });
+
+    if (log) {
+      const tx = new Transaction(
+        TRANSACTION.edit,
+        id,
+        target.shape,
+        oldState,
+        newState
+      );
+      this.setState({
+        past: [...past, tx]
+      });
+    }
   };
 
-  commitDeleting = targetIndex => {
+  commitDeleting = (targetIndex, log = true) => {
     const { past, content } = this.state;
     const shape = content[targetIndex];
     const { props } = shape;
-
-    const tx = new Transaction(
-      TRANSACTION.delete,
-      props.id,
-      props.shape,
-      props,
-      null
-    );
+    console.log(targetIndex, content, shape);
 
     this.nodes.delete(props.id);
     this.updateBorder(props);
@@ -169,9 +166,21 @@ class SketchPad extends Component {
       content: [
         ...content.slice(0, targetIndex),
         ...content.slice(targetIndex + 1, content.length)
-      ],
-      past: [...past, tx]
+      ]
     });
+
+    if (log) {
+      const tx = new Transaction(
+        TRANSACTION.delete,
+        props.id,
+        props.shape,
+        props,
+        null
+      );
+      this.setState({
+        past: [...past, tx]
+      });
+    }
   };
 
   updateBorder = ({ x, y, height, width, length, direction }) => {
@@ -233,63 +242,75 @@ class SketchPad extends Component {
 
   handleCommand = e => {
     const { content, future, past } = this.state;
-    let present;
+    let shape;
     let tx;
     let target;
+    let newContent;
+    let newFuture;
+    let newPast;
 
     switch (e.target.value) {
       case COMMANDS.undo:
-        tx = past.pop();
-        future.unshift(tx);
+        tx = past[past.length - 1];
+        newPast = past.slice(0, -1);
         if (tx) {
+          future.unshift(tx);
           switch (tx.type) {
             case TRANSACTION.create:
-              content.pop();
-              this.setState({
-                content,
-                future
-              });
+              newContent = content.slice(0, -1);
+              this.nodes.delete(tx.id);
               break;
             case TRANSACTION.edit:
               target = this.nodes.get(tx.id);
               target.current.updateWithState(tx.oldState);
               break;
             case TRANSACTION.delete:
+              const ref = React.createRef();
+              shape = drawShape({ ...tx.oldState, ref, key: tx.id });
+              this.nodes.set(tx.id, ref);
+              newContent = [...content, shape];
               break;
             default:
               break;
           }
         }
-        this.setState({ content, future, past });
+
+        this.setState({
+          content: newContent || content,
+          future: newFuture || future,
+          past: newPast || past
+        });
         break;
       case COMMANDS.redo:
-        tx = future.shift();
-        past.push(tx);
-
+        tx = future[0];
+        newFuture = future.slice(1);
         if (tx) {
+          past.push(tx);
+
           switch (tx.type) {
             case TRANSACTION.create:
-              console.log(tx);
-
-              this.setState({
-                content,
-                future
-              });
+              const ref = React.createRef();
+              shape = drawShape({ ...tx.newState, ref, key: tx.id });
+              this.nodes.set(tx.id, ref);
+              newContent = [...content, shape];
               break;
             case TRANSACTION.edit:
               target = this.nodes.get(tx.id);
               target.current.updateWithState(tx.newState);
               break;
             case TRANSACTION.delete:
+              newContent = content.slice(0, -1);
+              this.nodes.delete(tx.id);
               break;
             default:
               break;
           }
         }
+
         this.setState({
-          content,
-          future,
-          past
+          content: newContent || content,
+          future: newFuture || future,
+          past: newPast || past
         });
         break;
       case COMMANDS.zoomIn:
