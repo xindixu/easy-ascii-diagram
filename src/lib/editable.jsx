@@ -115,8 +115,10 @@ function editable(WrappedComponent) {
       }
     };
 
-    update = newProps => {
-      this.setState({ newProps });
+    update = props => {
+      // TODO: fix - when user undo an edit and then edit again, it is not updating the original prop
+      const { newProps } = this.state;
+      this.setState({ newProps: props, originalProps: newProps });
     };
 
     commit() {
@@ -126,7 +128,6 @@ function editable(WrappedComponent) {
       }
       const { commitEditing, forwardedRef } = this.props;
       commitEditing(forwardedRef.current, originalProps, newProps);
-      console.log(originalProps.length, newProps.length);
       this.setState({ originalProps: newProps });
     }
 

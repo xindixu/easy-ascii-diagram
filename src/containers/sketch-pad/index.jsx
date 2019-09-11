@@ -157,7 +157,6 @@ class SketchPad extends Component {
     const { past, content } = this.state;
     const shape = content[targetIndex];
     const { props } = shape;
-    console.log(targetIndex, content, shape);
 
     this.nodes.delete(props.id);
     this.updateBorder(props);
@@ -261,6 +260,7 @@ class SketchPad extends Component {
               this.nodes.delete(tx.id);
               break;
             case TRANSACTION.edit:
+              console.log(tx.oldState);
               target = this.nodes.get(tx.id);
               target.current.updateWithState(tx.oldState);
               break;
