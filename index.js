@@ -7,7 +7,7 @@ const app = express();
 app.use("/", serveStatic(path.join(__dirname, "/build")));
 
 // Catch all routes and redirect to the index file
-app.get("*", function(req, res) {
+app.get("*", (req, res) => {
   res.sendFile(`${__dirname}/build/index.html`);
 });
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import editable from "../editable";
 import { WithBackground, NoBackground, BorderOnly } from "./style";
-import { TOOLS, DIRECTION, DIRECTION_LINE } from "../../constants";
+import { TOOLS, DIRECTION } from "../../constants";
 
 const convertArrow = (direction, length) => {
   let text = "";
@@ -153,7 +153,7 @@ class Shape extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { width, height, direction, length, content, shape } = nextProps;
     if (
-      (prevState.direction === direction && prevState.length === length)  ||
+      (prevState.direction === direction && prevState.length === length) ||
       (prevState.width === width && prevState.height === height)
     )
       return { ...nextProps };

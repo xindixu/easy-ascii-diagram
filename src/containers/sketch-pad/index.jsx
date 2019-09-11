@@ -224,7 +224,7 @@ class SketchPad extends Component {
   handleResize = () =>
     debounce(() => {
       const { zoomLevel } = this.state;
-      const { totalRow, totalColumn } = calculateTotalGridNumber(zoomLevel);
+      calculateTotalGridNumber(zoomLevel);
     }, 500);
 
   handleAction = e => {

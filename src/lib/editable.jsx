@@ -2,13 +2,7 @@ import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 import Editor from "../components/editor";
 import { randomId, getX, getY } from "../util";
-import Transaction from "./transaction";
-import {
-  DIRECTION_HORIZONTAL,
-  DIRECTION_VERTICAL,
-  TOOLS,
-  TRANSACTION
-} from "../constants";
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TOOLS } from "../constants";
 
 function editable(WrappedComponent) {
   class Editable extends Component {
@@ -129,6 +123,8 @@ function editable(WrappedComponent) {
       const { commitEditing, forwardedRef } = this.props;
       commitEditing(forwardedRef.current, originalProps, newProps);
       this.setState({ originalProps: newProps });
+
+      console.log(newProps);
     }
 
     render() {

@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Wrapper } from "./style";
 
-class FloatingMenu extends Component {
-  render() {
-    return <Wrapper>{this.props.children}</Wrapper>;
-  }
-}
+const FloatingMenu = ({ children }) => {
+  return <Wrapper>{children}</Wrapper>;
+};
 
-FloatingMenu.propTypes = {};
+FloatingMenu.propTypes = {
+  children: PropTypes.any.isRequired
+};
 
 export default FloatingMenu;

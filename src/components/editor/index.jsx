@@ -220,6 +220,7 @@ class Editor extends Component {
               <button
                 value={el}
                 key={el}
+                type="button"
                 onClick={e => handleFloatingMenu(e, target)}
               >
                 {el}

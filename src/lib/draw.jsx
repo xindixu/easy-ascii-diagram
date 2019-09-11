@@ -5,9 +5,8 @@ import Line from "./shape/line";
 import Arrow from "./shape/arrow";
 import Text from "./shape/text";
 import Eraser from "./shape/eraser";
-import Shape from "./shape/shape";
-import { randomId } from "../util";
 
+import { randomId } from "../util";
 import { DIRECTION_LINE, DIRECTION_ARROW, TOOLS } from "../constants";
 
 const sharedProps = {
