@@ -77,11 +77,27 @@ class SketchPad extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.handleResize);
+    this.callBackendAPI()
+      .then(res => {
+        this.setState({ data: res.express });
+        console.log(res);
+      })
+      .catch(err => console.log(err));
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
   }
+
+  callBackendAPI = async () => {
+    const response = await fetch("/express_backend");
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
 
   addToResult = (x, y, text) => {
     const { border } = this.state;
