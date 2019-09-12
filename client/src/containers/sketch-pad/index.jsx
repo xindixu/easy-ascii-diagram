@@ -77,12 +77,6 @@ class SketchPad extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.handleResize);
-    this.callBackendAPI()
-      .then(res => {
-        this.setState({ data: res.express });
-        console.log(res);
-      })
-      .catch(err => console.log(err));
   }
 
   componentWillUnmount() {

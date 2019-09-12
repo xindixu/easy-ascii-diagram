@@ -1,11 +1,32 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 5000;
+const express = require('express')
+const http = require('http')
+const socketIO = require('socket.io')
 
-// console.log that your server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`));
+// our localhost port
+const port = 5000
 
-// create a GET route
-app.get('/express_backend', (req, res) => {
-  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-});
+const app = express()
+
+// our server instance
+const server = http.createServer(app)
+
+// This creates our socket using the instance of the server
+const io = socketIO(server)
+
+// This is what the socket.io syntax is like, we will work this later
+io.on('connection', socket => {
+  console.log('Connected')
+  
+
+  socket.on('change color', (color) => {
+    console.log('Color Changed to: ', color)
+    io.sockets.emit('change color', color)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected')
+  })
+})
+
+
+server.listen(port, () => console.log(`Listening on port ${port}`))
