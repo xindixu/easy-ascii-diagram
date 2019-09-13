@@ -18,9 +18,9 @@ io.on('connection', socket => {
   console.log('Connected')
   
 
-  socket.on('change color', (color) => {
-    console.log('Color Changed to: ', color)
-    io.sockets.emit('change color', color)
+  socket.on('transaction', (tx) => {
+    console.log('Created transaction: ', tx)
+    io.sockets.emit('create tx', tx)
   })
 
   socket.on('disconnect', () => {

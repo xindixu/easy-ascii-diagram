@@ -1,7 +1,7 @@
 import { GRID_HEIGHT, GRID_WIDTH } from "./constants";
 
-export const randomId = () =>
-  `SK${Math.random()
+export const randomId = (prefix = "XX") =>
+  `${prefix}${Math.random()
     .toString(36)
     .substring(2, 8)}`;
 

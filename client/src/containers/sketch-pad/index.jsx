@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { debounce } from "lodash";
 
 import {
@@ -11,7 +12,7 @@ import {
   TRANSACTION,
   DIRECTION_HORIZONTAL
 } from "../../constants";
-
+import withSocket from "../../hoc/withSocket";
 import Grid from "../../components/grid";
 import Diagram from "../../components/diagram";
 import PopUp from "../../components/pop-up";
@@ -140,6 +141,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
+      this.props.sendToServer(tx);
     }
   };
 
@@ -160,6 +162,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
+      this.props.sendToServer(tx);
     }
   };
 
@@ -189,6 +192,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
+      this.props.sendToServer(tx);
     }
   };
 
@@ -455,4 +459,8 @@ class SketchPad extends Component {
   }
 }
 
-export default SketchPad;
+SketchPad.propTypes = {
+  sendToServer: PropTypes.func.isRequired
+};
+
+export default withSocket(SketchPad);
