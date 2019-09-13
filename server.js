@@ -13,20 +13,22 @@ const server = http.createServer(app)
 // This creates our socket using the instance of the server
 const io = socketIO(server)
 
-// This is what the socket.io syntax is like, we will work this later
-io.on('connection', socket => {
-  console.log('Connected')
-  
 
-  socket.on('transaction', (tx) => {
-    console.log('Created transaction: ', tx)
-    io.sockets.emit('create tx', tx)
+io.on('connect', onConnect)
+
+function onConnect(socket){
+  console.log('Connected')
+  socket.emit('Hello!, you just joined the party')
+
+
+  socket.on('transact', (data) => {
+    console.log(`${data.user}: `, data.transaction)
+    socket.broadcast.emit('transact', data )
   })
 
   socket.on('disconnect', () => {
     console.log('Disconnected')
   })
-})
-
+}
 
 server.listen(port, () => console.log(`Listening on port ${port}`))
