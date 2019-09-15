@@ -123,8 +123,6 @@ function editable(WrappedComponent) {
       const { commitEditing, forwardedRef } = this.props;
       commitEditing(forwardedRef.current, originalProps, newProps);
       this.setState({ originalProps: newProps });
-
-      console.log(newProps);
     }
 
     render() {

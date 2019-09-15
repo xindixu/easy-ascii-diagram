@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Wrapper } from "./style";
-import { TOOLS, DIRECTION_ARROW, DIRECTION_LINE } from "../../constants";
+import {
+  TOOLS,
+  DIRECTION_ARROW,
+  DIRECTION_LINE,
+  TRANSACTION
+} from "../../constants";
 
 import {
   drawRectangle,
@@ -34,20 +39,9 @@ class Diagram extends Component {
     }
   };
 
-  enterEditMode = () => {
-    this.setState({
-      isEditing: true
-    });
-  };
-
-  exitEditMode = () => {
-    this.setState({
-      isEditing: false
-    });
-  };
-
   handleMouseDown = e => {
-    const { isTyping, isEditing } = this.state;
+    const { isTyping } = this.state;
+    const { isEditing } = this.props;
     if (isEditing) return;
     if (isTyping) {
       this.commit();
@@ -147,7 +141,14 @@ class Diagram extends Component {
   }
 
   draw(content) {
-    const { tool, zoomLevel, handleFloatingMenu, commitEditing } = this.props;
+    const {
+      tool,
+      zoomLevel,
+      handleFloatingMenu,
+      commitEditing,
+      enterEditMode,
+      exitEditMode
+    } = this.props;
     const { start, end } = this.state;
 
     let shape = null;
@@ -168,8 +169,8 @@ class Diagram extends Component {
       key: id,
       ref,
       zoomLevel,
-      enterEditMode: this.enterEditMode,
-      exitEditMode: this.exitEditMode,
+      enterEditMode,
+      exitEditMode,
       commitEditing,
       handleFloatingMenu
     };
@@ -245,7 +246,9 @@ class Diagram extends Component {
   }
 
   render() {
-    const { drawing, isEditing, isDrawing } = this.state;
+    const { drawing, isDrawing } = this.state;
+    const { isEditing } = this.props;
+
     const { tool, content } = this.props;
 
     return (
@@ -275,6 +278,9 @@ Diagram.propTypes = {
   tool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
   zoomLevel: PropTypes.number,
   content: PropTypes.arrayOf(PropTypes.node).isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  enterEditMode: PropTypes.func.isRequired,
+  exitEditMode: PropTypes.func.isRequired,
   commitDrawing: PropTypes.func.isRequired,
   commitEditing: PropTypes.func.isRequired,
   updateBorder: PropTypes.func.isRequired,

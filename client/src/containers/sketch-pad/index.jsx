@@ -51,17 +51,7 @@ const isOverlapped = (targetNode, otherNode) => {
 };
 
 class SketchPad extends Component {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { txFromServer } = nextProps;
-    if (!txFromServer || txFromServer === prevState.txFromServer) {
-      return {
-        ...prevState,
-        gotTxFromServer: false
-      };
-    }
-
-    return { ...prevState, txFromServer, gotTxFromServer: true };
-  }
+  static getDerivedStateFromProps(nextProps, prevState) {}
 
   constructor(props) {
     super(props);
@@ -72,6 +62,7 @@ class SketchPad extends Component {
     this.state = {
       zoomLevel,
       tool: TOOLS.arrow,
+      isEditing: false,
       content: [],
       past: [],
       future: [],
@@ -83,11 +74,10 @@ class SketchPad extends Component {
         left: totalColumn,
         right: 0
       },
-      txFromServer: null,
-      gotTxFromServer: false
+
+      nodes: new Map()
     };
     this.result = null;
-    this.nodes = new Map();
   }
 
   componentDidMount() {
@@ -96,20 +86,59 @@ class SketchPad extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { txFromServer } = this.props;
-    const { content } = this.state;
+
+    const { nodes } = this.state;
     if (txFromServer && txFromServer !== prevProps.txFromServer) {
       const { transaction: tx } = txFromServer;
-      const ref = React.createRef();
-      const shape = drawShape({ ...tx.newState, ref, key: tx.id });
-      this.nodes.set(tx.id, ref);
-      const newContent = [...content, shape];
-      this.setState({ content: newContent });
+      switch (tx.type) {
+        case TRANSACTION.create:
+          const ref = React.createRef();
+
+          const sharedProps = {
+            enterEditMode: this.enterEditMode,
+            exitEditMode: this.exitEditMode,
+            commitEditing: this.commitEditing,
+            handleFloatingMenu: this.handleFloatingMenu
+          };
+
+          const shape = drawShape({
+            ...sharedProps,
+            ...tx.newState,
+            ref,
+            key: tx.id
+          });
+          const drawing = { shape, id: tx.id, ref };
+          this.commitDrawing(drawing, false);
+
+          break;
+        case TRANSACTION.edit:
+          {
+            const target = nodes.get(tx.id);
+            target.current.updateWithState(tx.newState);
+            this.commitEditing(target.current, tx.oldState, tx.newState, false);
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
   }
+
+  enterEditMode = () => {
+    this.setState({
+      isEditing: true
+    });
+  };
+
+  exitEditMode = () => {
+    this.setState({
+      isEditing: false
+    });
+  };
 
   callBackendAPI = async () => {
     const response = await fetch("/express_backend");
@@ -147,14 +176,15 @@ class SketchPad extends Component {
   };
 
   commitDrawing = (drawing, log = true) => {
-    const { content, past } = this.state;
+    const { content, past, nodes } = this.state;
     const { shape, id, ref } = drawing;
     const { props } = shape;
-    this.nodes.set(id, ref);
+    nodes.set(id, ref);
 
     this.updateBorder(props);
     this.setState({
-      content: [...content, shape]
+      content: [...content, shape],
+      nodes
     });
 
     if (log) {
@@ -175,9 +205,7 @@ class SketchPad extends Component {
   commitEditing = (target, oldState, newState, log = true) => {
     const { id } = newState;
     const { past } = this.state;
-
     this.updateBorder(newState);
-
     if (log) {
       const tx = new Transaction(
         TRANSACTION.edit,
@@ -194,18 +222,19 @@ class SketchPad extends Component {
   };
 
   commitDeleting = (targetIndex, log = true) => {
-    const { past, content } = this.state;
+    const { past, content, nodes } = this.state;
     const shape = content[targetIndex];
     const { props } = shape;
 
-    this.nodes.delete(props.id);
+    nodes.delete(props.id);
     this.updateBorder(props);
 
     this.setState({
       content: [
         ...content.slice(0, targetIndex),
         ...content.slice(targetIndex + 1, content.length)
-      ]
+      ],
+      nodes
     });
 
     if (log) {
@@ -281,7 +310,7 @@ class SketchPad extends Component {
   };
 
   handleCommand = e => {
-    const { content, future, past } = this.state;
+    const { content, future, past, nodes } = this.state;
     let shape;
     let tx;
     let target;
@@ -298,17 +327,16 @@ class SketchPad extends Component {
           switch (tx.type) {
             case TRANSACTION.create:
               newContent = content.slice(0, -1);
-              this.nodes.delete(tx.id);
+              nodes.delete(tx.id);
               break;
             case TRANSACTION.edit:
-              console.log(tx.oldState);
-              target = this.nodes.get(tx.id);
+              target = nodes.get(tx.id);
               target.current.updateWithState(tx.oldState);
               break;
             case TRANSACTION.delete:
               const ref = React.createRef();
               shape = drawShape({ ...tx.oldState, ref, key: tx.id });
-              this.nodes.set(tx.id, ref);
+              nodes.set(tx.id, ref);
               newContent = [...content, shape];
               break;
             default:
@@ -319,7 +347,8 @@ class SketchPad extends Component {
         this.setState({
           content: newContent || content,
           future: newFuture || future,
-          past: newPast || past
+          past: newPast || past,
+          nodes
         });
         break;
       case COMMANDS.redo:
@@ -332,16 +361,16 @@ class SketchPad extends Component {
             case TRANSACTION.create:
               const ref = React.createRef();
               shape = drawShape({ ...tx.newState, ref, key: tx.id });
-              this.nodes.set(tx.id, ref);
+              nodes.set(tx.id, ref);
               newContent = [...content, shape];
               break;
             case TRANSACTION.edit:
-              target = this.nodes.get(tx.id);
+              target = nodes.get(tx.id);
               target.current.updateWithState(tx.newState);
               break;
             case TRANSACTION.delete:
               newContent = content.slice(0, -1);
-              this.nodes.delete(tx.id);
+              nodes.delete(tx.id);
               break;
             default:
               break;
@@ -351,7 +380,8 @@ class SketchPad extends Component {
         this.setState({
           content: newContent || content,
           future: newFuture || future,
-          past: newPast || past
+          past: newPast || past,
+          nodes
         });
         break;
       case COMMANDS.zoomIn:
@@ -430,7 +460,8 @@ class SketchPad extends Component {
       content,
       showPopUp,
       resultText,
-      border
+      border,
+      isEditing
     } = this.state;
 
     const { txFromServer } = this.props;
@@ -453,7 +484,10 @@ class SketchPad extends Component {
         <Diagram
           tool={tool}
           zoomLevel={zoomLevel}
+          isEditing={isEditing}
           content={content}
+          enterEditMode={this.enterEditMode}
+          exitEditMode={this.exitEditMode}
           commitDrawing={this.commitDrawing}
           commitEditing={this.commitEditing}
           updateBorder={this.updateBorder}
