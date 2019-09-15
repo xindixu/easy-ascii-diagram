@@ -51,6 +51,18 @@ const isOverlapped = (targetNode, otherNode) => {
 };
 
 class SketchPad extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { txFromServer } = nextProps;
+    if (!txFromServer || txFromServer === prevState.txFromServer) {
+      return {
+        ...prevState,
+        gotTxFromServer: false
+      };
+    }
+
+    return { ...prevState, txFromServer, gotTxFromServer: true };
+  }
+
   constructor(props) {
     super(props);
 
@@ -70,7 +82,9 @@ class SketchPad extends Component {
         down: 0,
         left: totalColumn,
         right: 0
-      }
+      },
+      txFromServer: null,
+      gotTxFromServer: false
     };
     this.result = null;
     this.nodes = new Map();
@@ -78,6 +92,19 @@ class SketchPad extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.handleResize);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { txFromServer } = this.props;
+    const { content } = this.state;
+    if (txFromServer && txFromServer !== prevProps.txFromServer) {
+      const { transaction: tx } = txFromServer;
+      const ref = React.createRef();
+      const shape = drawShape({ ...tx.newState, ref, key: tx.id });
+      this.nodes.set(tx.id, ref);
+      const newContent = [...content, shape];
+      this.setState({ content: newContent });
+    }
   }
 
   componentWillUnmount() {
@@ -405,6 +432,8 @@ class SketchPad extends Component {
       resultText,
       border
     } = this.state;
+
+    const { txFromServer } = this.props;
     return (
       <React.Fragment>
         <ToolBar
@@ -429,6 +458,7 @@ class SketchPad extends Component {
           commitEditing={this.commitEditing}
           updateBorder={this.updateBorder}
           handleFloatingMenu={this.handleFloatingMenu}
+          txFromServer={txFromServer}
         />
         {/* <Debug>
           {content.map(el =>
@@ -459,8 +489,16 @@ class SketchPad extends Component {
   }
 }
 
+SketchPad.defaultProps = {
+  txFromServer: null
+};
+
 SketchPad.propTypes = {
-  sendToServer: PropTypes.func.isRequired
+  sendToServer: PropTypes.func.isRequired,
+  txFromServer: PropTypes.shape({
+    user: PropTypes.string,
+    transaction: PropTypes.object
+  })
 };
 
 export default withSocket(SketchPad);

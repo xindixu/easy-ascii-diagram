@@ -8,7 +8,8 @@ import {
   drawLine,
   drawArrow,
   drawText,
-  erase
+  erase,
+  drawShape
 } from "../../lib/draw";
 
 import { getX, getY, randomId } from "../../util";
@@ -150,7 +151,7 @@ class Diagram extends Component {
     const { start, end } = this.state;
 
     let shape = null;
-    const id = randomId();
+    const id = randomId("SH");
     const ref = React.createRef();
 
     let x = start.x < end.x ? start.x : end.x;
@@ -267,7 +268,8 @@ class Diagram extends Component {
 }
 
 Diagram.defaultProps = {
-  zoomLevel: 1
+  zoomLevel: 1,
+  txFromServer: null
 };
 Diagram.propTypes = {
   tool: PropTypes.oneOf([...Object.values(TOOLS)]).isRequired,
@@ -276,7 +278,11 @@ Diagram.propTypes = {
   commitDrawing: PropTypes.func.isRequired,
   commitEditing: PropTypes.func.isRequired,
   updateBorder: PropTypes.func.isRequired,
-  handleFloatingMenu: PropTypes.func.isRequired
+  handleFloatingMenu: PropTypes.func.isRequired,
+  txFromServer: PropTypes.shape({
+    user: PropTypes.string,
+    transaction: PropTypes.object
+  })
 };
 
 export default Diagram;
