@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 import { randomId } from "../util";
 
 const settings = {
-  endpoint: "localhost:5000",
+  endpoint: "localhost:8000",
   clientId: randomId("USER"),
   channel: {
     transact: "transact",
@@ -21,6 +21,7 @@ const send = tx => {
 
 const withSocket = WrappedComponent => props => {
   useEffect(() => {
+    console.log(`Welcome, random user ${settings.clientId}`);
     socket.emit(settings.channel.join, { user: settings.clientId });
 
     socket.on(settings.channel.transact, data => {
