@@ -8,3 +8,9 @@ export const randomId = (prefix = "XX") =>
 export const getX = x => Math.ceil(x / GRID_WIDTH);
 
 export const getY = y => Math.ceil(y / GRID_HEIGHT) - 1;
+
+export const selectAndCopy = e => {
+  e.target.focus();
+  e.target.select();
+  document.execCommand("copy");
+};

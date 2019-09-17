@@ -37,6 +37,11 @@ const Button = styled.button`
   &:focus {
     outline: 1px solid ${yellow};
   }
+
+  &:hover {
+    background: ${pink};
+    cursor: pointer;
+  }
 `;
 
 export const IconButton = styled(Button)``;

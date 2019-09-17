@@ -20,6 +20,7 @@ import ToolBar from "../toolbar";
 import Transaction from "../../lib/transaction";
 import { drawShape } from "../../lib/draw";
 import { TextArea, Border, Debug } from "./style";
+import { selectAndCopy } from "../../util";
 
 const calculateTotalGridNumber = zoomLevel => {
   const totalRow = Math.floor(
@@ -27,12 +28,6 @@ const calculateTotalGridNumber = zoomLevel => {
   );
   const totalColumn = Math.floor(window.innerWidth / zoomLevel);
   return { totalRow, totalColumn };
-};
-
-const selectAndCopy = e => {
-  e.target.focus();
-  e.target.select();
-  document.execCommand("copy");
 };
 
 const isOverlapped = (targetNode, otherNode) => {
@@ -226,7 +221,6 @@ class SketchPad extends Component {
     const { past, content } = this.state;
     const shape = content[targetIndex];
     const { props } = shape;
-    console.log(content, shape, props);
 
     this.nodes.delete(props.id);
     this.updateBorder(props);
@@ -327,9 +321,8 @@ class SketchPad extends Component {
           future.unshift(tx);
           switch (tx.type) {
             case TRANSACTION.create:
-              this.commitDeleting(tx.id);
-              // newContent = content.slice(0, -1);
-              // nodes.delete(tx.id);
+              newContent = content.slice(0, -1);
+              this.nodes.delete(tx.id);
               break;
             case TRANSACTION.edit:
               target = this.nodes.get(tx.id);
@@ -404,7 +397,7 @@ class SketchPad extends Component {
 
     switch (e.target.value) {
       case EDITOR_COMMAND.moveUp:
-        for (let i = targetIndex + 1; i < content.length; i++) {
+        for (let i = targetIndex + 1; i < content.length; i += 1) {
           if (isOverlapped(target, content[i])) {
             content.splice(targetIndex, 1);
             content.splice(i, 0, target);
@@ -416,7 +409,7 @@ class SketchPad extends Component {
         }
         break;
       case EDITOR_COMMAND.moveDown:
-        for (let i = targetIndex - 1; i >= 0; i--) {
+        for (let i = targetIndex - 1; i >= 0; i -= 1) {
           if (isOverlapped(target, content[i])) {
             content.splice(targetIndex, 1);
             content.splice(i, 0, target);
@@ -494,16 +487,6 @@ class SketchPad extends Component {
           handleFloatingMenu={this.handleFloatingMenu}
           txFromServer={txFromServer}
         />
-        {/* <Debug>
-          {content.map(el =>
-            Object.keys(el.props).map(key => (
-              <p>
-                {key} : {el.props[key]}
-              </p>
-            ))
-          )}
-        </Debug> */}
-
         {showPopUp ? (
           <PopUp
             closePopUp={this.closePopUp}
