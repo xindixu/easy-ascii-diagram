@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import PopUp from "../../components/pop-up";
+import withSocket from "../../hoc/withSocket";
 import { randomId, selectAndCopy } from "../../util";
 import { Button, Input } from "./styles";
+
+const Collaboration = React.createContext(false);
 
 class Welcome extends Component {
   state = {
@@ -17,9 +20,16 @@ class Welcome extends Component {
     this.setState({ popUpClosed: true });
   };
 
-  createNewRoom = () => {
+  createRoom = () => {
     const newRoom = randomId("RM");
     this.setState({ newRoom });
+    this.props.createRoom(newRoom);
+
+  };
+
+  joinRoom = () => {
+    const { inputRoom } = this.state;
+    this.props.joinRoom(inputRoom);
   };
 
   handleInputChange = e => {
@@ -41,12 +51,14 @@ class Welcome extends Component {
               onChange={e => this.handleInputChange(e)}
             />
 
-            <Button type="submit">Join the Room</Button>
-            <Button type="primary" onClick={this.createNewRoom}>
+            <Button type="primary" onClick={this.joinRoom}>
+              Join the Room
+            </Button>
+            <Button type="primary" onClick={this.createRoom}>
               Create a Room
             </Button>
             {newRoom && (
-              <Input type="string" value={newRoom} onClick={selectAndCopy} />
+              <Input type="string" value={newRoom} onClick={selectAndCopy} readOnly/>
             )}
           </PopUp>
         )}
@@ -55,6 +67,9 @@ class Welcome extends Component {
   }
 }
 
-Welcome.propTypes = {};
+Welcome.propTypes = {
+  joinRoom: PropTypes.func.isRequired,
+  createRoom: PropTypes.func.isRequired,
+};
 
-export default Welcome;
+export default withSocket(Welcome);
