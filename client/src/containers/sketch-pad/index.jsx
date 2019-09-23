@@ -194,7 +194,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
-      this.props.sendToServer(tx);
+      this.props.sendTxToServer(tx);
     }
   };
 
@@ -213,7 +213,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
-      this.props.sendToServer(tx);
+      this.props.sendTxToServer(tx);
     }
   };
 
@@ -243,7 +243,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
-      this.props.sendToServer(tx);
+      this.props.sendTxToServer(tx);
     }
   };
 
@@ -511,7 +511,7 @@ SketchPad.defaultProps = {
 };
 
 SketchPad.propTypes = {
-  sendToServer: PropTypes.func.isRequired,
+  sendTxToServer: PropTypes.func.isRequired,
   txFromServer: PropTypes.shape({
     user: PropTypes.string,
     transaction: PropTypes.object

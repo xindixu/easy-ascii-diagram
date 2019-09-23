@@ -7,15 +7,33 @@ const settings = {
   clientId: randomId("USER"),
   channel: {
     transact: "transact",
-    join: "join"
+    logIn: "logIn",
+    joinRoom: "joinRoom",
+    createRoom: "createRoom"
   }
 };
 
 const socket = socketIOClient(settings.endpoint);
-const send = tx => {
+
+const sendTxToServer = tx => {
   socket.emit(settings.channel.transact, {
     user: settings.clientId,
     transaction: tx
+  });
+};
+
+const createRoom = roomId => {
+  console.log(roomId)
+  socket.emit(settings.channel.createRoom, {
+    user: settings.clientId,
+    room: roomId
+  });
+};
+
+const joinRoom = roomId => {
+  socket.emit(settings.channel.joinRoom, {
+    user: settings.clientId,
+    room: roomId
   });
 };
 
@@ -24,16 +42,22 @@ const withSocket = WrappedComponent => props => {
 
   useEffect(() => {
     console.log(`Welcome, random user ${settings.clientId}`);
-    socket.emit(settings.channel.join, { user: settings.clientId });
+    socket.emit(settings.channel.logIn, { user: settings.clientId });
 
-    socket.on(settings.channel.join, data => {
-      console.log(data);
-    });
     socket.on(settings.channel.transact, data => {
       setTx(data);
     });
   }, []);
-  return <WrappedComponent sendToServer={send} txFromServer={tx} {...props} />;
+  return (
+    <WrappedComponent
+      sendTxToServer={sendTxToServer}
+      txFromServer={tx}
+      joinRoom={joinRoom}
+      createRoom={createRoom}
+
+      {...props}
+    />
+  );
 };
 
 export default withSocket;

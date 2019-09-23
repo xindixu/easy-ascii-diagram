@@ -15,9 +15,11 @@ const io = socketIO(server)
 
 io.on('connect', onConnect)
 
-const channel= {
+const channel = {
   transact: "transact",
-  join: "join"
+  logIn: "logIn",
+  joinRoom: "joinRoom",
+  createRoom: "createRoom"
 }
 
 function onConnect(socket){
@@ -30,10 +32,21 @@ function onConnect(socket){
     socket.broadcast.emit(channel.transact, data )
   })
 
-  socket.on(channel.join, (data) => {
-    console.log(`${data.user} just joined `)
+  socket.on(channel.logIn, (data) => {
+    console.log(`${data.user} just log in `)
     socket.broadcast.emit(channel.join, data )
   })
+
+  socket.on(channel.createRoom, (data) => {
+    console.log(`create room: ${data.roomId} `)
+    socket.join(data.roomId)
+  })
+
+  socket.on(channel.joinRoom, (data) => {
+    console.log(`join room: ${data.roomId} `)
+    socket.join(data.roomId)
+  })
+
 
   socket.on('disconnect', () => {
     console.log('Disconnected')
