@@ -6,7 +6,6 @@ const {
   yellow,
   spacerSm,
   spacerMd,
-  spacerXs,
   radiusSm,
   sizeXl,
   sizeXs

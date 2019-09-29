@@ -26,25 +26,27 @@ function onConnect(socket){
   console.log('Connected')
   socket.emit('Hello!, you just joined the party')
 
-
-  socket.on(channel.transact, (data) => {
-    console.log(`${data.user}: `, data.transaction)
-    socket.broadcast.emit(channel.transact, data )
-  })
-
   socket.on(channel.logIn, (data) => {
     console.log(`${data.user} just log in `)
-    socket.broadcast.emit(channel.join, data )
+    socket.broadcast.emit(channel.join, data)
+  })
+
+  socket.on(channel.transact, (data) => {
+
+    const {room} = data
+    socket.broadcast.to(room).emit(channel.transact, data)
   })
 
   socket.on(channel.createRoom, (data) => {
-    console.log(`create room: ${data.roomId} `)
-    socket.join(data.roomId)
+    const {room, user} = data
+    console.log(`${user} created room: ${room}`)
+    socket.join(data.room)
   })
 
   socket.on(channel.joinRoom, (data) => {
-    console.log(`join room: ${data.roomId} `)
-    socket.join(data.roomId)
+    const {room, user} = data
+    socket.join(room)
+    socket.broadcast.to(room).emit(`${user} joined room: ${room}`)
   })
 
 

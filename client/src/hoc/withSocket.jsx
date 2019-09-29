@@ -5,6 +5,7 @@ import { randomId } from "../util";
 const settings = {
   endpoint: "localhost:8000",
   clientId: randomId("USER"),
+  room: null,
   channel: {
     transact: "transact",
     logIn: "logIn",
@@ -18,12 +19,13 @@ const socket = socketIOClient(settings.endpoint);
 const sendTxToServer = tx => {
   socket.emit(settings.channel.transact, {
     user: settings.clientId,
+    room: settings.room,
     transaction: tx
   });
 };
 
 const createRoom = roomId => {
-  console.log(roomId)
+  settings.room = roomId;
   socket.emit(settings.channel.createRoom, {
     user: settings.clientId,
     room: roomId
@@ -31,10 +33,12 @@ const createRoom = roomId => {
 };
 
 const joinRoom = roomId => {
-  socket.emit(settings.channel.joinRoom, {
+  settings.room = roomId;
+  const data = {
     user: settings.clientId,
     room: roomId
-  });
+  };
+  socket.emit(settings.channel.joinRoom, data);
 };
 
 const withSocket = WrappedComponent => props => {
@@ -43,7 +47,6 @@ const withSocket = WrappedComponent => props => {
   useEffect(() => {
     console.log(`Welcome, random user ${settings.clientId}`);
     socket.emit(settings.channel.logIn, { user: settings.clientId });
-
     socket.on(settings.channel.transact, data => {
       setTx(data);
     });
@@ -54,7 +57,6 @@ const withSocket = WrappedComponent => props => {
       txFromServer={tx}
       joinRoom={joinRoom}
       createRoom={createRoom}
-
       {...props}
     />
   );

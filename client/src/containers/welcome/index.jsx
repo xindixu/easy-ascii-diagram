@@ -24,12 +24,12 @@ class Welcome extends Component {
     const newRoom = randomId("RM");
     this.setState({ newRoom });
     this.props.createRoom(newRoom);
-
   };
 
   joinRoom = () => {
     const { inputRoom } = this.state;
     this.props.joinRoom(inputRoom);
+    this.setState({ popUpClosed: true });
   };
 
   handleInputChange = e => {
@@ -50,7 +50,6 @@ class Welcome extends Component {
               value={inputRoom}
               onChange={e => this.handleInputChange(e)}
             />
-
             <Button type="primary" onClick={this.joinRoom}>
               Join the Room
             </Button>
@@ -58,7 +57,12 @@ class Welcome extends Component {
               Create a Room
             </Button>
             {newRoom && (
-              <Input type="string" value={newRoom} onClick={selectAndCopy} readOnly/>
+              <Input
+                type="string"
+                value={newRoom}
+                onClick={selectAndCopy}
+                readOnly
+              />
             )}
           </PopUp>
         )}
@@ -69,7 +73,7 @@ class Welcome extends Component {
 
 Welcome.propTypes = {
   joinRoom: PropTypes.func.isRequired,
-  createRoom: PropTypes.func.isRequired,
+  createRoom: PropTypes.func.isRequired
 };
 
 export default withSocket(Welcome);
