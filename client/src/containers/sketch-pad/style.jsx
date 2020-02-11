@@ -14,7 +14,7 @@ export const Border = styled.div`
   ${props =>
     `
     left: ${props.left * GRID_WIDTH}px;
-    top: ${(props.up + 1)  * GRID_HEIGHT}px;
+    top: ${(props.up + 1) * GRID_HEIGHT}px;
     width: ${(props.right - props.left) * GRID_WIDTH}px;
     height: ${(props.down - props.up + 1) * GRID_HEIGHT}px;
   `}

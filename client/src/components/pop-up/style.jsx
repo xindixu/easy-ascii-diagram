@@ -1,7 +1,18 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
 
-const { pink, borderWidth, radiusMd, spacer } = styleSettings;
+const { pink, gray, borderWidth, radiusMd, spacer, zUI } = styleSettings;
+
+export const Backdrop = styled.div`
+  background: ${gray}99;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  z-index: ${zUI};
+`;
 
 export const Container = styled.div`
   background: white;
@@ -15,7 +26,7 @@ export const Container = styled.div`
   width: auto;
   height: auto;
   transform: translate(-50%, -50%);
-  z-index: 100;
+  z-index: ${zUI};
 `;
 
 export const Button = styled.button`
