@@ -4,14 +4,7 @@ import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
 
 const { yellow, pink, borderWidth, zTop, zBase } = styleSettings;
 
-const Base = styled.code.attrs(({ x, y, editing }) => ({
-  style: {
-    left: x * GRID_WIDTH,
-    top: y * GRID_HEIGHT,
-    zIndex: editing ? zTop : zBase,
-    opacity: editing ? 0.8 : 1
-  }
-}))`
+const Base = styled.code`
   user-select: none;
   white-space: pre;
   display: inline;
@@ -21,6 +14,13 @@ const Base = styled.code.attrs(({ x, y, editing }) => ({
   margin: 0;
   padding: 0;
   position: absolute;
+
+  ${({ x, y, editing }) =>
+    ` left: ${x * GRID_WIDTH}px;
+      top: ${y * GRID_HEIGHT}px;
+      zIndex: ${editing ? zTop : zBase};
+      opacity: ${editing ? 0.5 : 1};
+  `}
 `;
 
 export const WithGrid = styled(Base)`

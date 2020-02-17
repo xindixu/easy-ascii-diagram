@@ -81,5 +81,7 @@ export const EDITOR_COMMAND = {
 export const TRANSACTION = {
   create: "CREATE",
   delete: "DELETE",
-  edit: "EDIT"
+  edit: "EDIT",
+  moveUp: "MOVE_UP",
+  moveDown: "MOVE_DOWN"
 };

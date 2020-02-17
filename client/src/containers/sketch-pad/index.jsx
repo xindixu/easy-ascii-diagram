@@ -107,9 +107,15 @@ class SketchPad extends Component {
             this.commitEditing(target.current, tx.oldState, tx.newState, false);
           }
           break;
+
         case TRANSACTION.delete:
-          const index = content.findIndex(el => el.props.id === tx.id);
-          this.commitDeleting(index, false);
+          this.commitDeleting(tx.id, false);
+          break;
+        case TRANSACTION.moveUp:
+          this.commitMoveUp(tx.id, false);
+          break;
+        case TRANSACTION.moveDown:
+          this.commitMoveDown(tx.id, false);
           break;
         default:
           break;
@@ -217,8 +223,9 @@ class SketchPad extends Component {
     }
   };
 
-  commitDeleting = (targetIndex, log = true) => {
+  commitDeleting = (id, log = true) => {
     const { past, content } = this.state;
+    const targetIndex = content.findIndex(el => el.key === id);
     const shape = content[targetIndex];
     const { props } = shape;
     const { collaboration, sendTxToServer } = this.props;
@@ -241,6 +248,92 @@ class SketchPad extends Component {
         props,
         null
       );
+      this.setState({
+        past: [...past, tx]
+      });
+      sendTxToServer(tx);
+    }
+  };
+
+  commitMoveUp = (id, log = true) => {
+    const { content, past } = this.state;
+    const targetIndex = content.findIndex(el => el.key === id);
+    const target = content[targetIndex];
+
+    const { collaboration, sendTxToServer } = this.props;
+
+    // [..., targetIndex, ..., overlapElementIndex, ...]
+    const overlapElementIndex = findIndex(
+      content,
+      element => {
+        if (element.key === id) {
+          return false;
+        }
+        return !!isOverlapped(target, element);
+      },
+      targetIndex
+    );
+
+    if (overlapElementIndex < 0) {
+      return;
+    }
+    // [..., ..., overlapElementIndex, targetIndex, ...]
+    const newContent = [
+      ...content.slice(0, targetIndex),
+      ...content.slice(targetIndex + 1, overlapElementIndex),
+      content[overlapElementIndex],
+      target,
+      ...content.slice(overlapElementIndex + 1)
+    ];
+    this.setState({
+      content: newContent
+    });
+
+    if (collaboration && log) {
+      const tx = new Transaction(TRANSACTION.moveUp, id, null, null, null);
+      this.setState({
+        past: [...past, tx]
+      });
+      sendTxToServer(tx);
+    }
+  };
+
+  commitMoveDown = (id, log = true) => {
+    const { content, past } = this.state;
+    const targetIndex = content.findIndex(el => el.key === id);
+    const target = content[targetIndex];
+    const { collaboration, sendTxToServer } = this.props;
+
+    // [..., overlapElementIndex, ..., targetIndex, ...]
+    const overlapElementIndex = findLastIndex(
+      content,
+      element => {
+        if (element.key === id) {
+          return false;
+        }
+        return !!isOverlapped(target, element);
+      },
+      targetIndex
+    );
+
+    if (overlapElementIndex < 0) {
+      return;
+    }
+
+    // [..., targetIndex, overlapElementIndex, ..., ...]
+    const newContent = [
+      ...content.slice(0, overlapElementIndex),
+      target,
+      content[overlapElementIndex],
+      ...content.slice(overlapElementIndex + 1, targetIndex),
+      ...content.slice(targetIndex + 1)
+    ];
+    this.setState({
+      content: newContent
+    });
+
+    if (collaboration && log) {
+      const tx = new Transaction(TRANSACTION.moveDown, id, null, null, null);
       this.setState({
         past: [...past, tx]
       });
@@ -393,75 +486,18 @@ class SketchPad extends Component {
 
   handleFloatingMenu = (e, id) => {
     e.stopPropagation();
-    const { content } = this.state;
-    const targetIndex = content.findIndex(el => el.key === id);
-    const target = content[targetIndex];
 
     switch (e.target.value) {
       case EDITOR_COMMAND.moveUp:
-        {
-          // [..., targetIndex, ..., overlapElementIndex, ...]
-          const overlapElementIndex = findIndex(
-            content,
-            element => {
-              if (element.key === id) {
-                return false;
-              }
-              return !!isOverlapped(target, element);
-            },
-            targetIndex
-          );
-
-          if (overlapElementIndex < 0) {
-            return;
-          }
-          // [..., ..., overlapElementIndex, targetIndex, ...]
-          const newContent = [
-            ...content.slice(0, targetIndex),
-            ...content.slice(targetIndex + 1, overlapElementIndex),
-            content[overlapElementIndex],
-            target,
-            ...content.slice(overlapElementIndex + 1)
-          ];
-          this.setState({
-            content: newContent
-          });
-        }
+        this.commitMoveUp(id, true);
         break;
 
       case EDITOR_COMMAND.moveDown:
-        {
-          // [..., overlapElementIndex, ..., targetIndex, ...]
-          const overlapElementIndex = findLastIndex(
-            content,
-            element => {
-              if (element.key === id) {
-                return false;
-              }
-              return !!isOverlapped(target, element);
-            },
-            targetIndex
-          );
-
-          if (overlapElementIndex < 0) {
-            return;
-          }
-
-          // [..., targetIndex, overlapElementIndex, ..., ...]
-          const newContent = [
-            ...content.slice(0, overlapElementIndex),
-            target,
-            content[overlapElementIndex],
-            ...content.slice(overlapElementIndex + 1, targetIndex),
-            ...content.slice(targetIndex + 1)
-          ];
-          this.setState({
-            content: newContent
-          });
-        }
+        this.commitMoveDown(id, true);
         break;
+
       case EDITOR_COMMAND.delete:
-        this.commitDeleting(targetIndex);
+        this.commitDeleting(id, true);
         break;
       default:
         break;

@@ -22,6 +22,16 @@ class Transaction {
           throw new Error("Create should receive new props but not old props");
         }
         break;
+      case TRANSACTION.moveDown:
+        if (id === null) {
+          throw new Error("Move down should receive target id");
+        }
+        break;
+      case TRANSACTION.moveUp:
+        if (id === null) {
+          throw new Error("Move up should receive target id");
+        }
+        break;
       default:
         break;
     }
