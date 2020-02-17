@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { debounce } from "lodash";
+import { debounce, findIndex, findLastIndex } from "lodash";
 
 import {
   TOOLS,
@@ -33,6 +33,7 @@ const calculateTotalGridNumber = zoomLevel => {
 const isOverlapped = (targetNode, otherNode) => {
   const { state: target } = targetNode.ref.current;
   const { state: other } = otherNode.ref.current;
+
   if (
     target.x + target.width >= other.x &&
     target.x <= other.x + other.width &&
@@ -391,33 +392,73 @@ class SketchPad extends Component {
   };
 
   handleFloatingMenu = (e, id) => {
+    e.stopPropagation();
     const { content } = this.state;
     const targetIndex = content.findIndex(el => el.key === id);
     const target = content[targetIndex];
 
     switch (e.target.value) {
       case EDITOR_COMMAND.moveUp:
-        for (let i = targetIndex + 1; i < content.length; i += 1) {
-          if (isOverlapped(target, content[i])) {
-            content.splice(targetIndex, 1);
-            content.splice(i, 0, target);
-            this.setState({
-              content
-            });
-            break;
+        {
+          // [..., targetIndex, ..., overlapElementIndex, ...]
+          const overlapElementIndex = findIndex(
+            content,
+            element => {
+              if (element.key === id) {
+                return false;
+              }
+              return !!isOverlapped(target, element);
+            },
+            targetIndex
+          );
+
+          if (overlapElementIndex < 0) {
+            return;
           }
+          // [..., ..., overlapElementIndex, targetIndex, ...]
+          const newContent = [
+            ...content.slice(0, targetIndex),
+            ...content.slice(targetIndex + 1, overlapElementIndex),
+            content[overlapElementIndex],
+            target,
+            ...content.slice(overlapElementIndex + 1)
+          ];
+          this.setState({
+            content: newContent
+          });
         }
         break;
+
       case EDITOR_COMMAND.moveDown:
-        for (let i = targetIndex - 1; i >= 0; i -= 1) {
-          if (isOverlapped(target, content[i])) {
-            content.splice(targetIndex, 1);
-            content.splice(i, 0, target);
-            this.setState({
-              content
-            });
-            break;
+        {
+          // TODO: this is just freaking broken!!!!!
+          // [..., overlapElementIndex, ..., targetIndex, ...]
+          const overlapElementIndex = findLastIndex(
+            content,
+            element => {
+              if (element.key === id) {
+                return false;
+              }
+              return !!isOverlapped(target, element);
+            },
+            targetIndex
+          );
+
+          if (overlapElementIndex < 0) {
+            return;
           }
+
+          // [..., targetIndex, overlapElementIndex, ..., ...]
+          const newContent = [
+            ...content.slice(0, overlapElementIndex),
+            target,
+            content[overlapElementIndex],
+            ...content.slice(overlapElementIndex + 1, targetIndex),
+            ...content.slice(targetIndex + 1)
+          ];
+          this.setState({
+            content: newContent
+          });
         }
         break;
       case EDITOR_COMMAND.delete:
