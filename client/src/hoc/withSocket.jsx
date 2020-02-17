@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import socketIOClient from "socket.io-client";
+import { isEqual } from "lodash";
 import { randomId } from "../util";
 
 const settings = {
@@ -43,14 +45,26 @@ const joinRoom = roomId => {
 
 const withSocket = WrappedComponent => props => {
   const [tx, setTx] = useState(null);
+  const [prevTx, setPrevTx] = useState(null);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const { collaboration } = props;
 
   useEffect(() => {
-    console.log(`Welcome, random user ${settings.clientId}`);
-    socket.emit(settings.channel.logIn, { user: settings.clientId });
-    socket.on(settings.channel.transact, data => {
-      setTx(data);
-    });
-  }, []);
+    if (collaboration) {
+      console.log(`Welcome, random user ${settings.clientId}`);
+      socket.emit(settings.channel.logIn, { user: settings.clientId });
+      socket.on(settings.channel.transact, data => {
+        const { user, transaction } = data;
+        if (!isEqual(data, prevTx) && user !== settings.clientId) {
+          setTx(transaction);
+        } else {
+          setTx(null);
+        }
+      });
+    }
+    return () => {};
+  }, [collaboration]);
+
   return (
     <WrappedComponent
       sendTxToServer={sendTxToServer}
@@ -62,4 +76,7 @@ const withSocket = WrappedComponent => props => {
   );
 };
 
+withSocket.propTypes = {
+  collaboration: PropTypes.bool.isRequired
+};
 export default withSocket;

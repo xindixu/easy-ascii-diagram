@@ -32,6 +32,7 @@ function onConnect(socket){
   })
 
   socket.on(channel.transact, (data) => {
+    console.log(`transact: ${data}`)
 
     const {room} = data
     socket.broadcast.to(room).emit(channel.transact, data)

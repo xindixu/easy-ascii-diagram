@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { debounce, findIndex, findLastIndex } from "lodash";
+import { debounce, isEqual, findIndex, findLastIndex } from "lodash";
 
 import {
   TOOLS,
@@ -78,32 +78,27 @@ class SketchPad extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { txFromServer } = this.props;
+    const { txFromServer: tx } = this.props;
 
     const { content } = this.state;
-    if (txFromServer && txFromServer !== prevProps.txFromServer) {
-      const { transaction: tx } = txFromServer;
+    if (!isEqual(prevProps.txFromServer, tx)) {
       switch (tx.type) {
         case TRANSACTION.create:
           const ref = React.createRef();
-
           const sharedProps = {
             enterEditMode: this.enterEditMode,
             exitEditMode: this.exitEditMode,
             commitEditing: this.commitEditing,
             handleFloatingMenu: this.handleFloatingMenu
           };
-
           const shape = drawShape({
             ...sharedProps,
             ...tx.newState,
             ref,
             key: tx.id
           });
-
           const drawing = { shape, id: tx.id, ref };
           this.commitDrawing(drawing, false);
-
           break;
         case TRANSACTION.edit:
           {
@@ -177,6 +172,8 @@ class SketchPad extends Component {
     const { content, past } = this.state;
     const { shape, id, ref } = drawing;
     const { props } = shape;
+    const { collaboration, sendTxToServer } = this.props;
+
     this.nodes.set(id, ref);
 
     this.updateBorder(props);
@@ -184,7 +181,7 @@ class SketchPad extends Component {
       content: [...content, shape]
     });
 
-    if (log) {
+    if (collaboration && log) {
       const tx = new Transaction(
         TRANSACTION.create,
         id,
@@ -195,15 +192,17 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
-      this.props.sendTxToServer(tx);
+      sendTxToServer(tx);
     }
   };
 
   commitEditing = (target, oldState, newState, log = true) => {
     const { id } = newState;
     const { past } = this.state;
+    const { collaboration, sendTxToServer } = this.props;
     this.updateBorder(newState);
-    if (log) {
+
+    if (collaboration && log) {
       const tx = new Transaction(
         TRANSACTION.edit,
         id,
@@ -214,7 +213,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
-      this.props.sendTxToServer(tx);
+      sendTxToServer(tx);
     }
   };
 
@@ -222,6 +221,7 @@ class SketchPad extends Component {
     const { past, content } = this.state;
     const shape = content[targetIndex];
     const { props } = shape;
+    const { collaboration, sendTxToServer } = this.props;
 
     this.nodes.delete(props.id);
     this.updateBorder(props);
@@ -233,7 +233,7 @@ class SketchPad extends Component {
       ]
     });
 
-    if (log) {
+    if (collaboration && log) {
       const tx = new Transaction(
         TRANSACTION.delete,
         props.id,
@@ -244,7 +244,7 @@ class SketchPad extends Component {
       this.setState({
         past: [...past, tx]
       });
-      this.props.sendTxToServer(tx);
+      sendTxToServer(tx);
     }
   };
 
@@ -431,7 +431,6 @@ class SketchPad extends Component {
 
       case EDITOR_COMMAND.moveDown:
         {
-          // TODO: this is just freaking broken!!!!!
           // [..., overlapElementIndex, ..., targetIndex, ...]
           const overlapElementIndex = findLastIndex(
             content,
@@ -556,7 +555,8 @@ SketchPad.propTypes = {
   txFromServer: PropTypes.shape({
     user: PropTypes.string,
     transaction: PropTypes.object
-  })
+  }),
+  collaboration: PropTypes.bool.isRequired
 };
 
 export default withSocket(SketchPad);

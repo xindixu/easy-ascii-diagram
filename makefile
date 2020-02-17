@@ -7,5 +7,5 @@ start-cat:
 start-client:
 	make -j 2 start-bob start-cat
 
-start-erver: 
+start-server: 
 	node server.js

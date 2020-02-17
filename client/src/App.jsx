@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import SketchPad from "./containers/sketch-pad";
 import Welcome from "./containers/welcome";
 
 function App() {
+  const [collaboration, setCollaboration] = useState(false);
   return (
     <>
-      <SketchPad />
-      <Welcome  />
+      <SketchPad collaboration={collaboration} />
+      <Welcome setCollaboration={setCollaboration} />
     </>
   );
 }

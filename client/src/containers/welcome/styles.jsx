@@ -11,7 +11,14 @@ const {
   sizeXs
 } = styleSettings;
 
-export const Button = styled.button`
+export const Button = styled.button.attrs(({ disabled }) => ({
+  disabled
+}))`
+  ${({ disabled }) =>
+    disabled &&
+    `
+  opacity: 0.8
+`}
   display: block;
   padding: ${spacerSm};
   margin: ${spacerMd} auto;

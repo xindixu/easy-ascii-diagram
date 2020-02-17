@@ -23,8 +23,6 @@ function editable(WrappedComponent) {
       };
     }
 
-    componentDidMount() {}
-
     componentWillUnmount() {
       window.removeEventListener("click", this.handleClickOutside);
       const { exitEditMode } = this.props;
@@ -68,10 +66,10 @@ function editable(WrappedComponent) {
     };
 
     handleOnDoubleClick = e => {
+      e.stopPropagation();
       const { x, y, width, height } = e.target.getBoundingClientRect();
       const { enterEditMode } = this.props;
       const { horizontal, vertical } = this.getResizeDirection();
-
       this.setState({
         editing: true,
         x: getX(x),

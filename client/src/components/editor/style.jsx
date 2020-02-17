@@ -15,18 +15,18 @@ const cursor = {
   [EDITOR.bottomRight]: "nwse-resize"
 };
 
-export const Wrapper = styled.div.attrs(({ x, y, width, height }) => ({
-  style: {
-    left: x * GRID_WIDTH,
-    top: y * GRID_HEIGHT,
-    width: width * GRID_WIDTH,
-    height: height * GRID_HEIGHT
-  }
-}))`
+export const Wrapper = styled.div`
   position: absolute;
   outline: 2px solid ${blue};
   z-index: ${zToppest};
   cursor: move;
+
+  ${({ x, y, width, height }) => `
+    left: ${x * GRID_WIDTH}px;
+    top: ${y * GRID_HEIGHT}px;
+    width: ${width * GRID_WIDTH}px;
+    height:  ${height * GRID_HEIGHT}px;
+  `}
 `;
 
 export const EditArea = styled.div`
