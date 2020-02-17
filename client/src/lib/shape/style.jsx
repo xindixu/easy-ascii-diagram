@@ -15,7 +15,7 @@ const Base = styled.code.attrs(({ x, y, editing }) => ({
   user-select: none;
   white-space: pre;
   display: inline;
-  font-family: Courier, monospace;
+  font-family: monospace;
   font-size: ${GRID_WIDTH / 0.6}px;
   line-height: ${GRID_HEIGHT * 1.03}px;
   margin: 0;

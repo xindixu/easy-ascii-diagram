@@ -4,8 +4,8 @@ start-bob:
 start-cat: 
 	cd client && yarn run start-cat
 
-client:
+start-client:
 	make -j 2 start-bob start-cat
 
-server: 
+start-erver: 
 	node server.js
