@@ -1,6 +1,7 @@
 const express = require('express')
 const http = require('http')
 const socketIO = require('socket.io')
+const util = require('util')
 
 // our localhost port
 const port = 8000
@@ -32,8 +33,7 @@ function onConnect(socket){
   })
 
   socket.on(channel.transact, (data) => {
-    console.log(`transact: ${data}`)
-
+    console.log(util.inspect(data))
     const {room} = data
     socket.broadcast.to(room).emit(channel.transact, data)
   })

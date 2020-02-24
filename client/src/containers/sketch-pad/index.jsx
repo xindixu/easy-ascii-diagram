@@ -187,17 +187,18 @@ class SketchPad extends Component {
       content: [...content, shape]
     });
 
+    const tx = new Transaction(
+      TRANSACTION.create,
+      id,
+      props.shape,
+      null,
+      props
+    );
+    this.setState({
+      past: [...past, tx]
+    });
+
     if (collaboration && log) {
-      const tx = new Transaction(
-        TRANSACTION.create,
-        id,
-        props.shape,
-        null,
-        props
-      );
-      this.setState({
-        past: [...past, tx]
-      });
       sendTxToServer(tx);
     }
   };
@@ -208,17 +209,18 @@ class SketchPad extends Component {
     const { collaboration, sendTxToServer } = this.props;
     this.updateBorder(newState);
 
+    const tx = new Transaction(
+      TRANSACTION.edit,
+      id,
+      target.shape,
+      oldState,
+      newState
+    );
+    this.setState({
+      past: [...past, tx]
+    });
+
     if (collaboration && log) {
-      const tx = new Transaction(
-        TRANSACTION.edit,
-        id,
-        target.shape,
-        oldState,
-        newState
-      );
-      this.setState({
-        past: [...past, tx]
-      });
       sendTxToServer(tx);
     }
   };
@@ -240,17 +242,17 @@ class SketchPad extends Component {
       ]
     });
 
+    const tx = new Transaction(
+      TRANSACTION.delete,
+      props.id,
+      props.shape,
+      props,
+      null
+    );
+    this.setState({
+      past: [...past, tx]
+    });
     if (collaboration && log) {
-      const tx = new Transaction(
-        TRANSACTION.delete,
-        props.id,
-        props.shape,
-        props,
-        null
-      );
-      this.setState({
-        past: [...past, tx]
-      });
       sendTxToServer(tx);
     }
   };
@@ -289,11 +291,12 @@ class SketchPad extends Component {
       content: newContent
     });
 
+    const tx = new Transaction(TRANSACTION.moveUp, id, null, null, null);
+    this.setState({
+      past: [...past, tx]
+    });
+
     if (collaboration && log) {
-      const tx = new Transaction(TRANSACTION.moveUp, id, null, null, null);
-      this.setState({
-        past: [...past, tx]
-      });
       sendTxToServer(tx);
     }
   };
@@ -412,7 +415,7 @@ class SketchPad extends Component {
         tx = past[past.length - 1];
         newPast = past.slice(0, -1);
         if (tx) {
-          future.unshift(tx);
+          newFuture = [tx, ...future];
           switch (tx.type) {
             case TRANSACTION.create:
               newContent = content.slice(0, -1);
@@ -443,8 +446,7 @@ class SketchPad extends Component {
         tx = future[0];
         newFuture = future.slice(1);
         if (tx) {
-          past.push(tx);
-
+          newPast = [...past, tx];
           switch (tx.type) {
             case TRANSACTION.create:
               const ref = React.createRef();
