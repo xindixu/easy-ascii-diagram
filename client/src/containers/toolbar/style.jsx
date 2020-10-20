@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { TOOLBAR_HEIGHT } from "../../constants";
 import { styleSettings } from "../../assets/styles/settings";
 
-const { spacerXs, spacerSm, radiusSm, gray, yellow, pink } = styleSettings;
+const { spacerXs, spacerSm, radiusSm, gray,blue, yellow, pink } = styleSettings;
 
 export const Wrapper = styled.nav`
   z-index: 100;
@@ -32,7 +32,7 @@ const Button = styled.button`
   padding: ${spacerSm};
   margin: ${spacerXs};
   border-radius: ${radiusSm};
-  background: ${props => (props.active ? pink : "auto")};
+  background: ${props => (props.active ? pink : blue)};
 
   &:focus {
     outline: 1px solid ${yellow};

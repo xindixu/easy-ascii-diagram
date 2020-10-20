@@ -11,7 +11,7 @@ export const GridBackground = styled.div`
   left: 0;
   border-right: ${pink} solid ${borderWidth};
   border-bottom: ${pink} solid ${borderWidth};
-  ${props => `background-size: ${props.width}px ${props.height}px`}
+  ${props => `background-size: ${props.width}px ${props.height}px;`}
   height: calc(100vh - ${TOOLBAR_HEIGHT}px);
   width: 100vw;
   background-color: white;

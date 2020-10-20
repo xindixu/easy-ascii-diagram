@@ -15,7 +15,7 @@ export const Button = styled.button`
   ${({ disabled }) =>
     disabled &&
     `
-    opacity: 0.8
+    opacity: 0.8;
   `}
   display: block;
   padding: ${spacerSm};
