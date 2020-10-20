@@ -151,9 +151,20 @@ class Shape extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { width, height, direction, length, content, shape } = nextProps;
+    const {
+      width,
+      height,
+      direction,
+      length,
+      content,
+      shape,
+      zoomLevel
+    } = nextProps;
+    console.log(zoomLevel);
+
     if (
-      (prevState.direction === direction && prevState.length === length) ||
+      (prevState.zoomLevel === zoomLevel &&
+        (prevState.direction === direction && prevState.length === length)) ||
       (prevState.width === width && prevState.height === height)
     )
       return { ...nextProps };
@@ -169,12 +180,22 @@ class Shape extends Component {
 
   constructor(props) {
     super(props);
-    const { width, height, direction, length, content, shape } = this.props;
+    const {
+      width,
+      height,
+      direction,
+      length,
+      content,
+      shape,
+      zoomLevel
+    } = this.props;
 
+    console.log(this.props.zoomLevel);
     this.state = {
       ...this.props,
       width,
       height,
+      zoomLevel,
       text: Shape.convert(width, height, direction, length, content, shape)
     };
   }

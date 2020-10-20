@@ -85,3 +85,5 @@ export const TRANSACTION = {
   moveUp: "MOVE_UP",
   moveDown: "MOVE_DOWN"
 };
+
+export const ZOOM_LEVEL_BASE = 1;

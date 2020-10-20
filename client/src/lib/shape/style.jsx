@@ -9,17 +9,17 @@ const Base = styled.code`
   white-space: pre;
   display: inline;
   font-family: monospace;
-  font-size: ${GRID_WIDTH / 0.6}px;
-  line-height: ${GRID_HEIGHT * 1.03}px;
   margin: 0;
   padding: 0;
   position: absolute;
 
-  ${({ x, y, editing }) =>
-    ` left: ${x * GRID_WIDTH}px;
-      top: ${y * GRID_HEIGHT}px;
+  ${({ x, y, editing, zoomLevel }) =>
+    ` left: ${(x * GRID_WIDTH) / zoomLevel}px;
+      top: ${(y * GRID_HEIGHT) / zoomLevel}px;
       zIndex: ${editing ? zTop : zBase};
       opacity: ${editing ? 0.5 : 1};
+      font-size: ${GRID_WIDTH / 0.6 / zoomLevel}px;
+      line-height: ${(GRID_HEIGHT * 1.03) / zoomLevel}px;
   `}
 `;
 

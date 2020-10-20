@@ -10,7 +10,8 @@ import {
   TOOLBAR_HEIGHT,
   EDITOR_COMMAND,
   TRANSACTION,
-  DIRECTION_HORIZONTAL
+  DIRECTION_HORIZONTAL,
+  ZOOM_LEVEL_BASE
 } from "../../constants";
 import withSocket from "../../hoc/withSocket";
 import Grid from "../../components/grid";
@@ -49,12 +50,10 @@ const isOverlapped = (targetNode, otherNode) => {
 class SketchPad extends Component {
   constructor(props) {
     super(props);
-
-    const zoomLevel = 1;
-    const { totalRow, totalColumn } = calculateTotalGridNumber(zoomLevel);
+    const { totalRow, totalColumn } = calculateTotalGridNumber(ZOOM_LEVEL_BASE);
 
     this.state = {
-      zoomLevel,
+      zoomLevel: ZOOM_LEVEL_BASE,
       tool: TOOLS.arrow,
       isEditing: false,
       content: [],
@@ -171,6 +170,10 @@ class SketchPad extends Component {
   };
 
   setZoomLevel = zoom => {
+    if (zoom < 1 || zoom > 5) {
+      console.error("ZoomLevel must be in range of 1-4");
+      return;
+    }
     this.setState({ zoomLevel: zoom });
   };
 
@@ -402,7 +405,7 @@ class SketchPad extends Component {
   };
 
   handleCommand = e => {
-    const { content, future, past } = this.state;
+    const { content, future, past, zoomLevel } = this.state;
     let shape;
     let tx;
     let target;
@@ -474,8 +477,10 @@ class SketchPad extends Component {
         });
         break;
       case COMMANDS.zoomIn:
+        this.setZoomLevel(zoomLevel - 1);
         break;
       case COMMANDS.zoomOut:
+        this.setZoomLevel(zoomLevel + 1);
         break;
       default:
         break;

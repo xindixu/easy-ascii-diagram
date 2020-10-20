@@ -57,41 +57,54 @@ class Arrow extends Component {
     return text;
   }
 
-  static getWidthHeight = (direction, length) => {
+  static getWidthHeight = (direction, length, zoomLevel) => {
     let width;
     let height;
     if ([DIRECTION.up, DIRECTION.down].includes(direction)) {
       width = 1;
-      height = length;
+      height = length / zoomLevel;
     } else {
-      width = length;
+      width = length / zoomLevel;
       height = 1;
     }
     return { width, height };
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { direction, length, ...rest } = nextProps;
-    if (prevState.length === length) return { ...nextProps };
-    const { width, height } = Arrow.getWidthHeight(direction, length);
+    const { direction, length, zoomLevel, ...rest } = nextProps;
+    if (prevState.length === length && prevState.zoomLevel === zoomLevel) {
+      console.log(zoomLevel);
+      return { ...nextProps };
+    }
+    const { width, height } = Arrow.getWidthHeight(
+      direction,
+      length,
+      zoomLevel
+    );
     const state = {
       ...rest,
       width,
       height,
-      text: Arrow.convert(direction, length)
+      text: Arrow.convert(direction, length, zoomLevel)
     };
     return state;
   }
 
   constructor(props) {
     super(props);
-    const { direction, length } = this.props;
-    const { width, height } = Arrow.getWidthHeight(direction, length);
+
+    const { direction, length, zoomLevel } = this.props;
+    const { width, height } = Arrow.getWidthHeight(
+      direction,
+      length,
+      zoomLevel
+    );
 
     this.state = {
       ...this.props,
       width,
       height,
+      zoomLevel,
       text: Arrow.convert(direction, length)
     };
     this.shape = TOOLS.arrow;
