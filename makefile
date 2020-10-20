@@ -9,3 +9,7 @@ start-client:
 
 start-server: 
 	node server.js
+
+deploy: 
+	cd client && yarn install && yarn build 
+	mv -a client/build/. build

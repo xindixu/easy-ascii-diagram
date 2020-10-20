@@ -1,16 +1,6 @@
 {
-  "plugins": [
-    "react",
-    "import",
-    "jsx-a11y",
-    "prettier"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "airbnb",
-    "prettier"
-  ],
+  "plugins": ["prettier", "react-hooks"],
+  "extends": ["airbnb", "prettier", "prettier/react"],
   "env": {
     "node": true,
     "es6": true,
