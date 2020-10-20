@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 import PopUp from "../../components/pop-up";
 import withSocket from "../../hoc/withSocket";
 import { randomId, selectAndCopy } from "../../util";
-import { Button, Input } from "./styles";
+import { Input } from "./styles";
+import Button from "../../components/button";
 
 class Welcome extends Component {
   state = {
     popUpClosed: false,
     inputRoom: "",
-    newRoom: ""
+    newRoom: "",
   };
 
   componentDidMount() {}
@@ -35,7 +36,7 @@ class Welcome extends Component {
     this.setState({ popUpClosed: true });
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({ inputRoom: e.target.value });
   };
 
@@ -73,7 +74,7 @@ class Welcome extends Component {
                 <Input
                   type="string"
                   value={inputRoom}
-                  onChange={e => this.handleInputChange(e)}
+                  onChange={(e) => this.handleInputChange(e)}
                 />
                 <Button
                   type="primary"
@@ -106,7 +107,7 @@ class Welcome extends Component {
 Welcome.propTypes = {
   joinRoom: PropTypes.func.isRequired,
   createRoom: PropTypes.func.isRequired,
-  setCollaboration: PropTypes.func.isRequired
+  setCollaboration: PropTypes.func.isRequired,
 };
 
 export default withSocket(Welcome);

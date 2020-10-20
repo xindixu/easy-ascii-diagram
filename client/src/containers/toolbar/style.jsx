@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { TOOLBAR_HEIGHT } from "../../constants";
+import BaseButton from "../../components/button";
 import { styleSettings } from "../../assets/styles/settings";
 
-const { spacerXs, spacerSm, radiusSm, gray,blue, yellow, pink } = styleSettings;
+const { spacerXs, gray, yellow, pink } = styleSettings;
 
 export const Wrapper = styled.nav`
   z-index: 100;
@@ -28,11 +29,9 @@ export const Action = styled(Container)`
   flex: 20%;
 `;
 
-const Button = styled.button`
-  padding: ${spacerSm};
+const Button = styled(BaseButton)`
   margin: ${spacerXs};
-  border-radius: ${radiusSm};
-  background: ${props => (props.active ? pink : blue)};
+  display: inline-block;
 
   &:focus {
     outline: 1px solid ${yellow};

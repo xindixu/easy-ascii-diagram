@@ -11,7 +11,7 @@ import {
   EDITOR_COMMAND,
   TRANSACTION,
   DIRECTION_HORIZONTAL,
-  ZOOM_LEVEL_BASE
+  ZOOM_LEVEL_BASE,
 } from "../../constants";
 import withSocket from "../../hoc/withSocket";
 import Grid from "../../components/grid";
@@ -23,7 +23,7 @@ import { drawShape } from "../../lib/draw";
 import { TextArea, Border, Debug } from "./style";
 import { selectAndCopy } from "../../util";
 
-const calculateTotalGridNumber = zoomLevel => {
+const calculateTotalGridNumber = (zoomLevel) => {
   const totalRow = Math.floor(
     (window.innerHeight - TOOLBAR_HEIGHT) / zoomLevel
   );
@@ -65,8 +65,8 @@ class SketchPad extends Component {
         up: totalRow,
         down: 0,
         left: totalColumn,
-        right: 0
-      }
+        right: 0,
+      },
     };
     this.result = null;
     this.nodes = new Map();
@@ -88,13 +88,13 @@ class SketchPad extends Component {
             enterEditMode: this.enterEditMode,
             exitEditMode: this.exitEditMode,
             commitEditing: this.commitEditing,
-            handleFloatingMenu: this.handleFloatingMenu
+            handleFloatingMenu: this.handleFloatingMenu,
           };
           const shape = drawShape({
             ...sharedProps,
             ...tx.newState,
             ref,
-            key: tx.id
+            key: tx.id,
           });
           const drawing = { shape, id: tx.id, ref };
           this.commitDrawing(drawing, false);
@@ -128,13 +128,13 @@ class SketchPad extends Component {
 
   enterEditMode = () => {
     this.setState({
-      isEditing: true
+      isEditing: true,
     });
   };
 
   exitEditMode = () => {
     this.setState({
-      isEditing: false
+      isEditing: false,
     });
   };
 
@@ -165,11 +165,11 @@ class SketchPad extends Component {
     }
   };
 
-  closePopUp = e => {
+  closePopUp = (e) => {
     this.setState({ showPopUp: false });
   };
 
-  setZoomLevel = zoom => {
+  setZoomLevel = (zoom) => {
     if (zoom < 1 || zoom > 5) {
       console.error("ZoomLevel must be in range of 1-4");
       return;
@@ -187,7 +187,7 @@ class SketchPad extends Component {
 
     this.updateBorder(props);
     this.setState({
-      content: [...content, shape]
+      content: [...content, shape],
     });
 
     const tx = new Transaction(
@@ -198,7 +198,7 @@ class SketchPad extends Component {
       props
     );
     this.setState({
-      past: [...past, tx]
+      past: [...past, tx],
     });
 
     if (collaboration && log) {
@@ -220,7 +220,7 @@ class SketchPad extends Component {
       newState
     );
     this.setState({
-      past: [...past, tx]
+      past: [...past, tx],
     });
 
     if (collaboration && log) {
@@ -230,7 +230,7 @@ class SketchPad extends Component {
 
   commitDeleting = (id, log = true) => {
     const { past, content } = this.state;
-    const targetIndex = content.findIndex(el => el.key === id);
+    const targetIndex = content.findIndex((el) => el.key === id);
     const shape = content[targetIndex];
     const { props } = shape;
     const { collaboration, sendTxToServer } = this.props;
@@ -241,8 +241,8 @@ class SketchPad extends Component {
     this.setState({
       content: [
         ...content.slice(0, targetIndex),
-        ...content.slice(targetIndex + 1, content.length)
-      ]
+        ...content.slice(targetIndex + 1, content.length),
+      ],
     });
 
     const tx = new Transaction(
@@ -253,7 +253,7 @@ class SketchPad extends Component {
       null
     );
     this.setState({
-      past: [...past, tx]
+      past: [...past, tx],
     });
     if (collaboration && log) {
       sendTxToServer(tx);
@@ -262,7 +262,7 @@ class SketchPad extends Component {
 
   commitMoveUp = (id, log = true) => {
     const { content, past } = this.state;
-    const targetIndex = content.findIndex(el => el.key === id);
+    const targetIndex = content.findIndex((el) => el.key === id);
     const target = content[targetIndex];
 
     const { collaboration, sendTxToServer } = this.props;
@@ -270,7 +270,7 @@ class SketchPad extends Component {
     // [..., targetIndex, ..., overlapElementIndex, ...]
     const overlapElementIndex = findIndex(
       content,
-      element => {
+      (element) => {
         if (element.key === id) {
           return false;
         }
@@ -288,15 +288,15 @@ class SketchPad extends Component {
       ...content.slice(targetIndex + 1, overlapElementIndex),
       content[overlapElementIndex],
       target,
-      ...content.slice(overlapElementIndex + 1)
+      ...content.slice(overlapElementIndex + 1),
     ];
     this.setState({
-      content: newContent
+      content: newContent,
     });
 
     const tx = new Transaction(TRANSACTION.moveUp, id, null, null, null);
     this.setState({
-      past: [...past, tx]
+      past: [...past, tx],
     });
 
     if (collaboration && log) {
@@ -306,14 +306,14 @@ class SketchPad extends Component {
 
   commitMoveDown = (id, log = true) => {
     const { content, past } = this.state;
-    const targetIndex = content.findIndex(el => el.key === id);
+    const targetIndex = content.findIndex((el) => el.key === id);
     const target = content[targetIndex];
     const { collaboration, sendTxToServer } = this.props;
 
     // [..., overlapElementIndex, ..., targetIndex, ...]
     const overlapElementIndex = findLastIndex(
       content,
-      element => {
+      (element) => {
         if (element.key === id) {
           return false;
         }
@@ -332,16 +332,16 @@ class SketchPad extends Component {
       target,
       content[overlapElementIndex],
       ...content.slice(overlapElementIndex + 1, targetIndex),
-      ...content.slice(targetIndex + 1)
+      ...content.slice(targetIndex + 1),
     ];
     this.setState({
-      content: newContent
+      content: newContent,
     });
 
     if (collaboration && log) {
       const tx = new Transaction(TRANSACTION.moveDown, id, null, null, null);
       this.setState({
-        past: [...past, tx]
+        past: [...past, tx],
       });
       sendTxToServer(tx);
     }
@@ -364,7 +364,7 @@ class SketchPad extends Component {
       up: y,
       down: y + height || y + calHeight,
       left: x,
-      right: x + width || x + calWidth
+      right: x + width || x + calWidth,
     };
 
     const { border } = this.state;
@@ -379,10 +379,10 @@ class SketchPad extends Component {
       up: newUp,
       down: newDown,
       left: newLeft,
-      right: newRight
+      right: newRight,
     };
     this.setState({
-      border: newBorder
+      border: newBorder,
     });
   };
 
@@ -392,7 +392,7 @@ class SketchPad extends Component {
       calculateTotalGridNumber(zoomLevel);
     }, 500);
 
-  handleAction = e => {
+  handleAction = (e) => {
     switch (e.target.value) {
       case ACTIONS.export:
         this.export();
@@ -404,7 +404,7 @@ class SketchPad extends Component {
     }
   };
 
-  handleCommand = e => {
+  handleCommand = (e) => {
     const { content, future, past, zoomLevel } = this.state;
     let shape;
     let tx;
@@ -442,7 +442,7 @@ class SketchPad extends Component {
         this.setState({
           content: newContent || content,
           future: newFuture || future,
-          past: newPast || past
+          past: newPast || past,
         });
         break;
       case COMMANDS.redo:
@@ -473,7 +473,7 @@ class SketchPad extends Component {
         this.setState({
           content: newContent || content,
           future: newFuture || future,
-          past: newPast || past
+          past: newPast || past,
         });
         break;
       case COMMANDS.zoomIn:
@@ -487,7 +487,7 @@ class SketchPad extends Component {
     }
   };
 
-  handleTool = e => {
+  handleTool = (e) => {
     this.setState({ tool: e.target.value });
   };
 
@@ -520,11 +520,11 @@ class SketchPad extends Component {
       .fill(" ")
       .map(() => Array(cols).fill(" "));
 
-    content.forEach(el => {
+    content.forEach((el) => {
       const { state } = el.ref.current;
       this.addToResult(state.x, state.y, state.text);
     });
-    const resultText = this.result.map(arr => arr.join("")).join("\n");
+    const resultText = this.result.map((arr) => arr.join("")).join("\n");
 
     this.setState({ showPopUp: true, resultText });
   }
@@ -537,12 +537,12 @@ class SketchPad extends Component {
       showPopUp,
       resultText,
       border,
-      isEditing
+      isEditing,
     } = this.state;
 
     const { txFromServer } = this.props;
     return (
-      <React.Fragment>
+      <>
         <ToolBar
           currentTool={tool}
           currentZoom={zoomLevel}
@@ -584,22 +584,22 @@ class SketchPad extends Component {
             />
           </PopUp>
         ) : null}
-      </React.Fragment>
+      </>
     );
   }
 }
 
 SketchPad.defaultProps = {
-  txFromServer: null
+  txFromServer: null,
 };
 
 SketchPad.propTypes = {
   sendTxToServer: PropTypes.func.isRequired,
   txFromServer: PropTypes.shape({
     user: PropTypes.string,
-    transaction: PropTypes.object
+    transaction: PropTypes.object,
   }),
-  collaboration: PropTypes.bool.isRequired
+  collaboration: PropTypes.bool.isRequired,
 };
 
 export default withSocket(SketchPad);

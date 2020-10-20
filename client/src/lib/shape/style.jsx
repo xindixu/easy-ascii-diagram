@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
 import { GRID_WIDTH, GRID_HEIGHT } from "../../constants";
 
-const { yellow, pink, borderWidth, zTop, zBase } = styleSettings;
+const { yellow, pink, borderWidth, zTop, zBase, fontFamily } = styleSettings;
 
 const Base = styled.code`
   user-select: none;
   white-space: pre;
   display: inline;
-  font-family: monospace;
+  font-family: ${fontFamily};
   margin: 0;
   padding: 0;
   position: absolute;
@@ -31,9 +31,10 @@ export const WithGrid = styled(Base)`
     ),
     linear-gradient(90deg, ${pink} ${borderWidth}, transparent ${borderWidth});
 
-  ${props => `
-    background-size: ${GRID_WIDTH / props.zoomLevel}px ${GRID_HEIGHT /
-    props.zoomLevel}px
+  ${(props) => `
+    background-size: ${GRID_WIDTH / props.zoomLevel}px ${
+    GRID_HEIGHT / props.zoomLevel
+  }px;
   `}
 `;
 

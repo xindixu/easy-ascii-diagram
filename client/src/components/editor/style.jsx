@@ -12,7 +12,7 @@ const cursor = {
   [EDITOR.topLeft]: "nwse-resize",
   [EDITOR.topRight]: "nesw-resize",
   [EDITOR.bottomLeft]: "nesw-resize",
-  [EDITOR.bottomRight]: "nwse-resize"
+  [EDITOR.bottomRight]: "nwse-resize",
 };
 
 export const Wrapper = styled.div`
@@ -37,7 +37,7 @@ export const EditArea = styled.div`
   width: 100%;
   height: 100%;
   z-index: ${zToppest - 2};
-  ${props => (props.direction ? `cursor: ${cursor[props.direction]}` : null)}
+  ${(props) => (props.direction ? `cursor: ${cursor[props.direction]}` : null)}
 `;
 
 const Resizer = styled.button`

@@ -1,15 +1,25 @@
 import styled from "styled-components";
 import { styleSettings } from "../../assets/styles/settings";
+import BaseButton from "../button";
 
-const { pink, gray, borderWidth, radiusMd, spacer, zUI } = styleSettings;
+const {
+  pink,
+  gray,
+  borderWidth,
+  spacerLg,
+  radiusMd,
+  spacerSm,
+  spacer,
+  zUI,
+} = styleSettings;
 
 export const Backdrop = styled.div`
   background: ${gray}99;
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   backface-visibility: hidden;
   z-index: ${zUI};
 `;
@@ -29,11 +39,13 @@ export const Container = styled.div`
   z-index: ${zUI};
 `;
 
-export const Button = styled.button`
+export const Button = styled(BaseButton)`
   position: absolute;
-  top: ${spacer};
-  right: ${spacer};
-  border: none;
+  top: ${spacerSm};
+  right: ${spacerSm};
+  width: ${spacerLg};
+  margin: 0;
+  border-radius: 99rem;
 `;
 
 export const Header = styled.h1`

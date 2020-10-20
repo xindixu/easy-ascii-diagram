@@ -9,5 +9,6 @@ export const styleSettings = {
   ...color,
   ...borderRadius,
   ...borderWidth,
-  ...zIndex
+  ...zIndex,
+  fontFamily: "Courier, monospace",
 };

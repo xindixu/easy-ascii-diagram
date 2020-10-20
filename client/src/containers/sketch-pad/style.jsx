@@ -11,7 +11,7 @@ export const Border = styled.div`
   border: black solid 2px;
   position: absolute;
   z-index: 100;
-  ${props =>
+  ${(props) =>
     `
     left: ${props.left * GRID_WIDTH}px;
     top: ${(props.up + 1) * GRID_HEIGHT}px;
