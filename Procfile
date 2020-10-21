@@ -1,0 +1,1 @@
+web: yarn build --prefix client && yarn start --prefix server 

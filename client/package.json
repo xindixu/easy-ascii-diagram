@@ -7,7 +7,7 @@
     "start": "react-scripts start",
     "start-bob": "PORT=3001 react-scripts start",
     "start-cat": "PORT=3002 react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && mv -f build/ ../server",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

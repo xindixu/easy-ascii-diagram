@@ -8,8 +8,8 @@ start-client:
 	make -j 2 start-bob start-cat
 
 start-server: 
-	cd server && node server.js
+	cd server && yarn run start
 
 deploy: 
 	cd client && yarn install && yarn build 
-	mv -a client/build/. build
+	mv -a client/build/. server/build

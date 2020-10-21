@@ -2,9 +2,10 @@ const express = require('express')
 const http = require('http')
 const socketIO = require('socket.io')
 const util = require('util')
+const path = require('path')
 
 // our localhost port
-const port = 8000
+const port = process.env.PORT || 8000
 
 const app = express()
 
@@ -55,5 +56,11 @@ function onConnect(socket){
     console.log('Disconnected')
   })
 }
+
+
+app.use(express.static(path.join(__dirname, "build")))
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"))
+})
 
 server.listen(port, () => console.log(`Listening on port ${port}`))
