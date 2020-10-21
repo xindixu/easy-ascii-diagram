@@ -1,1 +1,1 @@
-web: yarn build --prefix client && yarn start --prefix server 
+web: cd server && yarn install && yarn run start
