@@ -6,7 +6,7 @@
   "author": "Xindi Xu <xindixu@utexas.edu>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "nodemon": "^2.0.6",
     "socket.io": "^2.3.0"
   },
